@@ -5,12 +5,12 @@ public class Issue {
     private String title;
     private String description;
     private String severity;
-    private String status;//TODO: add status enum
+    private Status status;
 
     public Issue() {
     }
 
-    public Issue(int issueId, String title, String description, String severity, String status) {
+    public Issue(int issueId, String title, String description, String severity, Status status) {
         this.issueId = issueId;
         this.title = title;
         this.description = description;
@@ -49,11 +49,11 @@ public class Issue {
         this.severity = severity;
     }
 
-    public String getStatus() {
+    public Status getStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(Status status) {
         this.status = status;
     }
 }

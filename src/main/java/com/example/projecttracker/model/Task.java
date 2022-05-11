@@ -7,12 +7,12 @@ public class Task {
     private String title;
     private String description;
     private Date deadline;
-    private String status;//TODO: add enum
+    private Status status;
 
     public Task() {
     }
 
-    public Task(int taskId, String title, String description, Date deadline, String status) {
+    public Task(int taskId, String title, String description, Date deadline, Status status) {
         this.taskId = taskId;
         this.title = title;
         this.description = description;
@@ -52,11 +52,11 @@ public class Task {
         this.deadline = deadline;
     }
 
-    public String getStatus() {
+    public Status getStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(Status status) {
         this.status = status;
     }
 }
