@@ -1,7 +1,12 @@
 package com.example.projecttracker.model;
 
+import lombok.Getter;
+import lombok.Setter;
+
+@Getter
+@Setter
 public class Issue {
-    private int issueId;
+    private Integer issueId;
     private String title;
     private String description;
     private String severity;
@@ -10,50 +15,11 @@ public class Issue {
     public Issue() {
     }
 
-    public Issue(int issueId, String title, String description, String severity, Status status) {
+    public Issue(Integer issueId, String title, String description, String severity, Status status) {
         this.issueId = issueId;
         this.title = title;
         this.description = description;
         this.severity = severity;
     }
 
-    public int getIssueId() {
-        return issueId;
-    }
-
-    public void setIssueId(int issueId) {
-        this.issueId = issueId;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public String getSeverity() {
-        return severity;
-    }
-
-    public void setSeverity(String severity) {
-        this.severity = severity;
-    }
-
-    public Status getStatus() {
-        return status;
-    }
-
-    public void setStatus(Status status) {
-        this.status = status;
-    }
 }
