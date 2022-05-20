@@ -1,6 +1,6 @@
 package com.example.projecttracker.data;
 
-import com.example.projecttracker.services.HelloApplication;
+import com.example.projecttracker.Config;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.Getter;
 import lombok.NonNull;
@@ -21,7 +21,7 @@ public class DataHandlerGen<T> {
     private final Class<T> tClass;
 
     public ArrayList<T> getGenericJSON(String propertyName) throws IOException {
-        String filePath = HelloApplication.getProperty(propertyName);
+        String filePath = Config.getProperty(propertyName);
         byte[] jsonData = Files.readAllBytes(
                 Paths.get(filePath)
         );
