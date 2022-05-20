@@ -7,6 +7,13 @@ import lombok.Setter;
 
 import java.util.Date;
 
+/**
+ * Tasks that can be assigned to a project.
+ * @author Alyssa Heimlicher
+ * @version 1.0
+ * @since 2022-05-20
+ */
+
 @Getter
 @Setter
 @NoArgsConstructor
@@ -33,7 +40,7 @@ public class Task {
      */
     private Date deadline;
     /**
-     * Status of the task.
+     * Status of the task. (In progress, Completed, etc.)
      * @since 1.0
      */
     private Status status;
