@@ -1,11 +1,11 @@
-package com.example.projecttracker;
+package com.example.projecttracker.services;
 
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.Produces;
 
 @Path("/hello-world")
-public class HelloResource {
+public class TaskResource {
     @GET
     @Produces("text/plain")
     public String hello() {
