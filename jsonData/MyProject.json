@@ -1,0 +1,26 @@
+[
+  {
+    "projectId": 1,
+    "title": "FPS Game",
+    "description": "This is a first person shooter in development",
+    "startDate": "2022-03-01",
+    "isFinished": false,
+    "subject": "Game Development",
+    "userUUID": "123e4567-e89b-12d3-a456-426614174000",
+    "tasks": [
+      {
+        "taskId": 1
+      }
+    ],
+    "issues": [
+      {
+        "issueId": 1
+      }
+    ],
+    "patchNotes": [
+      {
+        "patchNoteId": 1
+      }
+    ]
+  }
+]

@@ -1,8 +1,8 @@
 [
   {
     "taskId": 1,
-    "title": "Call mum",
-    "description": "swag",
+    "title": "implement pathfinding for AI",
+    "description": "Ai needs pathfinding in order to have any function other than just standing still.",
     "deadline": "2022-05-23T00:00:00.000Z",
     "status": "IN_PROGRESS"
   }
