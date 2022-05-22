@@ -20,11 +20,12 @@ public class Config extends Application {
      */
     public static String getProperty(String property) {
         if (Config.properties == null) {
-            setProperties(new Properties());
             readProperties();
         }
         String value = Config.properties.getProperty(property);
-        if (value == null) return "";
+        if (value == null) {
+            return "";
+        }
         return value;
     }
 
@@ -32,12 +33,14 @@ public class Config extends Application {
      * reads the properties file
      */
     private static void readProperties() {
-
         if (properties == null) {
             properties = new Properties();
             try (InputStream input = new FileInputStream(Config.class.getClassLoader().getResource("project.properties").getFile())) {
                 properties.load(input);
+
+                System.out.println("properties = " + properties);
             } catch (IOException e) {
+                System.out.println("olla");
                 e.printStackTrace();
             }
         }
