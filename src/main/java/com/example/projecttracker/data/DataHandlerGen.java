@@ -15,13 +15,12 @@ import java.util.ArrayList;
 
 /**
  * reads and writes the data in the JSON-files
+ *
+ * @param <T>
  * @author Alyssa Heimlicher
  * @version 1.0
  * @since 2022-05-20
- *
- * @param <T>
  */
-
 @Getter
 @Setter
 @RequiredArgsConstructor
@@ -31,11 +30,14 @@ public class DataHandlerGen<T> {
 
     /**
      * reads all the data from the JSON-file
+     *
      * @param propertyName the name of the property that tells us which JSON-file to read
      * @return an ArrayList of the data
      * @throws IOException when the file cannot be read/is not found
+     * @author Alyssa Heimlicher
+     * @since 1.0
      */
-    public ArrayList<T> getGenericJSON(String propertyName) throws IOException {
+    public ArrayList<T> getArrayListOutOfJSON(String propertyName) throws IOException {
         String filePath = Config.getProperty(propertyName);
         byte[] jsonData = Files.readAllBytes(
                 Paths.get(filePath)
@@ -46,22 +48,24 @@ public class DataHandlerGen<T> {
 
     /**
      * reads specific data from the JSON-file
+     *
      * @param propertyName the name of the property that tells us which JSON-file to read
-     * @param keyName the name of the key that we want to read
-     * @param key
-     * @param <Key> the type of Object that is getting read
+     * @param fieldName    the name of the field of the class that we want to read
+     * @param fieldValue   the value of the field of the class that we want to read
      * @return the data that was read
-     * @throws IOException when the file cannot be read/is not found
-     * @throws NoSuchFieldException when the field cannot be found
+     * @throws IOException            when the file cannot be read/is not found
+     * @throws NoSuchFieldException   when the field cannot be found
      * @throws IllegalAccessException when the field cannot be accessed
+     * @author Alyssa Heimlicher
+     * @since 1.0
      */
-    public <Key>T getSingleFromJsonArray(String propertyName, String keyName, Key key) throws IOException, NoSuchFieldException, IllegalAccessException {
-        ArrayList<T> arrayList = getGenericJSON(propertyName);
+    public T getSingleFromJsonArray(String propertyName, String fieldName, Object fieldValue) throws IOException, NoSuchFieldException, IllegalAccessException {
+        ArrayList<T> arrayList = getArrayListOutOfJSON(propertyName);
 
         for (T t : arrayList) {
-            Field privateField = t.getClass().getDeclaredField(keyName);
+            Field privateField = t.getClass().getDeclaredField(fieldName);
             privateField.setAccessible(true);
-            if (privateField.get(t).equals(key)) {
+            if (privateField.get(t).equals(fieldValue)) {
                 return t;
             }
         }
