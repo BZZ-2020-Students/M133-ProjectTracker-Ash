@@ -31,7 +31,7 @@ public class IssueResource {
     @GET
     @Produces("application/json")
     @Path("/{id}")
-    public Response getSingleTaskByID(@PathParam("id") int id) {
+    public Response getSingleIssueByID(@PathParam("id") int id) {
         try {
             Issue issue = new DataHandlerGen<>(Issue.class).getSingleFromJsonArray("issueJSON", "issueId", id);
             ObjectMapper objectMapper = new ObjectMapper();
