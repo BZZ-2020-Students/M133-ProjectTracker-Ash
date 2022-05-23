@@ -1,5 +1,7 @@
 package com.example.projecttracker.model;
 
+import com.example.projecttracker.data.IssueDataHandler;
+import com.example.projecttracker.data.PatchnoteDataHandler;
 import com.example.projecttracker.data.TaskDataHandler;
 import com.example.projecttracker.data.UserDataHandler;
 import lombok.AllArgsConstructor;
@@ -116,12 +118,40 @@ public class Project {
         return taskIds;
     }
 
-    public void setTaskIds(ArrayList<Integer> taskId) throws IOException, NoSuchFieldException, IllegalAccessException {
-        System.out.println("taskId = " + taskId);
+    public void setTaskIds(ArrayList<Integer> taskIds) throws IOException, NoSuchFieldException, IllegalAccessException {
         TaskDataHandler taskDataHandler = new TaskDataHandler();
-        for (Integer taskID : taskId) {
-            System.out.println("taskId = " + taskId);
+        for (Integer taskID : taskIds) {
             getTasks().add(taskDataHandler.readTaskById(taskID));
+        }
+    }
+
+    public ArrayList<Integer> getIssueIds() {
+        ArrayList<Integer> issueIds = new ArrayList<>();
+        for (Issue issue : getIssues()) {
+            issueIds.add(issue.getIssueId());
+        }
+        return issueIds;
+    }
+
+    public void setIssueIds(ArrayList<Integer> issueIds) throws IOException, NoSuchFieldException, IllegalAccessException {
+        IssueDataHandler issueDataHandler = new IssueDataHandler();
+        for (Integer taskID : issueIds) {
+            getIssues().add(issueDataHandler.readIssueByID(taskID));
+        }
+    }
+
+    public ArrayList<Integer> getPatchnoteIds() {
+        ArrayList<Integer> patchnoteIds = new ArrayList<>();
+        for (PatchNote patchnote : getPatchNotes()) {
+            patchnoteIds.add(patchnote.getPatchNoteId());
+        }
+        return patchnoteIds;
+    }
+
+    public void setPatchnoteIds(ArrayList<Integer> patchnoteIds) throws IOException, NoSuchFieldException, IllegalAccessException {
+        PatchnoteDataHandler patchnoteDataHandler = new PatchnoteDataHandler();
+        for (Integer patchnoteId : patchnoteIds) {
+            getPatchNotes().add(patchnoteDataHandler.readPatchNoteByID(patchnoteId));
         }
     }
 }
