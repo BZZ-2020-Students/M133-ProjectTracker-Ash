@@ -2,7 +2,7 @@
   {
     "userUUID": "123e4567-e89b-12d3-a456-426614174000",
     "userName": "guest",
-    "userPassword": "123456",
+    "password": "123456",
     "userRole": "guest"
   }
 ]
