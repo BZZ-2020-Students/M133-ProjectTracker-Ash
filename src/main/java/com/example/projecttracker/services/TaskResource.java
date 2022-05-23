@@ -12,8 +12,23 @@ import jakarta.ws.rs.core.Response;
 import java.io.IOException;
 import java.util.ArrayList;
 
+
+/**
+ * This class is responsible for handling all requests to the task class.
+ *
+ * @author Alyssa Heimlicher
+ * @version 1.0
+ * @since 2022-05-23
+ */
 @Path("/task")
 public class TaskResource {
+
+    /**
+     * This method gets all tasks from the json file.
+     *
+     * @return an arraylist of tasks
+     * @author Alyssa Heimlicher
+     */
     @GET
     @Produces("application/json")
     @Path("/list")
@@ -28,6 +43,13 @@ public class TaskResource {
         }
     }
 
+    /**
+     * This method gets a task from the json file by its id.
+     *
+     * @param id the id of the task
+     * @return a task with the id
+     * @author Alyssa Heimlicher
+     */
     @GET
     @Produces("application/json")
     @Path("/{id}")

@@ -13,8 +13,22 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 
+/**
+ * The issue service file used to handle all requests to the issue class.
+ *
+ * @author Alyssa Heimlicher
+ * @version 1.0
+ * @since 2022-05-23
+ */
 @Path("/patchnote")
 public class PatchNoteResource {
+
+    /**
+     * Gets all patch notes from the json file.
+     *
+     * @return A list of all patch notes.
+     * @author Alyssa Heimlicher
+     */
     @GET
     @Produces("application/json")
     @Path("/list")
@@ -29,6 +43,12 @@ public class PatchNoteResource {
         }
     }
 
+    /**
+     * gets a patch note by its id.
+     * @param id the id of the patch note.
+     * @return the patch note.
+     * @author Alyssa Heimlicher
+     * */
     @GET
     @Produces("application/json")
     @Path("/{id}")

@@ -16,7 +16,7 @@ import java.util.ArrayList;
 /**
  * reads and writes the data in the JSON-files
  *
- * @param <T>
+ * @param <T> the type of the data
  * @author Alyssa Heimlicher
  * @version 1.0
  * @since 2022-05-20
@@ -25,6 +25,10 @@ import java.util.ArrayList;
 @Setter
 @RequiredArgsConstructor
 public class DataHandlerGen<T> {
+    /**
+     * The class of the data
+     *
+     */
     @NonNull
     private final Class<T> tClass;
 

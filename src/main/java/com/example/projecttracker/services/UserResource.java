@@ -12,8 +12,22 @@ import jakarta.ws.rs.core.Response;
 import java.io.IOException;
 import java.util.ArrayList;
 
+/**
+ * This class is used to handle all requests to the user class.
+ *
+ * @author Alyssa Heimlicher
+ * @version 1.0
+ * @since 2022-05-23
+ */
 @Path("/user")
 public class UserResource {
+
+    /**
+     * This method is used to get all users from the json file.
+     *
+     * @return an arraylist of all users
+     * @author Alyssa Heimlicher
+     */
     @GET
     @Produces("application/json")
     @Path("/list")
@@ -28,6 +42,13 @@ public class UserResource {
         }
     }
 
+    /**
+     * This method is used to get a user from the json file by their uuid.
+     *
+     * @param uuid the uuid of the user
+     * @return the user with the given uuid
+     * @author Alyssa Heimlicher
+     */
     @GET
     @Produces("application/json")
     @Path("/{uuid}")
