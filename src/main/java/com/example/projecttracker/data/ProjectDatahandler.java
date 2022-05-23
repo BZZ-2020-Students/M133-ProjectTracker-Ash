@@ -47,7 +47,6 @@ public class ProjectDatahandler extends DataHandlerGen<Project> {
             TaskDataHandler taskDataHandler = new TaskDataHandler();
             setTasks(taskDataHandler, project);
 
-            ArrayList<Issue> issues = new ArrayList<>();
             IssueDataHandler issueDataHandler = new IssueDataHandler();
             setIssues(issueDataHandler, project);
 
