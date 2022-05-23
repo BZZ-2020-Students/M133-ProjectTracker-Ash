@@ -12,8 +12,22 @@ import jakarta.ws.rs.core.Response;
 import java.io.IOException;
 import java.util.ArrayList;
 
+/**
+ * This class is used to handle the requests for the project class.
+ *
+ * @author Alyssa Heimlicher
+ * @version 1.0
+ * @since 2022-05-23
+ */
 @Path("/project")
 public class ProjectResource {
+
+    /**
+     * This method is used to get all the projects from the json file.
+     *
+     * @return an arraylist of projects
+     * @author Alyssa Heimlicher
+     */
     @GET
     @Produces("application/json")
     @Path("/list")
@@ -28,6 +42,13 @@ public class ProjectResource {
         }
     }
 
+    /**
+     * This method is used to get a specific project from the json file based on the id.
+     *
+     * @param id the id of the project
+     * @return a project with the id
+     * @author Alyssa Heimlicher
+     */
     @GET
     @Produces("application/json")
     @Path("/{id}")

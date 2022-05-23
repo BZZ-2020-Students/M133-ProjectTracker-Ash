@@ -17,7 +17,7 @@ import java.util.ArrayList;
  *
  * @author Alyssa Heimlicher
  * @version 1.0
- * @since 2020-05-20
+ * @since 2022-05-20
  */
 
 @Getter
@@ -27,62 +27,42 @@ import java.util.ArrayList;
 public class Project {
     /**
      * The project's unique ID
-     *
-     * @since 1.0
      */
     private Integer projectId;
     /**
      * The project's name
-     *
-     * @since 1.0
      */
     private String title;
     /**
      * The project's description
-     *
-     * @since 1.0
      */
     private String description;
     /**
      * The project's start date
-     *
-     * @since 1.0
      */
     private String startDate;
     /**
      * Boolean value for whether the project is completed
-     *
-     * @since 1.0
      */
     private Boolean isFinished;
     /**
      * The project's subject (e.g. CS, Math, etc.)
-     *
-     * @since 1.0
      */
     private String subject;
     /**
      * The User the project belongs to
-     *
-     * @since 1.0
      */
     private User user;
     /**
      * The list of issues associated with the project
-     *
-     * @since 1.0
      */
     private ArrayList<Issue> issues;
     /**
      * The list of tasks associated with the project
-     *
-     * @since 1.0
      */
     private ArrayList<Task> tasks;
     /**
      * The list of patchNotes associated with the project
-     *
-     * @since 1.0
      */
     private ArrayList<PatchNote> patchNotes;
 
@@ -90,6 +70,7 @@ public class Project {
      * gets the userUUID from the User-object
      *
      * @return userUUID
+     * @author Alyssa Heimlicher
      */
     public String getUserUUID() {
         return getUser().getUserUUID();
@@ -99,6 +80,10 @@ public class Project {
      * creates a User-Object without the project
      *
      * @param userUUID the userUUID of the user
+     * @throws IOException            if the json file cannot be read
+     * @throws NoSuchFieldException   if the field does not exist
+     * @throws IllegalAccessException if the field cannot be accessed
+     * @author Alyssa Heimlicher
      */
     public void setUserUUID(String userUUID) throws IOException, NoSuchFieldException, IllegalAccessException {
         setUser(new User());
@@ -110,6 +95,12 @@ public class Project {
 
     }
 
+    /**
+     * get the taskIds from the tasks
+     *
+     * @return an ArrayList of taskIds
+     * @author Alyssa Heimlicher
+     */
     public ArrayList<Integer> getTaskIds() {
         ArrayList<Integer> taskIds = new ArrayList<>();
         for (Task task : getTasks()) {
@@ -118,6 +109,15 @@ public class Project {
         return taskIds;
     }
 
+    /**
+     * set the taskIds from the tasks to the project
+     *
+     * @param taskIds the taskIds to set
+     * @throws IOException            if the json file cannot be read
+     * @throws NoSuchFieldException   if the field does not exist
+     * @throws IllegalAccessException if the file cannot be accessed
+     * @author Alyssa Heimlicher
+     */
     public void setTaskIds(ArrayList<Integer> taskIds) throws IOException, NoSuchFieldException, IllegalAccessException {
         TaskDataHandler taskDataHandler = new TaskDataHandler();
         for (Integer taskID : taskIds) {
@@ -125,6 +125,12 @@ public class Project {
         }
     }
 
+    /**
+     * get the issueIds from the issues in the project
+     *
+     * @return an ArrayList of issueIds
+     * @author Alyssa Heimlicher
+     */
     public ArrayList<Integer> getIssueIds() {
         ArrayList<Integer> issueIds = new ArrayList<>();
         for (Issue issue : getIssues()) {
@@ -133,6 +139,15 @@ public class Project {
         return issueIds;
     }
 
+    /**
+     * set the issueIds from the issues to the project
+     *
+     * @param issueIds the issueIds to set
+     * @throws IOException            if the json file cannot be read
+     * @throws NoSuchFieldException   if the field does not exist
+     * @throws IllegalAccessException if the file cannot be accessed
+     * @author Alyssa Heimlicher
+     */
     public void setIssueIds(ArrayList<Integer> issueIds) throws IOException, NoSuchFieldException, IllegalAccessException {
         IssueDataHandler issueDataHandler = new IssueDataHandler();
         for (Integer taskID : issueIds) {
@@ -140,6 +155,12 @@ public class Project {
         }
     }
 
+    /**
+     * get the patchNoteIds from the patchNotes in the project
+     *
+     * @return an ArrayList of patchNoteIds
+     * @author Alyssa Heimlicher
+     */
     public ArrayList<Integer> getPatchnoteIds() {
         ArrayList<Integer> patchnoteIds = new ArrayList<>();
         for (PatchNote patchnote : getPatchNotes()) {
@@ -148,6 +169,15 @@ public class Project {
         return patchnoteIds;
     }
 
+    /**
+     * set the patchNoteIds from the patchNotes to the project
+     *
+     * @param patchnoteIds the patchNoteIds to set
+     * @throws IOException            if the json file cannot be read
+     * @throws NoSuchFieldException   if the field does not exist
+     * @throws IllegalAccessException if the file cannot be accessed
+     * @author Alyssa Heimlicher
+     */
     public void setPatchnoteIds(ArrayList<Integer> patchnoteIds) throws IOException, NoSuchFieldException, IllegalAccessException {
         PatchnoteDataHandler patchnoteDataHandler = new PatchnoteDataHandler();
         for (Integer patchnoteId : patchnoteIds) {

@@ -12,8 +12,22 @@ import jakarta.ws.rs.core.Response;
 import java.io.IOException;
 import java.util.ArrayList;
 
+/**
+ * The issue service file used to handle all requests to the issue class.
+ *
+ * @author Alyssa Heimlicher
+ * @version 1.0
+ * @since 2022-05-23
+ */
 @Path("/issue")
 public class IssueResource {
+
+    /**
+     * Gets all issues from the JSON file.
+     *
+     * @return an arraylist of issues
+     * @author Alyssa Heimlicher
+     */
     @GET
     @Produces("application/json")
     @Path("/list")
@@ -28,6 +42,13 @@ public class IssueResource {
         }
     }
 
+    /**
+     * Gets an issue from the JSON file based on the id.
+     *
+     * @param id the id of the issue
+     * @return the issue
+     * @author Alyssa Heimlicher
+     */
     @GET
     @Produces("application/json")
     @Path("/{id}")
