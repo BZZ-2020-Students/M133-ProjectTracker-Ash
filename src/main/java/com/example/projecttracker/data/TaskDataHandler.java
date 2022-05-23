@@ -1,7 +1,6 @@
 package com.example.projecttracker.data;
 
 import com.example.projecttracker.model.Task;
-import com.example.projecttracker.model.User;
 
 import java.io.IOException;
 import java.util.ArrayList;
