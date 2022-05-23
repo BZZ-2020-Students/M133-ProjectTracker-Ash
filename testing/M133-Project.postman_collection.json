@@ -1,0 +1,547 @@
+{
+	"info": {
+		"_postman_id": "f2a94fdc-4772-4cf2-b76e-5cc6acd76027",
+		"name": "M133-Project",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "21099284"
+	},
+	"item": [
+		{
+			"name": "Task",
+			"item": [
+				{
+					"name": "GetAllTasks",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"const jsonData = pm.response.json();\r",
+									"pm.collectionVariables.set(\"taskId\", jsonData[0].taskId);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseRestURL}}/task/list",
+							"host": [
+								"{{baseRestURL}}"
+							],
+							"path": [
+								"task",
+								"list"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetSingleTask",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseRestURL}}/task/{{taskId}}",
+							"host": [
+								"{{baseRestURL}}"
+							],
+							"path": [
+								"task",
+								"{{taskId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetSingleTask404",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 404\", function () {\r",
+									"    pm.response.to.have.status(404);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseRestURL}}/task/8098",
+							"host": [
+								"{{baseRestURL}}"
+							],
+							"path": [
+								"task",
+								"8098"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Issue",
+			"item": [
+				{
+					"name": "GetAllIssues",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"const jsonData = pm.response.json();\r",
+									"pm.collectionVariables.set(\"issueId\", jsonData[0].issueId);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseRestURL}}/issue/list",
+							"host": [
+								"{{baseRestURL}}"
+							],
+							"path": [
+								"issue",
+								"list"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetSingleIssue",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseRestURL}}/issue/{{issueId}}",
+							"host": [
+								"{{baseRestURL}}"
+							],
+							"path": [
+								"issue",
+								"{{issueId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetSingleIssue404",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 404\", function () {\r",
+									"    pm.response.to.have.status(404);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseRestURL}}/issue/234983",
+							"host": [
+								"{{baseRestURL}}"
+							],
+							"path": [
+								"issue",
+								"234983"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "PatchNote",
+			"item": [
+				{
+					"name": "GetAllPatchNotes",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"const jsonData = pm.response.json();\r",
+									"pm.collectionVariables.set(\"patchNoteId\", jsonData[0].patchNoteId);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseRestURL}}/patchnote/list",
+							"host": [
+								"{{baseRestURL}}"
+							],
+							"path": [
+								"patchnote",
+								"list"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetSinglePatchNote",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseRestURL}}/patchnote/{{patchNoteId}}",
+							"host": [
+								"{{baseRestURL}}"
+							],
+							"path": [
+								"patchnote",
+								"{{patchNoteId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetSinglePatchNote404",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 404\", function () {\r",
+									"    pm.response.to.have.status(404);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseRestURL}}/patchnote/383",
+							"host": [
+								"{{baseRestURL}}"
+							],
+							"path": [
+								"patchnote",
+								"383"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "User",
+			"item": [
+				{
+					"name": "GetAllUsers",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"const jsonData = pm.response.json();\r",
+									"pm.collectionVariables.set(\"userUUID\", jsonData[0].userUUID);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseRestURL}}/user/list",
+							"host": [
+								"{{baseRestURL}}"
+							],
+							"path": [
+								"user",
+								"list"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetSingleUser",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseRestURL}}/user/{{userUUID}}",
+							"host": [
+								"{{baseRestURL}}"
+							],
+							"path": [
+								"user",
+								"{{userUUID}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetSingleUser404",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 404\", function () {\r",
+									"    pm.response.to.have.status(404);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseRestURL}}/user/132-0923",
+							"host": [
+								"{{baseRestURL}}"
+							],
+							"path": [
+								"user",
+								"132-0923"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Project",
+			"item": [
+				{
+					"name": "GetAllProjects",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"const jsonData = pm.response.json();\r",
+									"pm.collectionVariables.set(\"projectId\", jsonData[0].projectId);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseRestURL}}/project/list",
+							"host": [
+								"{{baseRestURL}}"
+							],
+							"path": [
+								"project",
+								"list"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetSingleProject",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseRestURL}}/project/{{projectId}}",
+							"host": [
+								"{{baseRestURL}}"
+							],
+							"path": [
+								"project",
+								"{{projectId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetSingleProject404",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 404\", function () {\r",
+									"    pm.response.to.have.status(404);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseRestURL}}/project/3928",
+							"host": [
+								"{{baseRestURL}}"
+							],
+							"path": [
+								"project",
+								"3928"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "baseRestURL",
+			"value": "http://localhost:8080/ProjectTracker-1.0/api"
+		},
+		{
+			"key": "taskId",
+			"value": ""
+		},
+		{
+			"key": "issueId",
+			"value": ""
+		},
+		{
+			"key": "patchNoteId",
+			"value": ""
+		},
+		{
+			"key": "userUUID",
+			"value": ""
+		},
+		{
+			"key": "projectId",
+			"value": ""
+		}
+	]
+}

@@ -8,11 +8,36 @@ import com.example.projecttracker.model.Task;
 import java.io.IOException;
 import java.util.ArrayList;
 
+/**
+ * Utility class for handling data regarding Projects in JSON files.
+ *
+ * @author Alyssa Heimlicher
+ * @version 1.0
+ * @see Project
+ * @since 2022-05-23
+ */
 public class ProjectDatahandler extends DataHandlerGen<Project> {
+    /**
+     * Default constructor.
+     *
+     * @author Alyssa Heimlicher
+     * @since 2020-05-23
+     */
     public ProjectDatahandler() {
         super(Project.class);
     }
 
+    /**
+     * Gets a single project from the JSON file.
+     *
+     * @param fieldValue the value of the field to search for
+     * @return the project with the given field value or null if no project with that field value exists
+     * @throws IOException            if the file cannot be read
+     * @throws NoSuchFieldException   if the field does not exist
+     * @throws IllegalAccessException if the field cannot be accessed
+     * @author Alyssa Heimlicher
+     * @since 2020-05-23
+     */
     public Project getSingleFromJsonArray(Object fieldValue) throws IOException, NoSuchFieldException, IllegalAccessException {
         Project project = super.getSingleFromJsonArray("projectJSON", "projectId", fieldValue);
 
