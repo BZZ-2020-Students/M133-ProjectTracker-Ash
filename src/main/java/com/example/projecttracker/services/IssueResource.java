@@ -2,7 +2,6 @@ package com.example.projecttracker.services;
 
 import com.example.projecttracker.data.DataHandlerGen;
 import com.example.projecttracker.model.Issue;
-import com.example.projecttracker.model.Task;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.Path;
