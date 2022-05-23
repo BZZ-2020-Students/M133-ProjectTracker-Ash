@@ -28,7 +28,8 @@ public class ProjectDatahandler extends DataHandlerGen<Project> {
     }
 
     /**
-     * Gets a single project from the JSON file.
+     * Gets a single project from the JSON file. If project is found, we also set the tasks, issues, and patch notes.
+     * if project is not found, we return null.
      *
      * @param fieldValue the value of the field to search for
      * @return the project with the given field value or null if no project with that field value exists
@@ -36,6 +37,7 @@ public class ProjectDatahandler extends DataHandlerGen<Project> {
      * @throws NoSuchFieldException   if the field does not exist
      * @throws IllegalAccessException if the field cannot be accessed
      * @author Alyssa Heimlicher
+     * @see DataHandlerGen#getSingleFromJsonArray(String, String, Object)
      * @since 2020-05-23
      */
     public Project getSingleFromJsonArray(Object fieldValue) throws IOException, NoSuchFieldException, IllegalAccessException {
@@ -58,6 +60,17 @@ public class ProjectDatahandler extends DataHandlerGen<Project> {
         return project;
     }
 
+    /**
+     * Returns all found Projects. Also sets the tasks, issues, and patch notes of each project.
+     *
+     * @return all found Projects
+     * @throws IOException            if the file cannot be read
+     * @throws NoSuchFieldException   if the field does not exist
+     * @throws IllegalAccessException if the field cannot be accessed
+     * @author Alyssa Heimlicher
+     * @see DataHandlerGen#getArrayListOutOfJSON(String)
+     * @since 2020-05-23
+     */
     public ArrayList<Project> getArrayListOutOfJSON() throws IOException, NoSuchFieldException, IllegalAccessException {
         ArrayList<Project> projects = super.getArrayListOutOfJSON("projectJSON");
 
@@ -76,6 +89,18 @@ public class ProjectDatahandler extends DataHandlerGen<Project> {
         return projects;
     }
 
+    /**
+     * Utility method to set the tasks of a project.
+     *
+     * @param tasks           The list to add the tasks to
+     * @param taskDataHandler The data handler to use to get the tasks
+     * @param project         The project to set the tasks of
+     * @throws IOException            if the file cannot be read
+     * @throws NoSuchFieldException   if the field does not exist
+     * @throws IllegalAccessException if the field cannot be accessed
+     * @author Alyssa Heimlicher
+     * @since 2020-05-23
+     */
     private void setTasks(ArrayList<Task> tasks, TaskDataHandler taskDataHandler, Project project) throws IOException, NoSuchFieldException, IllegalAccessException {
         for (Integer taskID : project.getTaskIds()) {
             Task task = taskDataHandler.readTaskById(taskID);
@@ -84,6 +109,18 @@ public class ProjectDatahandler extends DataHandlerGen<Project> {
         project.setTasks(tasks);
     }
 
+    /**
+     * Utility method to set the issues of a project.
+     *
+     * @param issues           The list to add the issues to
+     * @param issueDataHandler The data handler to use to get the issues
+     * @param project          The project to set the issues of
+     * @throws IOException            if the file cannot be read
+     * @throws NoSuchFieldException   if the field does not exist
+     * @throws IllegalAccessException if the field cannot be accessed
+     * @author Alyssa Heimlicher
+     * @since 2020-05-23
+     */
     private void setIssues(ArrayList<Issue> issues, IssueDataHandler issueDataHandler, Project project) throws IOException, NoSuchFieldException, IllegalAccessException {
         for (Integer issueId : project.getIssueIds()) {
             Issue issue = issueDataHandler.readIssueByID(issueId);
@@ -92,6 +129,18 @@ public class ProjectDatahandler extends DataHandlerGen<Project> {
         project.setIssues(issues);
     }
 
+    /**
+     * Utility method to set the patch notes of a project.
+     *
+     * @param patchNotes           The list to add the patch notes to
+     * @param patchnoteDataHandler The data handler to use to get the patch notes
+     * @param project              The project to set the patch notes of
+     * @throws IOException            if the file cannot be read
+     * @throws NoSuchFieldException   if the field does not exist
+     * @throws IllegalAccessException if the field cannot be accessed
+     * @author Alyssa Heimlicher
+     * @since 2020-05-23
+     */
     private void setPatchNotes(ArrayList<PatchNote> patchNotes, PatchnoteDataHandler patchnoteDataHandler, Project project) throws IOException, NoSuchFieldException, IllegalAccessException {
         for (Integer patchnoteID : project.getTaskIds()) {
             PatchNote patchNote = patchnoteDataHandler.readPatchNoteByID(patchnoteID);
