@@ -44,7 +44,6 @@ public class ProjectDatahandler extends DataHandlerGen<Project> {
         Project project = super.getSingleFromJsonArray("projectJSON", "projectId", fieldValue);
 
         if (project != null) {
-            ArrayList<Task> tasks = new ArrayList<>();
             TaskDataHandler taskDataHandler = new TaskDataHandler();
             setTasks(taskDataHandler, project);
 
@@ -52,7 +51,6 @@ public class ProjectDatahandler extends DataHandlerGen<Project> {
             IssueDataHandler issueDataHandler = new IssueDataHandler();
             setIssues(issueDataHandler, project);
 
-            ArrayList<PatchNote> patchNotes = new ArrayList<>();
             PatchnoteDataHandler patchnoteDataHandler = new PatchnoteDataHandler();
             setPatchNotes(patchnoteDataHandler, project);
         }
