@@ -37,13 +37,11 @@ public class Config extends Application {
             properties = new Properties();
             try (InputStream input = new FileInputStream(Config.class.getClassLoader().getResource("project.properties").getFile())) {
                 properties.load(input);
-
-                System.out.println("properties = " + properties);
             } catch (IOException e) {
-                System.out.println("olla");
                 e.printStackTrace();
             }
         }
+
     }
 
     /**
