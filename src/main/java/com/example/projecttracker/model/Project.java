@@ -11,6 +11,7 @@ import lombok.Setter;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.UUID;
 
 /**
  * Project Class for the Project Tracker App
@@ -101,27 +102,27 @@ public class Project {
      * @return an ArrayList of taskIds
      * @author Alyssa Heimlicher
      */
-    public ArrayList<Integer> getTaskIds() {
-        ArrayList<Integer> taskIds = new ArrayList<>();
+    public ArrayList<String> getTaskUUIds() {
+        ArrayList<String> taskUUIDs = new ArrayList<>();
         for (Task task : getTasks()) {
-            taskIds.add(task.getTaskId());
+            taskUUIDs.add(task.getTaskUUID());
         }
-        return taskIds;
+        return taskUUIDs;
     }
 
     /**
      * set the taskIds from the tasks to the project
      *
-     * @param taskIds the taskIds to set
+     * @param taskUUIDs the taskUUIDs to set
      * @throws IOException            if the json file cannot be read
      * @throws NoSuchFieldException   if the field does not exist
      * @throws IllegalAccessException if the file cannot be accessed
      * @author Alyssa Heimlicher
      */
-    public void setTaskIds(ArrayList<Integer> taskIds) throws IOException, NoSuchFieldException, IllegalAccessException {
+    public void setTaskIds(ArrayList<String> taskUUIDs) throws IOException, NoSuchFieldException, IllegalAccessException {
         TaskDataHandler taskDataHandler = new TaskDataHandler();
-        for (Integer taskID : taskIds) {
-            getTasks().add(taskDataHandler.readTaskById(taskID));
+        for (String taskUUID : taskUUIDs) {
+            getTasks().add(taskDataHandler.readTaskByUUID(taskUUID));
         }
     }
 

@@ -3,6 +3,7 @@ package com.example.projecttracker.model;
 import lombok.*;
 
 import java.util.Date;
+import java.util.UUID;
 
 /**
  * Tasks that can be assigned to a project.
@@ -23,7 +24,7 @@ public class Task {
      *
      * @since 1.0
      */
-    private Integer taskId;
+    private String taskUUID;
     /**
      * The name of the task.
      *
@@ -48,4 +49,5 @@ public class Task {
      * @since 1.0
      */
     private Status status;
+
 }

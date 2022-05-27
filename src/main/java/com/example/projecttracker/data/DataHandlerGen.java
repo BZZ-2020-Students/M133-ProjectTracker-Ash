@@ -27,7 +27,6 @@ import java.util.ArrayList;
 public class DataHandlerGen<T> {
     /**
      * The class of the data
-     *
      */
     @NonNull
     private final Class<T> tClass;
@@ -75,6 +74,25 @@ public class DataHandlerGen<T> {
         }
 
         return null;
+    }
+
+    /**
+     * Adds a new data to the JSON-file
+     *
+     * @param object       the data that we want to add
+     * @param propertyName the name of the property that tells us which JSON-file to write in
+     * @author Alyssa Heimlicher
+     */
+    public void insertIntoJson(T object, String propertyName) {
+        try {
+            ObjectMapper objectMapper = new ObjectMapper();
+            String path = Config.getProperty(propertyName);
+            ArrayList<T> objects = getArrayListOutOfJSON(propertyName);
+            objects.add(object);
+            objectMapper.writeValue(Paths.get(path).toFile(), objects);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
 

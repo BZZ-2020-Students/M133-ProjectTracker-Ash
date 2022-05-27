@@ -1,16 +1,18 @@
 package com.example.projecttracker.services;
 
+import com.example.projecttracker.data.DataHandlerGen;
 import com.example.projecttracker.data.TaskDataHandler;
+import com.example.projecttracker.model.Status;
 import com.example.projecttracker.model.Task;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import jakarta.ws.rs.GET;
-import jakarta.ws.rs.Path;
-import jakarta.ws.rs.PathParam;
-import jakarta.ws.rs.Produces;
+import jakarta.ws.rs.*;
+import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.UUID;
 
 
 /**
@@ -44,18 +46,18 @@ public class TaskResource {
     }
 
     /**
-     * This method gets a task from the json file by its id.
+     * This method gets a task from the json file by its uuid.
      *
-     * @param id the id of the task
+     * @param uuid the uuid of the task
      * @return a task with the id
      * @author Alyssa Heimlicher
      */
     @GET
     @Produces("application/json")
-    @Path("/{id}")
-    public Response getSingleTaskByID(@PathParam("id") int id) {
+    @Path("/{uuid}")
+    public Response getSingleTaskByID(@PathParam("uuid") String uuid) {
         try {
-            Task task = new TaskDataHandler().readTaskById(id);
+            Task task = new TaskDataHandler().readTaskByUUID(uuid);
             ObjectMapper objectMapper = new ObjectMapper();
 
             if (task == null) {
@@ -66,5 +68,24 @@ public class TaskResource {
         } catch (IOException | NoSuchFieldException | IllegalAccessException e) {
             return Response.status(500).entity("{\"error\":\"" + e.getMessage() + "\"}").build();
         }
+    }
+
+    @Path("/create")
+    @POST
+    @Produces(MediaType.TEXT_PLAIN)
+    public Response insertTask(@FormParam("title") String title,
+                               @FormParam("description") String description,
+                               @FormParam("deadline") Date deadline) {
+        System.out.println("TaskResource.insertTask");
+        System.out.println("title = " + title);
+        String taskUUID = UUID.randomUUID().toString();
+        Task task = new Task(taskUUID, title, description, deadline, Status.TODO);
+        DataHandlerGen<Task> dh = new DataHandlerGen<>(Task.class);
+        dh.insertIntoJson(task, "taskJSON");
+
+        return Response
+                .status(200)
+                .entity("")
+                .build();
     }
 }

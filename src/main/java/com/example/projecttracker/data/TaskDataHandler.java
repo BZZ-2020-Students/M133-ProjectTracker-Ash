@@ -27,15 +27,15 @@ public class TaskDataHandler extends DataHandlerGen<Task> {
     /**
      * reads a Task by its id
      *
-     * @param id the id of the Task
+     * @param uuid the uuid of the Task
      * @return the Task (null=not found)
      * @throws IOException if the file cannot be read
      * @throws NoSuchFieldException if the field is not found
      * @throws IllegalAccessException if the field is not accessible
      * @author Alyssa Heimlicher
      */
-    public Task readTaskById(int id) throws IOException, NoSuchFieldException, IllegalAccessException {
-        return super.getSingleFromJsonArray("taskJSON", "taskId", id);
+    public Task readTaskByUUID(String uuid) throws IOException, NoSuchFieldException, IllegalAccessException {
+        return super.getSingleFromJsonArray("taskJSON", "taskUUID", uuid);
     }
 
     /**
@@ -48,4 +48,6 @@ public class TaskDataHandler extends DataHandlerGen<Task> {
     public ArrayList<Task> getArrayListOutOfJSON() throws IOException {
         return super.getArrayListOutOfJSON("taskJSON");
     }
+
+
 }

@@ -96,8 +96,8 @@ public class ProjectDatahandler extends DataHandlerGen<Project> {
      */
     private void setTasks(TaskDataHandler taskDataHandler, Project project) throws IOException, NoSuchFieldException, IllegalAccessException {
         ArrayList<Task> tasks = new ArrayList<>();
-        for (Integer taskID : project.getTaskIds()) {
-            Task task = taskDataHandler.readTaskById(taskID);
+        for (String taskUUid : project.getTaskUUIds()) {
+            Task task = taskDataHandler.readTaskByUUID(taskUUid);
             tasks.add(task);
         }
         project.setTasks(tasks);
@@ -136,7 +136,7 @@ public class ProjectDatahandler extends DataHandlerGen<Project> {
      */
     private void setPatchNotes(PatchnoteDataHandler patchnoteDataHandler, Project project) throws IOException, NoSuchFieldException, IllegalAccessException {
         ArrayList<PatchNote> patchNotes = new ArrayList<>();
-        for (Integer patchnoteID : project.getTaskIds()) {
+        for (Integer patchnoteID : project.getPatchnoteIds()) {
             PatchNote patchNote = patchnoteDataHandler.readPatchNoteByID(patchnoteID);
             patchNotes.add(patchNote);
         }

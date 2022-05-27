@@ -9,7 +9,7 @@
     "userUUID": "123e4567-e89b-12d3-a456-426614174000",
     "tasks": [
       {
-        "taskId": 1
+        "taskUUID": "de3b2066-dc08-11ec-9d64-0242ac120002"
       }
     ],
     "issues": [
