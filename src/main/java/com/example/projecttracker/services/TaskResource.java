@@ -5,6 +5,8 @@ import com.example.projecttracker.data.TaskDataHandler;
 import com.example.projecttracker.model.Status;
 import com.example.projecttracker.model.Task;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
@@ -40,7 +42,8 @@ public class TaskResource {
         try {
             ArrayList<Task> tasks = new TaskDataHandler().getArrayListOutOfJSON();
             ObjectMapper objectMapper = new ObjectMapper();
-            objectMapper.findAndRegisterModules();
+            objectMapper.registerModule(new JavaTimeModule());
+            objectMapper.configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false);
             return Response.status(200).entity(objectMapper.writeValueAsString(tasks)).build();
         } catch (IOException e) {
             e.printStackTrace();
@@ -62,7 +65,8 @@ public class TaskResource {
         try {
             Task task = new TaskDataHandler().readTaskByUUID(uuid);
             ObjectMapper objectMapper = new ObjectMapper();
-            objectMapper.findAndRegisterModules();
+            objectMapper.registerModule(new JavaTimeModule());
+            objectMapper.configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false);
             if (task == null) {
                 return Response.status(404).entity("{\"error\":\"Task not found\"}").build();
             }
@@ -88,11 +92,9 @@ public class TaskResource {
     @Path("/create")
     public Response insertTask(@FormParam("title") String title,
                                @FormParam("description") String description,
-                               @FormParam("deadline") Date deadline) {
+                               @FormParam("deadline") String deadline) {
         System.out.println("TaskResource.insertTask");
-        LocalDate deadlineLocal = deadline.toInstant()
-                .atZone(ZoneId.systemDefault())
-                .toLocalDate();
+        LocalDate deadlineLocal = LocalDate.parse(deadline);
         String taskUUID = UUID.randomUUID().toString();
         Task task = new Task(taskUUID, title, description, deadlineLocal, Status.TODO);
         DataHandlerGen<Task> dh = new DataHandlerGen<>(Task.class);
