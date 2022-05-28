@@ -1,6 +1,6 @@
 [
   {
-    "projectId": 1,
+    "projectUUID": "1916f60c-de88-11ec-9d64-0242ac120002",
     "title": "FPS Game",
     "description": "This is a first person shooter in development",
     "startDate": "2022-03-01",

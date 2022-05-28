@@ -36,6 +36,7 @@ public class PatchNoteResource {
         try {
             ArrayList<PatchNote> patchNotes = new DataHandlerGen<>(PatchNote.class).getArrayListOutOfJSON("patchNoteJSON");
             ObjectMapper objectMapper = new ObjectMapper();
+            objectMapper.findAndRegisterModules();
             return Response.status(200).entity(objectMapper.writeValueAsString(patchNotes)).build();
         } catch (IOException e) {
             e.printStackTrace();
@@ -56,7 +57,7 @@ public class PatchNoteResource {
         try {
             PatchNote patchNote = new DataHandlerGen<>(PatchNote.class).getSingleFromJsonArray("patchNoteJSON", "patchNoteId", id);
             ObjectMapper objectMapper = new ObjectMapper();
-
+            objectMapper.findAndRegisterModules();
             if (patchNote == null) {
                 return Response.status(404).entity("{\"error\":\"PatchNote not found\"}").build();
             }

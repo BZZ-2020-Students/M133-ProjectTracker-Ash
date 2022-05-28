@@ -3,14 +3,14 @@
     "taskUUID": "de3b2066-dc08-11ec-9d64-0242ac120002",
     "title": "implement pathfinding for AI",
     "description": "Ai needs pathfinding in order to have any function other than just standing still.",
-    "deadline": 1653264000000,
+    "deadline": "2022-06-01",
     "status": "IN_PROGRESS"
   },
   {
     "taskUUID": "db117daa-e295-4597-abcd-a69496797dc0",
     "title": "Complete physics",
     "description": "Physics is a core part of the game, so it needs to be completed.",
-    "deadline": 1653868800000,
+    "deadline": "2022-06-01",
     "status": "IN_PROGRESS"
   }
 ]

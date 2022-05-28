@@ -35,6 +35,7 @@ public class IssueResource {
         try {
             ArrayList<Issue> issues = new DataHandlerGen<>(Issue.class).getArrayListOutOfJSON("issueJSON");
             ObjectMapper objectMapper = new ObjectMapper();
+            objectMapper.findAndRegisterModules();
             return Response.status(200).entity(objectMapper.writeValueAsString(issues)).build();
         } catch (IOException e) {
             e.printStackTrace();
@@ -56,7 +57,7 @@ public class IssueResource {
         try {
             Issue issue = new DataHandlerGen<>(Issue.class).getSingleFromJsonArray("issueJSON", "issueId", id);
             ObjectMapper objectMapper = new ObjectMapper();
-
+            objectMapper.findAndRegisterModules();
             if (issue == null) {
                 return Response.status(404).entity("{\"error\":\"Issue not found\"}").build();
             }

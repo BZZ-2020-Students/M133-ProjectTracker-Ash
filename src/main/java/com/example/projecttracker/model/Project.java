@@ -10,8 +10,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.io.IOException;
+import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.UUID;
 
 /**
  * Project Class for the Project Tracker App
@@ -29,7 +29,7 @@ public class Project {
     /**
      * The project's unique ID
      */
-    private Integer projectId;
+    private String projectUUID;
     /**
      * The project's name
      */
@@ -41,7 +41,7 @@ public class Project {
     /**
      * The project's start date
      */
-    private String startDate;
+    private LocalDate startDate;
     /**
      * Boolean value for whether the project is completed
      */

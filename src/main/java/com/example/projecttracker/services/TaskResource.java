@@ -10,6 +10,8 @@ import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 
 import java.io.IOException;
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.UUID;
@@ -38,8 +40,7 @@ public class TaskResource {
         try {
             ArrayList<Task> tasks = new TaskDataHandler().getArrayListOutOfJSON();
             ObjectMapper objectMapper = new ObjectMapper();
-            System.out.println("TaskResource.getAllTasks");
-            System.out.println("tasks can happen");
+            objectMapper.findAndRegisterModules();
             return Response.status(200).entity(objectMapper.writeValueAsString(tasks)).build();
         } catch (IOException e) {
             e.printStackTrace();
@@ -61,7 +62,7 @@ public class TaskResource {
         try {
             Task task = new TaskDataHandler().readTaskByUUID(uuid);
             ObjectMapper objectMapper = new ObjectMapper();
-
+            objectMapper.findAndRegisterModules();
             if (task == null) {
                 return Response.status(404).entity("{\"error\":\"Task not found\"}").build();
             }
@@ -73,7 +74,15 @@ public class TaskResource {
     }
 
 
-
+    /**
+     * This method creates a new task and adds it to the json file.
+     *
+     * @param title       the title of the task
+     * @param description the description of the task
+     * @param deadline    the deadline of the task
+     * @return a response
+     * @author Alyssa Heimlicher
+     */
     @POST
     @Produces(MediaType.TEXT_PLAIN)
     @Path("/create")
@@ -81,9 +90,11 @@ public class TaskResource {
                                @FormParam("description") String description,
                                @FormParam("deadline") Date deadline) {
         System.out.println("TaskResource.insertTask");
-        System.out.println("title = " + title);
+        LocalDate deadlineLocal = deadline.toInstant()
+                .atZone(ZoneId.systemDefault())
+                .toLocalDate();
         String taskUUID = UUID.randomUUID().toString();
-        Task task = new Task(taskUUID, title, description, deadline, Status.TODO);
+        Task task = new Task(taskUUID, title, description, deadlineLocal, Status.TODO);
         DataHandlerGen<Task> dh = new DataHandlerGen<>(Task.class);
         dh.insertIntoJson(task, "taskJSON");
 
@@ -95,6 +106,7 @@ public class TaskResource {
 
     /**
      * This method deletes a task from the json file by its uuid.
+     *
      * @param uuid the uuid of the task
      * @return a response with the status code
      */
@@ -107,7 +119,7 @@ public class TaskResource {
             return Response.status(200).entity("{\"success\":\"Task deleted\"}").build();
         } catch (IOException | NoSuchFieldException | IllegalAccessException e) {
             return Response.status(500).entity("{\"error\":\"" + e.getMessage() + "\"}").build();
-        } catch(IllegalArgumentException e) {
+        } catch (IllegalArgumentException e) {
             return Response.status(404).entity("{\"error\":\"Task not found\"}").build();
         }
     }

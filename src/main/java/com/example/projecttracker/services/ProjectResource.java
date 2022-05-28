@@ -35,6 +35,7 @@ public class ProjectResource {
         try {
             ArrayList<Project> projects = new ProjectDatahandler().getArrayListOutOfJSON();
             ObjectMapper objectMapper = new ObjectMapper();
+            objectMapper.findAndRegisterModules();
             return Response.status(200).entity(objectMapper.writeValueAsString(projects)).build();
         } catch (IOException | NoSuchFieldException | IllegalAccessException e) {
             e.printStackTrace();
@@ -45,22 +46,23 @@ public class ProjectResource {
     /**
      * This method is used to get a specific project from the json file based on the id.
      *
-     * @param id the id of the project
+     * @param uuid the id of the project
      * @return a project with the id
      * @author Alyssa Heimlicher
      */
     @GET
     @Produces("application/json")
-    @Path("/{id}")
-    public Response getSingleProjectByID(@PathParam("id") int id) {
+    @Path("/{uuid}")
+    public Response getSingleProjectByID(@PathParam("uuid") String uuid) {
         try {
-            Project project = new ProjectDatahandler().getSingleFromJsonArray(id);
+            Project project = new ProjectDatahandler().getSingleFromJsonArray(uuid);
 
             if (project == null) {
                 return Response.status(404).entity("{\"error\":\"Project not found\"}").build();
             }
 
             ObjectMapper objectMapper = new ObjectMapper();
+            objectMapper.findAndRegisterModules();
             return Response.status(200).entity(objectMapper.writeValueAsString(project)).build();
         } catch (IOException | NoSuchFieldException | IllegalAccessException e) {
             return Response.status(500).entity("{\"error\":\"" + e.getMessage() + "\"}").build();

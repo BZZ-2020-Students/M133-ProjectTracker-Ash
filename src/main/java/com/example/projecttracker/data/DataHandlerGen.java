@@ -47,6 +47,7 @@ public class DataHandlerGen<T> {
                 Paths.get(filePath)
         );
         ObjectMapper objectMapper = new ObjectMapper();
+        objectMapper.findAndRegisterModules();
         return objectMapper.readValue(jsonData, objectMapper.getTypeFactory().constructCollectionType(ArrayList.class, tClass));
     }
 

@@ -35,6 +35,7 @@ public class UserResource {
         try {
             ArrayList<User> users = new DataHandlerGen<>(User.class).getArrayListOutOfJSON("userJSON");
             ObjectMapper objectMapper = new ObjectMapper();
+            objectMapper.findAndRegisterModules();
             return Response.status(200).entity(objectMapper.writeValueAsString(users)).build();
         } catch (IOException e) {
             e.printStackTrace();
@@ -56,7 +57,7 @@ public class UserResource {
         try {
             User user = new DataHandlerGen<>(User.class).getSingleFromJsonArray("userJSON", "userUUID", uuid);
             ObjectMapper objectMapper = new ObjectMapper();
-
+            objectMapper.findAndRegisterModules();
             if (user == null) {
                 return Response.status(404).entity("{\"error\":\"User not found\"}").build();
             }

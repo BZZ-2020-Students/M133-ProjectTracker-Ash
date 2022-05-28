@@ -41,7 +41,7 @@ public class ProjectDatahandler extends DataHandlerGen<Project> {
      * @since 2020-05-23
      */
     public Project getSingleFromJsonArray(Object fieldValue) throws IOException, NoSuchFieldException, IllegalAccessException {
-        Project project = super.getSingleFromJsonArray("projectJSON", "projectId", fieldValue);
+        Project project = super.getSingleFromJsonArray("projectJSON", "projectUUID", fieldValue);
 
         if (project != null) {
             TaskDataHandler taskDataHandler = new TaskDataHandler();

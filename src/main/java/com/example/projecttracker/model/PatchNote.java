@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 /**
@@ -43,7 +44,7 @@ public class PatchNote {
      *
      * @since 1.0
      */
-    private Date date;
+    private LocalDate date;
     /**
      * The version number of the patch note.
      *
