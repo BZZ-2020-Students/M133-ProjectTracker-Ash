@@ -13,9 +13,7 @@ import jakarta.ws.rs.core.Response;
 
 import java.io.IOException;
 import java.time.LocalDate;
-import java.time.ZoneId;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.UUID;
 
 
@@ -101,7 +99,7 @@ public class TaskResource {
         dh.insertIntoJson(task, "taskJSON");
 
         return Response
-                .status(200)
+                .status(201)
                 .entity("")
                 .build();
     }
@@ -111,6 +109,7 @@ public class TaskResource {
      *
      * @param uuid the uuid of the task
      * @return a response with the status code
+     * @author Alyssa Heimlicher
      */
     @DELETE
     @Produces("application/json")

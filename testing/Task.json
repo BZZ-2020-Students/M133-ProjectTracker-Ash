@@ -12,12 +12,5 @@
     "description": "Physics is a core part of the game, so it needs to be completed.",
     "deadline": "2022-06-01",
     "status": "IN_PROGRESS"
-  },
-  {
-    "taskUUID": "adb43605-49c6-45c9-a3c9-d37db8ceadd7",
-    "title": "New Tasks",
-    "description": "wow a new description",
-    "deadline": "2022-06-10",
-    "status": "TODO"
   }
 ]

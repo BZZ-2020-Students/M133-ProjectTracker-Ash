@@ -4,7 +4,6 @@ import com.example.projecttracker.data.DataHandlerGen;
 import com.example.projecttracker.data.IssueDataHandler;
 import com.example.projecttracker.model.Issue;
 import com.example.projecttracker.model.Status;
-import com.example.projecttracker.model.Task;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
@@ -13,10 +12,7 @@ import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 
 import java.io.IOException;
-import java.time.LocalDate;
-import java.time.ZoneId;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.UUID;
 
 /**
@@ -89,8 +85,8 @@ public class IssueResource {
     @Produces(MediaType.TEXT_PLAIN)
     @Path("/create")
     public Response insertIssue(@FormParam("title") String title,
-                               @FormParam("description") String description,
-                               @FormParam("severity") String severity) {
+                                @FormParam("description") String description,
+                                @FormParam("severity") String severity) {
         System.out.println("IssueResource.insertIssue");
         String issueUUID = UUID.randomUUID().toString();
         Issue issue = new Issue(issueUUID, title, description, severity, Status.TODO);
@@ -98,8 +94,28 @@ public class IssueResource {
         dh.insertIntoJson(issue, "issueJSON");
 
         return Response
-                .status(200)
+                .status(201)
                 .entity("")
                 .build();
+    }
+
+    /**
+     * This method deletes an issue from the json file based on the uuid.
+     * @param uuid the uuid of the issue
+     * @return a response based on if the issue was deleted or not
+     * @author Alyssa Heimlicher
+     */
+    @DELETE
+    @Produces("application/json")
+    @Path("/delete/{uuid}")
+    public Response deleteIssueByUUID(@PathParam("uuid") String uuid) {
+        try {
+            new IssueDataHandler().deleteSingleFromJson("issueJSON", "issueUUID",uuid);
+            return Response.status(200).entity("{\"success\":\"Issue deleted\"}").build();
+        } catch (IOException | NoSuchFieldException | IllegalAccessException e) {
+            return Response.status(500).entity("{\"error\":\"" + e.getMessage() + "\"}").build();
+        }catch(IllegalArgumentException e){
+            return Response.status(404).entity("{\"error\":\"Issue not found\"}").build();
+        }
     }
 }
