@@ -4,5 +4,11 @@
     "userName": "guest",
     "password": "123456",
     "userRole": "guest"
+  },
+  {
+    "userUUID": "7aa9bd67-a4f6-40de-bfae-ca143e5c80ca",
+    "userName": "Hans51",
+    "password": "MinG4QDAQc1hSFS",
+    "userRole": "Guest"
   }
 ]

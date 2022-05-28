@@ -1,18 +1,18 @@
 package com.example.projecttracker.services;
 
 import com.example.projecttracker.data.DataHandlerGen;
+import com.example.projecttracker.data.UserDataHandler;
 import com.example.projecttracker.model.User;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import jakarta.ws.rs.GET;
-import jakarta.ws.rs.Path;
-import jakarta.ws.rs.PathParam;
-import jakarta.ws.rs.Produces;
+import jakarta.ws.rs.*;
+import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.UUID;
 
 /**
  * This class is used to handle all requests to the user class.
@@ -69,5 +69,28 @@ public class UserResource {
         } catch (IOException | NoSuchFieldException | IllegalAccessException e) {
             return Response.status(500).entity("{\"error\":\"" + e.getMessage() + "\"}").build();
         }
+    }
+
+    /**
+     * Creates a new user and adds it to the json file.
+     *
+     * @param username the username of the user
+     * @param password the password of the user
+     * @return a response depending on the success of the operation.
+     * @author Alyssa Heimlicher
+     */
+    @POST
+    @Produces(MediaType.TEXT_PLAIN)
+    @Path("/create")
+    public Response createPatchNote(@FormParam("username") String username,
+                                    @FormParam("password") String password) {
+        String userUUID = UUID.randomUUID().toString();
+        User user = new User(userUUID, username, password, "Guest");
+        new UserDataHandler().insertIntoJson(user, "userJSON");
+
+        return Response
+                .status(200)
+                .entity("")
+                .build();
     }
 }
