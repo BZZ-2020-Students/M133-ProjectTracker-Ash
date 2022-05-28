@@ -116,8 +116,8 @@ public class ProjectDatahandler extends DataHandlerGen<Project> {
      */
     private void setIssues(IssueDataHandler issueDataHandler, Project project) throws IOException, NoSuchFieldException, IllegalAccessException {
         ArrayList<Issue> issues = new ArrayList<>();
-        for (Integer issueId : project.getIssueIds()) {
-            Issue issue = issueDataHandler.readIssueByID(issueId);
+        for (String issueUUID : project.getIssueUUID()) {
+            Issue issue = issueDataHandler.readIssueByUUID(issueUUID);
             issues.add(issue);
         }
         project.setIssues(issues);

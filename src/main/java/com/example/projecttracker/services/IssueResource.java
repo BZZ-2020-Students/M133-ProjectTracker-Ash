@@ -1,6 +1,7 @@
 package com.example.projecttracker.services;
 
 import com.example.projecttracker.data.DataHandlerGen;
+import com.example.projecttracker.data.IssueDataHandler;
 import com.example.projecttracker.model.Issue;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.ws.rs.GET;
@@ -46,16 +47,16 @@ public class IssueResource {
     /**
      * Gets an issue from the JSON file based on the id.
      *
-     * @param id the id of the issue
+     * @param uuid the uuid of the issue
      * @return the issue
      * @author Alyssa Heimlicher
      */
     @GET
     @Produces("application/json")
-    @Path("/{id}")
-    public Response getSingleIssueByID(@PathParam("id") int id) {
+    @Path("/{uuid}")
+    public Response getSingleIssueByUUID(@PathParam("uuid") String uuid) {
         try {
-            Issue issue = new DataHandlerGen<>(Issue.class).getSingleFromJsonArray("issueJSON", "issueId", id);
+            Issue issue = new IssueDataHandler().readIssueByUUID(uuid);
             ObjectMapper objectMapper = new ObjectMapper();
             objectMapper.findAndRegisterModules();
             if (issue == null) {

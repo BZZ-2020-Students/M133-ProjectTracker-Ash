@@ -22,7 +22,7 @@ public class Issue {
      *
      * @since 1.0
      */
-    private Integer issueId;
+    private String issueUUID;
     /**
      * The name of the issue.
      *

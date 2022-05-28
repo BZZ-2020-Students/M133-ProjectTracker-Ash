@@ -132,10 +132,10 @@ public class Project {
      * @return an ArrayList of issueIds
      * @author Alyssa Heimlicher
      */
-    public ArrayList<Integer> getIssueIds() {
-        ArrayList<Integer> issueIds = new ArrayList<>();
+    public ArrayList<String> getIssueUUID() {
+        ArrayList<String> issueIds = new ArrayList<>();
         for (Issue issue : getIssues()) {
-            issueIds.add(issue.getIssueId());
+            issueIds.add(issue.getIssueUUID());
         }
         return issueIds;
     }
@@ -143,16 +143,16 @@ public class Project {
     /**
      * set the issueIds from the issues to the project
      *
-     * @param issueIds the issueIds to set
+     * @param issueUUIDs the issueUUID to set
      * @throws IOException            if the json file cannot be read
      * @throws NoSuchFieldException   if the field does not exist
      * @throws IllegalAccessException if the file cannot be accessed
      * @author Alyssa Heimlicher
      */
-    public void setIssueIds(ArrayList<Integer> issueIds) throws IOException, NoSuchFieldException, IllegalAccessException {
+    public void setIssueIds(ArrayList<String> issueUUIDs) throws IOException, NoSuchFieldException, IllegalAccessException {
         IssueDataHandler issueDataHandler = new IssueDataHandler();
-        for (Integer taskID : issueIds) {
-            getIssues().add(issueDataHandler.readIssueByID(taskID));
+        for (String issueUUID : issueUUIDs) {
+            getIssues().add(issueDataHandler.readIssueByUUID(issueUUID));
         }
     }
 
