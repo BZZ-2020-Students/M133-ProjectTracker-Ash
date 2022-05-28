@@ -2,6 +2,8 @@ package com.example.projecttracker.data;
 
 import com.example.projecttracker.Config;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
@@ -47,7 +49,8 @@ public class DataHandlerGen<T> {
                 Paths.get(filePath)
         );
         ObjectMapper objectMapper = new ObjectMapper();
-        objectMapper.findAndRegisterModules();
+        objectMapper.registerModule(new JavaTimeModule());
+        objectMapper.configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false);
         return objectMapper.readValue(jsonData, objectMapper.getTypeFactory().constructCollectionType(ArrayList.class, tClass));
     }
 
@@ -128,6 +131,8 @@ public class DataHandlerGen<T> {
         try {
             ObjectMapper objectMapper = new ObjectMapper();
             String path = Config.getProperty(propertyName);
+            objectMapper.registerModule(new JavaTimeModule());
+            objectMapper.configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false);
             objectMapper.writeValue(Paths.get(path).toFile(), objects);
         } catch (IOException e) {
             e.printStackTrace();

@@ -5,5 +5,12 @@
     "description": "Ai not responding to player when standing in front of it",
     "severity": "High",
     "status": "TODO"
+  },
+  {
+    "issueUUID": "7ef6e642-d19e-4461-8a94-0155eaa2a606",
+    "title": "Issue is here",
+    "description": "its quite important",
+    "severity": "mild",
+    "status": "TODO"
   }
 ]

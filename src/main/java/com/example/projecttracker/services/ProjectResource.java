@@ -3,6 +3,8 @@ package com.example.projecttracker.services;
 import com.example.projecttracker.data.ProjectDatahandler;
 import com.example.projecttracker.model.Project;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.PathParam;
@@ -35,7 +37,8 @@ public class ProjectResource {
         try {
             ArrayList<Project> projects = new ProjectDatahandler().getArrayListOutOfJSON();
             ObjectMapper objectMapper = new ObjectMapper();
-            objectMapper.findAndRegisterModules();
+            objectMapper.registerModule(new JavaTimeModule());
+            objectMapper.configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false);
             return Response.status(200).entity(objectMapper.writeValueAsString(projects)).build();
         } catch (IOException | NoSuchFieldException | IllegalAccessException e) {
             e.printStackTrace();
@@ -62,7 +65,8 @@ public class ProjectResource {
             }
 
             ObjectMapper objectMapper = new ObjectMapper();
-            objectMapper.findAndRegisterModules();
+            objectMapper.registerModule(new JavaTimeModule());
+            objectMapper.configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false);
             return Response.status(200).entity(objectMapper.writeValueAsString(project)).build();
         } catch (IOException | NoSuchFieldException | IllegalAccessException e) {
             return Response.status(500).entity("{\"error\":\"" + e.getMessage() + "\"}").build();

@@ -4,6 +4,8 @@ import com.example.projecttracker.data.DataHandlerGen;
 import com.example.projecttracker.data.PatchnoteDataHandler;
 import com.example.projecttracker.model.PatchNote;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.PathParam;
@@ -59,7 +61,8 @@ public class PatchNoteResource {
         try {
             PatchNote patchNote = new PatchnoteDataHandler().readPatchNoteByUUID(uuid);
             ObjectMapper objectMapper = new ObjectMapper();
-            objectMapper.findAndRegisterModules();
+            objectMapper.registerModule(new JavaTimeModule());
+            objectMapper.configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false);
             if (patchNote == null) {
                 return Response.status(404).entity("{\"error\":\"PatchNote not found\"}").build();
             }
