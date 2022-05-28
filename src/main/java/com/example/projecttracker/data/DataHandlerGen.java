@@ -12,6 +12,7 @@ import java.lang.reflect.Field;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * reads and writes the data in the JSON-files
@@ -89,11 +90,47 @@ public class DataHandlerGen<T> {
             String path = Config.getProperty(propertyName);
             ArrayList<T> objects = getArrayListOutOfJSON(propertyName);
             objects.add(object);
-            objectMapper.writeValue(Paths.get(path).toFile(), objects);
+            saveJson(propertyName, objects);
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
+    /**
+     * Deletes a specific data from the JSON-file
+     *
+     * @param propertyName the name of the property that tells us which JSON-file to write in
+     * @param fieldName    the name of the field of the class that we want to delete
+     * @param fieldValue   the value of the data in the field
+     * @throws IOException            when the file cannot be read/is not found
+     * @throws NoSuchFieldException   when the field cannot be found
+     * @throws IllegalAccessException when the field cannot be accessed
+     * @author Alyssa Heimlicher
+     */
+    public void deleteSingleFromJson(String propertyName, String fieldName, Object fieldValue) throws IOException, NoSuchFieldException, IllegalAccessException {
+        ArrayList<T> objects = getArrayListOutOfJSON(propertyName);
+        T object = getSingleFromJsonArray(propertyName, fieldName, fieldValue);
+        if(!objects.remove(object)){
+            throw new IllegalArgumentException("Object not found");
+        }
+        saveJson(propertyName, objects);
+    }
+
+    /**
+     * Saves the data in the JSON-file
+     *
+     * @param propertyName the name of the property that tells us which JSON-file to write in
+     * @param objects      the data that we want to save
+     * @author Alyssa Heimlicher
+     */
+    public void saveJson(String propertyName, List<T> objects) {
+        try {
+            ObjectMapper objectMapper = new ObjectMapper();
+            String path = Config.getProperty(propertyName);
+            objectMapper.writeValue(Paths.get(path).toFile(), objects);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
 }

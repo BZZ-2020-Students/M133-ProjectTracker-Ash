@@ -3,6 +3,7 @@ package com.example.projecttracker.model;
 import lombok.*;
 
 import java.util.Date;
+import java.util.Objects;
 import java.util.UUID;
 
 /**
@@ -50,4 +51,11 @@ public class Task {
      */
     private Status status;
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Task task = (Task) o;
+        return taskUUID.equals(task.taskUUID) && title.equals(task.title) && description.equals(task.description) && deadline.equals(task.deadline) && status == task.status;
+    }
 }

@@ -38,6 +38,8 @@ public class TaskResource {
         try {
             ArrayList<Task> tasks = new TaskDataHandler().getArrayListOutOfJSON();
             ObjectMapper objectMapper = new ObjectMapper();
+            System.out.println("TaskResource.getAllTasks");
+            System.out.println("tasks can happen");
             return Response.status(200).entity(objectMapper.writeValueAsString(tasks)).build();
         } catch (IOException e) {
             e.printStackTrace();
@@ -70,9 +72,11 @@ public class TaskResource {
         }
     }
 
-    @Path("/create")
+
+
     @POST
     @Produces(MediaType.TEXT_PLAIN)
+    @Path("/create")
     public Response insertTask(@FormParam("title") String title,
                                @FormParam("description") String description,
                                @FormParam("deadline") Date deadline) {
@@ -87,5 +91,24 @@ public class TaskResource {
                 .status(200)
                 .entity("")
                 .build();
+    }
+
+    /**
+     * This method deletes a task from the json file by its uuid.
+     * @param uuid the uuid of the task
+     * @return a response with the status code
+     */
+    @DELETE
+    @Produces("application/json")
+    @Path("/delete/{uuid}")
+    public Response deleteTaskByUUID(@PathParam("uuid") String uuid) {
+        try {
+            new TaskDataHandler().deleteSingleFromJson("taskJSON", "taskUUID", uuid);
+            return Response.status(200).entity("{\"success\":\"Task deleted\"}").build();
+        } catch (IOException | NoSuchFieldException | IllegalAccessException e) {
+            return Response.status(500).entity("{\"error\":\"" + e.getMessage() + "\"}").build();
+        } catch(IllegalArgumentException e) {
+            return Response.status(404).entity("{\"error\":\"Task not found\"}").build();
+        }
     }
 }
