@@ -5,5 +5,12 @@
     "description": "Ai now attacks the player",
     "date": "2022-05-01",
     "version": "V1.0.0"
+  },
+  {
+    "patchNoteUUID": "f73da851-feb7-4194-b909-da9cf18025c1",
+    "title": "Hot Fix 1.2.0",
+    "description": "Various Bugfixes and points system is improved. Added new AI",
+    "date": "2022-05-28",
+    "version": "V1.2.0"
   }
 ]

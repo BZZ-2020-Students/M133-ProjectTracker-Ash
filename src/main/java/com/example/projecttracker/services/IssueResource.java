@@ -101,6 +101,7 @@ public class IssueResource {
 
     /**
      * This method deletes an issue from the json file based on the uuid.
+     *
      * @param uuid the uuid of the issue
      * @return a response based on if the issue was deleted or not
      * @author Alyssa Heimlicher
@@ -110,11 +111,11 @@ public class IssueResource {
     @Path("/delete/{uuid}")
     public Response deleteIssueByUUID(@PathParam("uuid") String uuid) {
         try {
-            new IssueDataHandler().deleteSingleFromJson("issueJSON", "issueUUID",uuid);
+            new IssueDataHandler().deleteSingleFromJson("issueJSON", "issueUUID", uuid);
             return Response.status(200).entity("{\"success\":\"Issue deleted\"}").build();
         } catch (IOException | NoSuchFieldException | IllegalAccessException e) {
             return Response.status(500).entity("{\"error\":\"" + e.getMessage() + "\"}").build();
-        }catch(IllegalArgumentException e){
+        } catch (IllegalArgumentException e) {
             return Response.status(404).entity("{\"error\":\"Issue not found\"}").build();
         }
     }

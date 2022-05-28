@@ -91,7 +91,6 @@ public class TaskResource {
     public Response insertTask(@FormParam("title") String title,
                                @FormParam("description") String description,
                                @FormParam("deadline") String deadline) {
-        System.out.println("TaskResource.insertTask");
         LocalDate deadlineLocal = LocalDate.parse(deadline);
         String taskUUID = UUID.randomUUID().toString();
         Task task = new Task(taskUUID, title, description, deadlineLocal, Status.TODO);
