@@ -136,8 +136,8 @@ public class ProjectDatahandler extends DataHandlerGen<Project> {
      */
     private void setPatchNotes(PatchnoteDataHandler patchnoteDataHandler, Project project) throws IOException, NoSuchFieldException, IllegalAccessException {
         ArrayList<PatchNote> patchNotes = new ArrayList<>();
-        for (Integer patchnoteID : project.getPatchnoteIds()) {
-            PatchNote patchNote = patchnoteDataHandler.readPatchNoteByID(patchnoteID);
+        for (String patchnoteUUID : project.getPatchnoteUUIDs()) {
+            PatchNote patchNote = patchnoteDataHandler.readPatchNoteByUUID(patchnoteUUID);
             patchNotes.add(patchNote);
         }
         project.setPatchNotes(patchNotes);

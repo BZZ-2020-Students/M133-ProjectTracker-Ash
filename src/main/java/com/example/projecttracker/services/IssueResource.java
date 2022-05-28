@@ -45,7 +45,7 @@ public class IssueResource {
     }
 
     /**
-     * Gets an issue from the JSON file based on the id.
+     * Gets an issue from the JSON file based on the uuid.
      *
      * @param uuid the uuid of the issue
      * @return the issue

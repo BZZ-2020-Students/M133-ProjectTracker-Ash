@@ -162,27 +162,27 @@ public class Project {
      * @return an ArrayList of patchNoteIds
      * @author Alyssa Heimlicher
      */
-    public ArrayList<Integer> getPatchnoteIds() {
-        ArrayList<Integer> patchnoteIds = new ArrayList<>();
+    public ArrayList<String> getPatchnoteUUIDs() {
+        ArrayList<String> patchnoteUUIDs = new ArrayList<>();
         for (PatchNote patchnote : getPatchNotes()) {
-            patchnoteIds.add(patchnote.getPatchNoteId());
+            patchnoteUUIDs.add(patchnote.getPatchNoteUUID());
         }
-        return patchnoteIds;
+        return patchnoteUUIDs;
     }
 
     /**
      * set the patchNoteIds from the patchNotes to the project
      *
-     * @param patchnoteIds the patchNoteIds to set
+     * @param patchnoteUUIDs the patchNoteUUIDs to set
      * @throws IOException            if the json file cannot be read
      * @throws NoSuchFieldException   if the field does not exist
      * @throws IllegalAccessException if the file cannot be accessed
      * @author Alyssa Heimlicher
      */
-    public void setPatchnoteIds(ArrayList<Integer> patchnoteIds) throws IOException, NoSuchFieldException, IllegalAccessException {
+    public void setPatchnoteUUIDs(ArrayList<String> patchnoteUUIDs) throws IOException, NoSuchFieldException, IllegalAccessException {
         PatchnoteDataHandler patchnoteDataHandler = new PatchnoteDataHandler();
-        for (Integer patchnoteId : patchnoteIds) {
-            getPatchNotes().add(patchnoteDataHandler.readPatchNoteByID(patchnoteId));
+        for (String patchnoteUUID : patchnoteUUIDs) {
+            getPatchNotes().add(patchnoteDataHandler.readPatchNoteByUUID(patchnoteUUID));
         }
     }
 }

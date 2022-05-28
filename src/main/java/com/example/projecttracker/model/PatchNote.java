@@ -6,7 +6,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDate;
-import java.util.Date;
 
 /**
  * A patch note that is added to a project. Preferably, this is a short note that describes the changes made to the project.
@@ -22,11 +21,11 @@ import java.util.Date;
 @NoArgsConstructor
 public class PatchNote {
     /**
-     * The id of the patch note.
+     * The uuid of the patch note.
      *
      * @since 1.0
      */
-    private Integer patchNoteId;
+    private String patchNoteUUID;
     /**
      * The title of the patch note.
      *

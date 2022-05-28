@@ -44,10 +44,10 @@ public class ProjectResource {
     }
 
     /**
-     * This method is used to get a specific project from the json file based on the id.
+     * This method is used to get a specific project from the json file based on the uuid.
      *
-     * @param uuid the id of the project
-     * @return a project with the id
+     * @param uuid the uuid of the project
+     * @return a project with the uuid
      * @author Alyssa Heimlicher
      */
     @GET

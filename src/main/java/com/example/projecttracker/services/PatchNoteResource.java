@@ -1,6 +1,7 @@
 package com.example.projecttracker.services;
 
 import com.example.projecttracker.data.DataHandlerGen;
+import com.example.projecttracker.data.PatchnoteDataHandler;
 import com.example.projecttracker.model.PatchNote;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.ws.rs.GET;
@@ -45,17 +46,18 @@ public class PatchNoteResource {
     }
 
     /**
-     * gets a patch note by its id.
-     * @param id the id of the patch note.
+     * gets a patch note by its uuid.
+     *
+     * @param uuid the uuid of the patch note.
      * @return the patch note.
      * @author Alyssa Heimlicher
-     * */
+     */
     @GET
     @Produces("application/json")
-    @Path("/{id}")
-    public Response getSinglePatchNoteByID(@PathParam("id") int id) {
+    @Path("/{uuid}")
+    public Response getSinglePatchNoteByID(@PathParam("uuid") String uuid) {
         try {
-            PatchNote patchNote = new DataHandlerGen<>(PatchNote.class).getSingleFromJsonArray("patchNoteJSON", "patchNoteId", id);
+            PatchNote patchNote = new PatchnoteDataHandler().readPatchNoteByUUID(uuid);
             ObjectMapper objectMapper = new ObjectMapper();
             objectMapper.findAndRegisterModules();
             if (patchNote == null) {
