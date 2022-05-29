@@ -5,6 +5,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.Objects;
+
 /**
  * The User class
  *
@@ -44,4 +46,11 @@ public class User {
     private String userRole;
 
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        User user = (User) o;
+        return userUUID.equals(user.userUUID) && userName.equals(user.userName) && password.equals(user.password) && userRole.equals(user.userRole);
+    }
 }

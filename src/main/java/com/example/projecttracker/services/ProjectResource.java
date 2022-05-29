@@ -81,6 +81,7 @@ public class ProjectResource {
      * @param description the description of the project
      * @param startDate   the start date of the project
      * @param subject     the subject of the project (e.g. Blender, Game Development, etc.)
+     * @param userUUID    the uuid of the user
      * @return a response
      * @author Alyssa Heimlicher
      */

@@ -93,4 +93,25 @@ public class UserResource {
                 .entity("")
                 .build();
     }
+
+    /**
+     * This method deletes a user from the json file by their uuid.
+     *
+     * @param uuid the uuid of the user
+     * @return a response with the status code
+     * @author Alyssa Heimlicher
+     */
+    @DELETE
+    @Produces("application/json")
+    @Path("/delete/{uuid}")
+    public Response deleteUserByUUID(@PathParam("uuid") String uuid) {
+        try {
+            new UserDataHandler().deleteSingleFromJson("userJSON", "userUUID", uuid);
+            return Response.status(200).entity("{\"success\":\"User deleted\"}").build();
+        } catch (IOException | NoSuchFieldException | IllegalAccessException e) {
+            return Response.status(500).entity("{\"error\":\"" + e.getMessage() + "\"}").build();
+        } catch (IllegalArgumentException e) {
+            return Response.status(404).entity("{\"error\":\"User not found\"}").build();
+        }
+    }
 }
