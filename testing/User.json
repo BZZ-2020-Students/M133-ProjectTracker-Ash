@@ -1,8 +1,1 @@
-[
-  {
-    "userUUID": "123e4567-e89b-12d3-a456-426614174000",
-    "userName": "guest",
-    "password": "123456",
-    "userRole": "guest"
-  }
-]
+[{"userUUID":"123e4567-e89b-12d3-a456-426614174000","userName":"guest","password":"123456","userRole":"guest"},{"userUUID":"0c68439c-3698-4030-a8c8-fcd10a126d4e","userName":"Velda.Runolfsdottir57","password":"c5HenBEPLMghce3","userRole":"Guest"}]

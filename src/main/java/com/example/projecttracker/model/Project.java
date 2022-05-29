@@ -12,6 +12,7 @@ import lombok.Setter;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Objects;
 
 /**
  * Project Class for the Project Tracker App
@@ -184,5 +185,18 @@ public class Project {
         for (String patchnoteUUID : patchnoteUUIDs) {
             getPatchNotes().add(patchnoteDataHandler.readPatchNoteByUUID(patchnoteUUID));
         }
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Project project = (Project) o;
+        return projectUUID.equals(project.projectUUID) && title.equals(project.title) && description.equals(project.description) && startDate.equals(project.startDate) && isFinished.equals(project.isFinished) && subject.equals(project.subject) && user.equals(project.user) && issues.equals(project.issues) && tasks.equals(project.tasks) && patchNotes.equals(project.patchNotes);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(projectUUID, title, description, startDate, isFinished, subject, user, issues, tasks, patchNotes);
     }
 }
