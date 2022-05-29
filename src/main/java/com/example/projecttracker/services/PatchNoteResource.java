@@ -39,7 +39,8 @@ public class PatchNoteResource {
         try {
             ArrayList<PatchNote> patchNotes = new DataHandlerGen<>(PatchNote.class).getArrayListOutOfJSON("patchNoteJSON");
             ObjectMapper objectMapper = new ObjectMapper();
-            objectMapper.findAndRegisterModules();
+            objectMapper.registerModule(new JavaTimeModule());
+            objectMapper.configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false);
             return Response.status(200).entity(objectMapper.writeValueAsString(patchNotes)).build();
         } catch (IOException e) {
             e.printStackTrace();
@@ -99,6 +100,27 @@ public class PatchNoteResource {
                 .status(200)
                 .entity("")
                 .build();
+    }
+
+    /**
+     * This method deletes a patchNote from the json file by its uuid.
+     *
+     * @param uuid the uuid of the patch note.
+     * @return a response with the status code
+     * @author Alyssa Heimlicher
+     */
+    @DELETE
+    @Produces("application/json")
+    @Path("/delete/{uuid}")
+    public Response deletePatchNoteByUUID(@PathParam("uuid") String uuid) {
+        try {
+            new PatchnoteDataHandler().deleteSingleFromJson("patchNoteJSON", "patchNoteUUID", uuid);
+            return Response.status(200).entity("{\"success\":\"PatchNote deleted\"}").build();
+        } catch (IOException | NoSuchFieldException | IllegalAccessException e) {
+            return Response.status(500).entity("{\"error\":\"" + e.getMessage() + "\"}").build();
+        } catch (IllegalArgumentException e) {
+            return Response.status(404).entity("{\"error\":\"PatchNote not found\"}").build();
+        }
     }
 
 }

@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDate;
+import java.util.Objects;
 
 /**
  * A patch note that is added to a project. Preferably, this is a short note that describes the changes made to the project.
@@ -51,4 +52,11 @@ public class PatchNote {
      */
     private String version;
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        PatchNote patchNote = (PatchNote) o;
+        return patchNoteUUID.equals(patchNote.patchNoteUUID) && title.equals(patchNote.title) && description.equals(patchNote.description) && date.equals(patchNote.date) && version.equals(patchNote.version);
+    }
 }
