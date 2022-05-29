@@ -1,18 +1,19 @@
 package com.example.projecttracker.services;
 
 import com.example.projecttracker.data.ProjectDatahandler;
-import com.example.projecttracker.model.Project;
+import com.example.projecttracker.data.UserDataHandler;
+import com.example.projecttracker.model.*;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import jakarta.ws.rs.GET;
-import jakarta.ws.rs.Path;
-import jakarta.ws.rs.PathParam;
-import jakarta.ws.rs.Produces;
+import jakarta.ws.rs.*;
+import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 
 import java.io.IOException;
+import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.UUID;
 
 /**
  * This class is used to handle the requests for the project class.
@@ -71,5 +72,46 @@ public class ProjectResource {
         } catch (IOException | NoSuchFieldException | IllegalAccessException e) {
             return Response.status(500).entity("{\"error\":\"" + e.getMessage() + "\"}").build();
         }
+    }
+
+    /**
+     * This method is used to add a project to the json file.
+     *
+     * @param title       the title of the project
+     * @param description the description of the project
+     * @param startDate   the start date of the project
+     * @param subject     the subject of the project (e.g. Blender, Game Development, etc.)
+     * @return a response
+     * @author Alyssa Heimlicher
+     */
+    @POST
+    @Produces(MediaType.TEXT_PLAIN)
+    @Path("/create")
+    public Response createProject(@FormParam("title") String title,
+                                  @FormParam("description") String description,
+                                  @FormParam("startDate") String startDate,
+                                  @FormParam("subject") String subject,
+                                  @FormParam("userUUID") String userUUID) {
+
+        try {
+            String projectUUID = UUID.randomUUID().toString();
+            LocalDate startDateLocal = LocalDate.parse(startDate);
+            ArrayList<Task> tasks = new ArrayList<>();
+            ArrayList<Issue> issues = new ArrayList<>();
+            ArrayList<PatchNote> patchNotes = new ArrayList<>();
+            User user = new UserDataHandler().readUserByUserUUID(userUUID);
+            if (user == null) {
+                return Response.status(404).entity("{\"error\":\"User not found\"}").build();
+            }
+            Project project = new Project(projectUUID, title, description, startDateLocal, false, subject, user, issues, tasks, patchNotes);
+            new ProjectDatahandler().insertIntoJson(project, "projectJSON");
+        } catch (IOException | NoSuchFieldException | IllegalAccessException e) {
+            return Response.status(500).entity("{\"error\":\"" + e.getMessage() + "\"}").build();
+        }
+
+        return Response
+                .status(200)
+                .entity("")
+                .build();
     }
 }
