@@ -139,13 +139,13 @@ public class ProjectResource {
             for (Issue issue : issues) {
                 new IssueDataHandler().deleteSingleFromJson("issueJSON", "issueUUID", issue.getIssueUUID());
             }
-//            for (PatchNote patchNote : patchNotes) {
-//                new PatchnoteDataHandler().deleteSingleFromJson("patchNoteJSON", "patchNoteUUID", patchNote.getPatchNoteUUID());
-//            }
+            for (PatchNote patchNote : patchNotes) {
+                new PatchnoteDataHandler().deleteSingleFromJson("patchNoteJSON", "patchNoteUUID", patchNote.getPatchNoteUUID());
+            }
             projects.remove(project);
             project.removeAllTasks();
             project.removeAllIssues();
-//            project.removeAllPatchNotes();
+            project.removeAllPatchNotes();
             projects.add(project);
             new ProjectDatahandler().saveJson("projectJSON", projects);
             new ProjectDatahandler().deleteSingleFromJson("projectJSON", "projectUUID", uuid);
