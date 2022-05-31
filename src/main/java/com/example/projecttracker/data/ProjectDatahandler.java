@@ -7,6 +7,7 @@ import com.example.projecttracker.model.Task;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Utility class for handling data regarding Projects in JSON files.
@@ -81,6 +82,30 @@ public class ProjectDatahandler extends DataHandlerGen<Project> {
         }
 
         return projects;
+    }
+
+    public void deleteSingleFromJson(String uuid) throws IOException, NoSuchFieldException, IllegalAccessException {
+        Project project = new ProjectDatahandler().getSingleFromJsonArray(uuid);
+        ArrayList<Project> projects = new ProjectDatahandler().getArrayListOutOfJSON();
+        List<Task> tasks = project.getTasks();
+        List<Issue> issues = project.getIssues();
+        List<PatchNote> patchNotes = project.getPatchNotes();
+        for (Task task : tasks) {
+            new TaskDataHandler().deleteSingleFromJson("taskJSON", "taskUUID", task.getTaskUUID());
+        }
+        for (Issue issue : issues) {
+            new IssueDataHandler().deleteSingleFromJson("issueJSON", "issueUUID", issue.getIssueUUID());
+        }
+        for (PatchNote patchNote : patchNotes) {
+            new PatchnoteDataHandler().deleteSingleFromJson("patchNoteJSON", "patchNoteUUID", patchNote.getPatchNoteUUID());
+        }
+        projects.remove(project);
+        project.removeAllTasks();
+        project.removeAllIssues();
+        project.removeAllPatchNotes();
+        projects.add(project);
+        new ProjectDatahandler().saveJson("projectJSON", projects);
+        super.deleteSingleFromJson("projectJSON", "projectUUID", uuid);
     }
 
     /**

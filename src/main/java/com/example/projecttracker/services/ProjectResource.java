@@ -128,27 +128,8 @@ public class ProjectResource {
     @Path("/delete/{uuid}")
     public Response deleteProjectByUUID(@PathParam("uuid") String uuid) {
         try {
-            Project project = new ProjectDatahandler().getSingleFromJsonArray(uuid);
-            ArrayList<Project> projects = new ProjectDatahandler().getArrayListOutOfJSON();
-            List<Task> tasks = project.getTasks();
-            List<Issue> issues = project.getIssues();
-            List<PatchNote> patchNotes = project.getPatchNotes();
-            for (Task task : tasks) {
-                new TaskDataHandler().deleteSingleFromJson("taskJSON", "taskUUID", task.getTaskUUID());
-            }
-            for (Issue issue : issues) {
-                new IssueDataHandler().deleteSingleFromJson("issueJSON", "issueUUID", issue.getIssueUUID());
-            }
-            for (PatchNote patchNote : patchNotes) {
-                new PatchnoteDataHandler().deleteSingleFromJson("patchNoteJSON", "patchNoteUUID", patchNote.getPatchNoteUUID());
-            }
-            projects.remove(project);
-            project.removeAllTasks();
-            project.removeAllIssues();
-            project.removeAllPatchNotes();
-            projects.add(project);
-            new ProjectDatahandler().saveJson("projectJSON", projects);
-            new ProjectDatahandler().deleteSingleFromJson("projectJSON", "projectUUID", uuid);
+
+            new ProjectDatahandler().deleteSingleFromJson(uuid);
             return Response.status(200).entity("{\"success\":\"Project deleted\"}").build();
         } catch (IOException | NoSuchFieldException | IllegalAccessException e) {
             return Response.status(500).entity("{\"error\":\"" + e.getMessage() + "\"}").build();
