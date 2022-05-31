@@ -1,1 +1,16 @@
-[{"issueUUID":"a52be7ee-de90-11ec-9d64-0242ac120002","title":"Ai not responding","description":"Ai not responding to player when standing in front of it","severity":"High","status":"TODO"},{"issueUUID":"9ee6139a-cbea-4e91-9754-f3e18cd9e01f","title":"Enemies attack each other","description":"they should be on the same team...this shouldnt happen at all","severity":"important","status":"TODO"},{"issueUUID":"a023249d-b4e3-47fb-bc0d-e6f8889ad043","title":"Enemies attack each other","description":"they should be on the same team...this shouldnt happen at all","severity":"important","status":"TODO"}]
+[
+  {
+    "issueUUID": "a52be7ee-de90-11ec-9d64-0242ac120002",
+    "title": "Ai not responding",
+    "description": "Ai not responding to player when standing in front of it",
+    "severity": "High",
+    "status": "TODO"
+  },
+  {
+    "issueUUID": "9ee6139a-cbea-4e91-9754-f3e18cd9e01f",
+    "title": "Enemies attack each other",
+    "description": "they should be on the same team...this shouldnt happen at all",
+    "severity": "important",
+    "status": "TODO"
+  }
+]

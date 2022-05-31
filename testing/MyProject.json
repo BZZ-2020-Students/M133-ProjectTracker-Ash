@@ -37,40 +37,7 @@
         "description": "Ai now attacks the player",
         "date": "2022-05-01",
         "version": "V1.0.0"
-      },
-      {
-        "patchNoteUUID": "db9061a0-de92-11ec-9d64-0242ac120002",
-        "title": "Ai now attacks the player",
-        "description": "Ai now attacks the player",
-        "date": "2022-05-01",
-        "version": "V1.0.0"
-      },
-      {
-        "patchNoteUUID": "db9061a0-de92-11ec-9d64-0242ac120002",
-        "title": "Ai now attacks the player",
-        "description": "Ai now attacks the player",
-        "date": "2022-05-01",
-        "version": "V1.0.0"
-      },
-      {
-        "patchNoteUUID": "db9061a0-de92-11ec-9d64-0242ac120002",
-        "title": "Ai now attacks the player",
-        "description": "Ai now attacks the player",
-        "date": "2022-05-01",
-        "version": "V1.0.0"
       }
-    ],
-    "taskUUIds": [
-      "de3b2066-dc08-11ec-9d64-0242ac120002"
-    ],
-    "issueUUID": [
-      "a52be7ee-de90-11ec-9d64-0242ac120002"
-    ],
-    "patchnoteUUIDs": [
-      "db9061a0-de92-11ec-9d64-0242ac120002",
-      "db9061a0-de92-11ec-9d64-0242ac120002",
-      "db9061a0-de92-11ec-9d64-0242ac120002",
-      "db9061a0-de92-11ec-9d64-0242ac120002"
     ],
     "userUUID": "e2bc7fc7-b5d4-4f02-a225-8e0190fb411a"
   }
