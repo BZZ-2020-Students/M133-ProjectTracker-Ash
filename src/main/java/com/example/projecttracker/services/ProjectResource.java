@@ -1,7 +1,6 @@
 package com.example.projecttracker.services;
 
-import com.example.projecttracker.data.ProjectDatahandler;
-import com.example.projecttracker.data.UserDataHandler;
+import com.example.projecttracker.data.*;
 import com.example.projecttracker.model.*;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
@@ -13,6 +12,7 @@ import jakarta.ws.rs.core.Response;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 /**
@@ -128,6 +128,26 @@ public class ProjectResource {
     @Path("/delete/{uuid}")
     public Response deleteProjectByUUID(@PathParam("uuid") String uuid) {
         try {
+            Project project = new ProjectDatahandler().getSingleFromJsonArray(uuid);
+            ArrayList<Project> projects = new ProjectDatahandler().getArrayListOutOfJSON();
+            List<Task> tasks = project.getTasks();
+            List<Issue> issues = project.getIssues();
+            List<PatchNote> patchNotes = project.getPatchNotes();
+            for (Task task : tasks) {
+                new TaskDataHandler().deleteSingleFromJson("taskJSON", "taskUUID", task.getTaskUUID());
+            }
+//            for (Issue issue : issues) {
+//                new IssueDataHandler().deleteSingleFromJson("issueJSON", "issueUUID", issue.getIssueUUID());
+//            }
+//            for (PatchNote patchNote : patchNotes) {
+//                new PatchnoteDataHandler().deleteSingleFromJson("patchNoteJSON", "patchNoteUUID", patchNote.getPatchNoteUUID());
+//            }
+            projects.remove(project);
+            project.removeAllTasks();
+//            project.removeAllIssues();
+//            project.removeAllPatchNotes();
+            projects.add(project);
+            new ProjectDatahandler().saveJson("projectJSON", projects);
             new ProjectDatahandler().deleteSingleFromJson("projectJSON", "projectUUID", uuid);
             return Response.status(200).entity("{\"success\":\"Project deleted\"}").build();
         } catch (IOException | NoSuchFieldException | IllegalAccessException e) {

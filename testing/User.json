@@ -1,1 +1,20 @@
-[{"userUUID":"123e4567-e89b-12d3-a456-426614174000","userName":"guest","password":"123456","userRole":"guest"},{"userUUID":"59dc9910-8190-4c3c-9591-9b3be196f293","userName":"Larissa41","password":"214zuakueb3CbJC","userRole":"Guest"},{"userUUID":"e2bc7fc7-b5d4-4f02-a225-8e0190fb411a","userName":"Lawson_Nolan17","password":"4dX6mbF_qsCc4Gq","userRole":"Guest"}]
+[
+  {
+    "userUUID": "e2bc7fc7-b5d4-4f02-a225-8e0190fb411a",
+    "userName": "Lawson_Nolan17",
+    "password": "4dX6mbF_qsCc4Gq",
+    "userRole": "Guest"
+  },
+  {
+    "userUUID": "0535a922-80db-41a0-9777-a17c88f6598e",
+    "userName": "Deonte_Morar",
+    "password": "TKWT3KoQyHmgm__",
+    "userRole": "Guest"
+  },
+  {
+    "userUUID": "2f6555a5-66d1-43fb-98fb-c9d781052ffe",
+    "userName": "Marcel_Huel",
+    "password": "2JV5Ra6YwQTMuOj",
+    "userRole": "Guest"
+  }
+]

@@ -187,6 +187,18 @@ public class Project {
         }
     }
 
+    public void removeAllTasks() {
+        getTasks().clear();
+    }
+
+    public void removeAllIssues() {
+        getIssues().clear();
+    }
+
+    public void removeAllPatchNotes() {
+        getPatchNotes().clear();
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
