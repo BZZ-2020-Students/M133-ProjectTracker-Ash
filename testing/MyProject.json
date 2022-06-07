@@ -6,33 +6,19 @@
     "startDate": "2022-03-01",
     "isFinished": false,
     "subject": "Game Development",
-    "user": {
-      "userUUID": "e2bc7fc7-b5d4-4f02-a225-8e0190fb411a",
-      "userName": "Lawson_Nolan17",
-      "password": "4dX6mbF_qsCc4Gq",
-      "userRole": "Guest"
-    },
     "issues": [
       {
-        "issueUUID": "a52be7ee-de90-11ec-9d64-0242ac120002",
-        "title": "Ai not responding",
-        "description": "Ai not responding to player when standing in front of it",
-        "severity": "High",
-        "status": "TODO"
+        "issueUUID": "a52be7ee-de90-11ec-9d64-0242ac120002"
       }
     ],
     "tasks": [
       {
-        "taskUUID": "de3b2066-dc08-11ec-9d64-0242ac120002",
-        "title": "implement pathfinding for AI",
-        "description": "Ai needs pathfinding in order to have any function other than just standing still.",
-        "deadline": "2022-06-01",
-        "status": "IN_PROGRESS"
+        "taskUUID": "de3b2066-dc08-11ec-9d64-0242ac120002"
       }
     ],
     "patchNotes": [
       {
-        "patchNoteUUID": "db9061a0-de92-11ec-9d64-0242ac120002"
+        "patchNoteUUID": "dab4445b-924e-489e-ac38-c50dc1476b4f"
       }
     ],
     "userUUID": "e2bc7fc7-b5d4-4f02-a225-8e0190fb411a"

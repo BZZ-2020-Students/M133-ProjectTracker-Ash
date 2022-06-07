@@ -2,8 +2,12 @@ package com.example.projecttracker.services;
 
 import com.example.projecttracker.data.*;
 import com.example.projecttracker.model.*;
+import com.example.projecttracker.util.ToJson;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.databind.ser.FilterProvider;
+import com.fasterxml.jackson.databind.ser.impl.SimpleBeanPropertyFilter;
+import com.fasterxml.jackson.databind.ser.impl.SimpleFilterProvider;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
@@ -12,7 +16,6 @@ import jakarta.ws.rs.core.Response;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.UUID;
 
 /**
@@ -37,10 +40,8 @@ public class ProjectResource {
     public Response getAllProjects() {
         try {
             ArrayList<Project> projects = new ProjectDatahandler().getArrayListOutOfJSON();
-            ObjectMapper objectMapper = new ObjectMapper();
-            objectMapper.registerModule(new JavaTimeModule());
-            objectMapper.configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false);
-            return Response.status(200).entity(objectMapper.writeValueAsString(projects)).build();
+
+            return Response.status(200).entity(ToJson.toJson(projects, getFilterProvider())).build();
         } catch (IOException | NoSuchFieldException | IllegalAccessException e) {
             e.printStackTrace();
             return Response.status(500).entity("{\"error\":\"" + e.getMessage() + "\"}").build();
@@ -136,5 +137,10 @@ public class ProjectResource {
         } catch (IllegalArgumentException e) {
             return Response.status(404).entity("{\"error\":\"Project not found\"}").build();
         }
+    }
+
+    private FilterProvider getFilterProvider() {
+        return new SimpleFilterProvider()
+                .addFilter("ProjectFilter", SimpleBeanPropertyFilter.serializeAllExcept("patchNoteUUIDs", "taskUUIDs", "issueUUIDs", "user"));
     }
 }

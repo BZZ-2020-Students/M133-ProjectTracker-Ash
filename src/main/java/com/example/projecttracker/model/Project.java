@@ -4,15 +4,12 @@ import com.example.projecttracker.data.IssueDataHandler;
 import com.example.projecttracker.data.PatchnoteDataHandler;
 import com.example.projecttracker.data.TaskDataHandler;
 import com.example.projecttracker.data.UserDataHandler;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import com.fasterxml.jackson.annotation.JsonFilter;
+import lombok.*;
 
 import java.io.IOException;
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Objects;
 
 /**
  * Project Class for the Project Tracker App
@@ -26,6 +23,8 @@ import java.util.Objects;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@ToString
+@JsonFilter("ProjectFilter")
 public class Project {
     /**
      * The project's unique ID
@@ -103,7 +102,7 @@ public class Project {
      * @return an ArrayList of taskIds
      * @author Alyssa Heimlicher
      */
-    public ArrayList<String> getTaskUUIds() {
+    public ArrayList<String> getTaskUUIDs() {
         ArrayList<String> taskUUIDs = new ArrayList<>();
         for (Task task : getTasks()) {
             taskUUIDs.add(task.getTaskUUID());
@@ -120,7 +119,7 @@ public class Project {
      * @throws IllegalAccessException if the file cannot be accessed
      * @author Alyssa Heimlicher
      */
-    public void setTaskIds(ArrayList<String> taskUUIDs) throws IOException, NoSuchFieldException, IllegalAccessException {
+    public void setTaskUUIDs(ArrayList<String> taskUUIDs) throws IOException, NoSuchFieldException, IllegalAccessException {
         TaskDataHandler taskDataHandler = new TaskDataHandler();
         for (String taskUUID : taskUUIDs) {
             getTasks().add(taskDataHandler.readTaskByUUID(taskUUID));
@@ -133,7 +132,7 @@ public class Project {
      * @return an ArrayList of issueIds
      * @author Alyssa Heimlicher
      */
-    public ArrayList<String> getIssueUUID() {
+    public ArrayList<String> getIssueUUIDs() {
         ArrayList<String> issueIds = new ArrayList<>();
         for (Issue issue : getIssues()) {
             issueIds.add(issue.getIssueUUID());
@@ -150,7 +149,7 @@ public class Project {
      * @throws IllegalAccessException if the file cannot be accessed
      * @author Alyssa Heimlicher
      */
-    public void setIssueIds(ArrayList<String> issueUUIDs) throws IOException, NoSuchFieldException, IllegalAccessException {
+    public void setIssueUUIDs(ArrayList<String> issueUUIDs) throws IOException, NoSuchFieldException, IllegalAccessException {
         IssueDataHandler issueDataHandler = new IssueDataHandler();
         for (String issueUUID : issueUUIDs) {
             getIssues().add(issueDataHandler.readIssueByUUID(issueUUID));
@@ -163,11 +162,12 @@ public class Project {
      * @return an ArrayList of patchNoteIds
      * @author Alyssa Heimlicher
      */
-    public ArrayList<String> getPatchnoteUUIDs() {
+    public ArrayList<String> getPatchNoteUUIDs() {
         ArrayList<String> patchnoteUUIDs = new ArrayList<>();
         for (PatchNote patchnote : getPatchNotes()) {
             patchnoteUUIDs.add(patchnote.getPatchNoteUUID());
         }
+        System.out.println("patchnoteUUIDs = " + patchnoteUUIDs);
         return patchnoteUUIDs;
     }
 
@@ -180,7 +180,7 @@ public class Project {
      * @throws IllegalAccessException if the file cannot be accessed
      * @author Alyssa Heimlicher
      */
-    public void setPatchnoteUUIDs(ArrayList<String> patchnoteUUIDs) throws IOException, NoSuchFieldException, IllegalAccessException {
+    public void setPatchNoteUUIDs(ArrayList<String> patchnoteUUIDs) throws IOException, NoSuchFieldException, IllegalAccessException {
         PatchnoteDataHandler patchnoteDataHandler = new PatchnoteDataHandler();
         for (String patchnoteUUID : patchnoteUUIDs) {
             getPatchNotes().add(patchnoteDataHandler.readPatchNoteByUUID(patchnoteUUID));
@@ -205,10 +205,5 @@ public class Project {
         if (o == null || getClass() != o.getClass()) return false;
         Project project = (Project) o;
         return projectUUID.equals(project.projectUUID) && title.equals(project.title) && description.equals(project.description) && startDate.equals(project.startDate) && isFinished.equals(project.isFinished) && subject.equals(project.subject) && user.equals(project.user) && issues.equals(project.issues) && tasks.equals(project.tasks) && patchNotes.equals(project.patchNotes);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(projectUUID, title, description, startDate, isFinished, subject, user, issues, tasks, patchNotes);
     }
 }
