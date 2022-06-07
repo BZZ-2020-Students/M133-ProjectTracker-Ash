@@ -114,7 +114,7 @@ public class DataHandlerGen<T> {
     public void deleteSingleFromJson(String propertyName, String fieldName, Object fieldValue) throws IOException, NoSuchFieldException, IllegalAccessException {
         ArrayList<T> objects = getArrayListOutOfJSON(propertyName);
         T object = getSingleFromJsonArray(propertyName, fieldName, fieldValue);
-        if(!objects.remove(object)){
+        if (!objects.remove(object)) {
             throw new IllegalArgumentException("Object not found");
         }
         saveJson(propertyName, objects);

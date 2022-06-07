@@ -7,6 +7,16 @@ import com.fasterxml.jackson.databind.ser.FilterProvider;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 
 public class ToJson {
+
+    /**
+     * This method is used to add an object to a json file with a filterprovider.
+     *
+     * @param t he object to add to the json file
+     * @param filterProvider the filterprovider to use
+     * @param <T> the type of the object
+     * @return the objectwriter with the filterprovider
+     * @throws JsonProcessingException if the object cannot be written to the json file
+     */
     public static <T> String toJson(T t, FilterProvider filterProvider) throws JsonProcessingException {
         ObjectMapper objectMapper = new ObjectMapper();
         objectMapper.registerModule(new JavaTimeModule());

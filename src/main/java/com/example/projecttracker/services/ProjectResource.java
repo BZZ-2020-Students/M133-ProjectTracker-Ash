@@ -1,14 +1,12 @@
 package com.example.projecttracker.services;
 
-import com.example.projecttracker.data.*;
+import com.example.projecttracker.data.ProjectDatahandler;
+import com.example.projecttracker.data.UserDataHandler;
 import com.example.projecttracker.model.*;
 import com.example.projecttracker.util.ToJson;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.databind.ser.FilterProvider;
 import com.fasterxml.jackson.databind.ser.impl.SimpleBeanPropertyFilter;
 import com.fasterxml.jackson.databind.ser.impl.SimpleFilterProvider;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
@@ -65,11 +63,7 @@ public class ProjectResource {
             if (project == null) {
                 return Response.status(404).entity("{\"error\":\"Project not found\"}").build();
             }
-
-            ObjectMapper objectMapper = new ObjectMapper();
-            objectMapper.registerModule(new JavaTimeModule());
-            objectMapper.configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false);
-            return Response.status(200).entity(objectMapper.writeValueAsString(project)).build();
+            return Response.status(200).entity(ToJson.toJson(project, getFilterProvider())).build();
         } catch (IOException | NoSuchFieldException | IllegalAccessException e) {
             return Response.status(500).entity("{\"error\":\"" + e.getMessage() + "\"}").build();
         }
@@ -141,6 +135,7 @@ public class ProjectResource {
 
     private FilterProvider getFilterProvider() {
         return new SimpleFilterProvider()
-                .addFilter("ProjectFilter", SimpleBeanPropertyFilter.serializeAllExcept("patchNoteUUIDs", "taskUUIDs", "issueUUIDs", "user"));
+                .addFilter("ProjectFilter", SimpleBeanPropertyFilter.serializeAllExcept("patchNoteUUIDs", "taskUUIDs", "issueUUIDs", "userUUID"))
+                .addFilter("UserFilter", SimpleBeanPropertyFilter.serializeAll());
     }
 }

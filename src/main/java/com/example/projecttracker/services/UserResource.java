@@ -3,9 +3,10 @@ package com.example.projecttracker.services;
 import com.example.projecttracker.data.DataHandlerGen;
 import com.example.projecttracker.data.UserDataHandler;
 import com.example.projecttracker.model.User;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationFeature;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import com.example.projecttracker.util.ToJson;
+import com.fasterxml.jackson.databind.ser.FilterProvider;
+import com.fasterxml.jackson.databind.ser.impl.SimpleBeanPropertyFilter;
+import com.fasterxml.jackson.databind.ser.impl.SimpleFilterProvider;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
@@ -36,9 +37,8 @@ public class UserResource {
     public Response getAllUsers() {
         try {
             ArrayList<User> users = new DataHandlerGen<>(User.class).getArrayListOutOfJSON("userJSON");
-            ObjectMapper objectMapper = new ObjectMapper();
-            objectMapper.findAndRegisterModules();
-            return Response.status(200).entity(objectMapper.writeValueAsString(users)).build();
+
+            return Response.status(200).entity(ToJson.toJson(users, getFilterProvider())).build();
         } catch (IOException e) {
             e.printStackTrace();
             return Response.status(500).entity("{\"error\":\"" + e.getMessage() + "\"}").build();
@@ -58,14 +58,11 @@ public class UserResource {
     public Response getSingleUserByUUID(@PathParam("uuid") String uuid) {
         try {
             User user = new DataHandlerGen<>(User.class).getSingleFromJsonArray("userJSON", "userUUID", uuid);
-            ObjectMapper objectMapper = new ObjectMapper();
-            objectMapper.registerModule(new JavaTimeModule());
-            objectMapper.configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false);
             if (user == null) {
                 return Response.status(404).entity("{\"error\":\"User not found\"}").build();
             }
 
-            return Response.status(200).entity(objectMapper.writeValueAsString(user)).build();
+            return Response.status(200).entity(ToJson.toJson(user, getFilterProvider())).build();
         } catch (IOException | NoSuchFieldException | IllegalAccessException e) {
             return Response.status(500).entity("{\"error\":\"" + e.getMessage() + "\"}").build();
         }
@@ -113,5 +110,10 @@ public class UserResource {
         } catch (IllegalArgumentException e) {
             return Response.status(404).entity("{\"error\":\"User not found\"}").build();
         }
+    }
+
+    private FilterProvider getFilterProvider() {
+        return new SimpleFilterProvider()
+                .addFilter("UserFilter", SimpleBeanPropertyFilter.serializeAll());
     }
 }
