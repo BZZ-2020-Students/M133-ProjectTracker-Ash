@@ -133,6 +133,12 @@ public class ProjectResource {
         }
     }
 
+    /**
+     * This method returns the filter provider for the project with every filter in it
+     *
+     * @return the filter provider
+     * @author Alyssa Heimlicher
+     */
     private FilterProvider getFilterProvider() {
         return new SimpleFilterProvider()
                 .addFilter("ProjectFilter", SimpleBeanPropertyFilter.serializeAllExcept("patchNoteUUIDs", "taskUUIDs", "issueUUIDs", "userUUID"))

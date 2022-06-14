@@ -187,14 +187,29 @@ public class Project {
         }
     }
 
+    /**
+     * removes all the tasks from the project
+     *
+     * @author Alyssa Heimlicher
+     */
     public void removeAllTasks() {
         getTasks().clear();
     }
 
+    /**
+     * removes all the issues from the project
+     *
+     * @author Alyssa Heimlicher
+     */
     public void removeAllIssues() {
         getIssues().clear();
     }
 
+    /**
+     * removes all the patchNotes from the project
+     *
+     * @author Alyssa Heimlicher
+     */
     public void removeAllPatchNotes() {
         getPatchNotes().clear();
     }

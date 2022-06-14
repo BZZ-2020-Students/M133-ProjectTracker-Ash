@@ -84,6 +84,13 @@ public class ProjectDatahandler extends DataHandlerGen<Project> {
         return projects;
     }
 
+    /**
+     * Deletes a single project from the JSON file
+     * @param uuid the uuid of the project to delete
+     * @throws IOException if the file cannot be read
+     * @throws NoSuchFieldException if the field does not exist
+     * @throws IllegalAccessException if the file cannot be accessed
+     */
     public void deleteSingleFromJson(String uuid) throws IOException, NoSuchFieldException, IllegalAccessException {
         Project project = new ProjectDatahandler().getSingleFromJsonArray(uuid);
         ArrayList<Project> projects = new ProjectDatahandler().getArrayListOutOfJSON();

@@ -112,6 +112,11 @@ public class UserResource {
         }
     }
 
+    /**
+     * This method returns a filter provider for the user class.
+     *
+     * @return a filter provider for the user class
+     */
     private FilterProvider getFilterProvider() {
         return new SimpleFilterProvider()
                 .addFilter("UserFilter", SimpleBeanPropertyFilter.serializeAll());
