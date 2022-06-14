@@ -1,8 +1,12 @@
 package com.example.projecttracker.data;
 
 import com.example.projecttracker.Config;
+import com.example.projecttracker.util.ToJson;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.databind.ser.FilterProvider;
+import com.fasterxml.jackson.databind.ser.impl.SimpleBeanPropertyFilter;
+import com.fasterxml.jackson.databind.ser.impl.SimpleFilterProvider;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import lombok.Getter;
 import lombok.NonNull;
@@ -135,9 +139,17 @@ public class DataHandlerGen<T> {
             objectMapper.registerModule(new JavaTimeModule());
             objectMapper.configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false);
             objectMapper.writeValue(Paths.get(path).toFile(), objects);
+            ToJson.toJson(objects, getFilterProvider());
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    private FilterProvider getFilterProvider() {
+        return new SimpleFilterProvider()
+                .addFilter("ProjectFilter", SimpleBeanPropertyFilter.serializeAllExcept("patchNoteUUIDs", "taskUUIDs", "issueUUIDs", "user"))
+                .addFilter("UserFilter", SimpleBeanPropertyFilter.serializeAll());
+
     }
 
 }
