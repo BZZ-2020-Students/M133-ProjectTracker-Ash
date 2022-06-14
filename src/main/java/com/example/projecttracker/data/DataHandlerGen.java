@@ -70,6 +70,7 @@ public class DataHandlerGen<T> {
     public T getSingleFromJsonArray(String propertyName, String fieldName, Object fieldValue) throws IOException, NoSuchFieldException, IllegalAccessException {
         ArrayList<T> arrayList = getArrayListOutOfJSON(propertyName);
 
+
         for (T t : arrayList) {
             Field privateField = t.getClass().getDeclaredField(fieldName);
             privateField.setAccessible(true);
