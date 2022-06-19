@@ -134,17 +134,14 @@ public class DataHandlerGen<T> {
      */
     public void saveJson(String propertyName, List<T> objects) {
         try {
-            ObjectMapper objectMapper = new ObjectMapper();
             String path = Config.getProperty(propertyName);
-            objectMapper.registerModule(new JavaTimeModule());
-            objectMapper.configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false);
-            objectMapper.writeValue(Paths.get(path).toFile(), objects);
-            ToJson.toJson(objects, getFilterProvider());
+            ToJson.toJson(path, objects, getFilterProvider());
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
+    //TODO: make genric lol
     private FilterProvider getFilterProvider() {
         return new SimpleFilterProvider()
                 .addFilter("ProjectFilter", SimpleBeanPropertyFilter.serializeAllExcept("patchNoteUUIDs", "taskUUIDs", "issueUUIDs", "user"))
