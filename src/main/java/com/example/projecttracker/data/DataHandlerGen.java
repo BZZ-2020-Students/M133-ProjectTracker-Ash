@@ -141,12 +141,7 @@ public class DataHandlerGen<T> {
         }
     }
 
-    //TODO: make genric lol
-    private FilterProvider getFilterProvider() {
-        return new SimpleFilterProvider()
-                .addFilter("ProjectFilter", SimpleBeanPropertyFilter.serializeAllExcept("patchNoteUUIDs", "taskUUIDs", "issueUUIDs", "user"))
-                .addFilter("UserFilter", SimpleBeanPropertyFilter.serializeAll());
-
+    protected FilterProvider getFilterProvider() {
+        return null;
     }
-
 }

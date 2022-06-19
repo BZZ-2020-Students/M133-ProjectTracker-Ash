@@ -1,6 +1,9 @@
 package com.example.projecttracker.data;
 
 import com.example.projecttracker.model.User;
+import com.fasterxml.jackson.databind.ser.FilterProvider;
+import com.fasterxml.jackson.databind.ser.impl.SimpleBeanPropertyFilter;
+import com.fasterxml.jackson.databind.ser.impl.SimpleFilterProvider;
 
 import java.io.IOException;
 
@@ -36,5 +39,11 @@ public class UserDataHandler extends DataHandlerGen<User> {
      */
     public User readUserByUserUUID(String userUUID) throws IOException, NoSuchFieldException, IllegalAccessException {
         return super.getSingleFromJsonArray("userJSON", "userUUID", userUUID);
+    }
+
+    @Override
+    protected FilterProvider getFilterProvider() {
+        return new SimpleFilterProvider()
+                .addFilter("UserFilter", SimpleBeanPropertyFilter.serializeAll());
     }
 }

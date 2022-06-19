@@ -6,7 +6,7 @@
 
     <groupId>com.example</groupId>
     <artifactId>ProjectTracker</artifactId>
-    <version>1.0</version>
+    <version>1.2</version>
     <name>ProjectTracker</name>
     <packaging>war</packaging>
 

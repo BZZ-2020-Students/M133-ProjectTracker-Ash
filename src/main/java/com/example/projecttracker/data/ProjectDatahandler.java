@@ -4,6 +4,9 @@ import com.example.projecttracker.model.Issue;
 import com.example.projecttracker.model.PatchNote;
 import com.example.projecttracker.model.Project;
 import com.example.projecttracker.model.Task;
+import com.fasterxml.jackson.databind.ser.FilterProvider;
+import com.fasterxml.jackson.databind.ser.impl.SimpleBeanPropertyFilter;
+import com.fasterxml.jackson.databind.ser.impl.SimpleFilterProvider;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -86,9 +89,10 @@ public class ProjectDatahandler extends DataHandlerGen<Project> {
 
     /**
      * Deletes a single project from the JSON file
+     *
      * @param uuid the uuid of the project to delete
-     * @throws IOException if the file cannot be read
-     * @throws NoSuchFieldException if the field does not exist
+     * @throws IOException            if the file cannot be read
+     * @throws NoSuchFieldException   if the field does not exist
      * @throws IllegalAccessException if the file cannot be accessed
      */
     public void deleteSingleFromJson(String uuid) throws IOException, NoSuchFieldException, IllegalAccessException {
@@ -173,5 +177,12 @@ public class ProjectDatahandler extends DataHandlerGen<Project> {
             patchNotes.add(patchNote);
         }
         project.setPatchNotes(patchNotes);
+    }
+
+    @Override
+    protected FilterProvider getFilterProvider() {
+        return new SimpleFilterProvider()
+                .addFilter("ProjectFilter", SimpleBeanPropertyFilter.serializeAllExcept("patchNoteUUIDs", "taskUUIDs", "issueUUIDs", "user"))
+                .addFilter("UserFilter", SimpleBeanPropertyFilter.serializeAll());
     }
 }

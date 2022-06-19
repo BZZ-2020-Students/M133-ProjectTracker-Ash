@@ -123,14 +123,28 @@ public class ProjectResource {
     @Path("/delete/{uuid}")
     public Response deleteProjectByUUID(@PathParam("uuid") String uuid) {
         try {
+            Project project = new ProjectDatahandler().getSingleFromJsonArray(uuid);
 
+            if (project == null) {
+                return projectNotFound();
+            }
+        } catch (IOException | NoSuchFieldException | IllegalAccessException e) {
+            return projectNotFound();
+        }
+
+        try {
             new ProjectDatahandler().deleteSingleFromJson(uuid);
             return Response.status(200).entity("{\"success\":\"Project deleted\"}").build();
         } catch (IOException | NoSuchFieldException | IllegalAccessException e) {
+            e.printStackTrace();
             return Response.status(500).entity("{\"error\":\"" + e.getMessage() + "\"}").build();
         } catch (IllegalArgumentException e) {
-            return Response.status(404).entity("{\"error\":\"Project not found\"}").build();
+            return projectNotFound();
         }
+    }
+
+    private Response projectNotFound() {
+        return Response.status(404).entity("{\"error\":\"Project not found\"}").build();
     }
 
     /**

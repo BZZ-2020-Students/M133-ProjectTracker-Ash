@@ -89,11 +89,12 @@ public class Project {
     public void setUserUUID(String userUUID) throws IOException, NoSuchFieldException, IllegalAccessException {
         setUser(new User());
         User user = new UserDataHandler().readUserByUserUUID(userUUID);
-        getUser().setUserUUID(userUUID);
-        getUser().setUserName(user.getUserName());
-        getUser().setPassword(user.getPassword());
-        getUser().setUserRole(user.getUserRole());
-
+        if (user != null) {
+            getUser().setUserUUID(userUUID);
+            getUser().setUserName(user.getUserName());
+            getUser().setPassword(user.getPassword());
+            getUser().setUserRole(user.getUserRole());
+        }
     }
 
     /**
@@ -105,7 +106,9 @@ public class Project {
     public ArrayList<String> getTaskUUIDs() {
         ArrayList<String> taskUUIDs = new ArrayList<>();
         for (Task task : getTasks()) {
-            taskUUIDs.add(task.getTaskUUID());
+            if (task != null) {
+                taskUUIDs.add(task.getTaskUUID());
+            }
         }
         return taskUUIDs;
     }
@@ -135,7 +138,9 @@ public class Project {
     public ArrayList<String> getIssueUUIDs() {
         ArrayList<String> issueIds = new ArrayList<>();
         for (Issue issue : getIssues()) {
-            issueIds.add(issue.getIssueUUID());
+            if (issue != null) {
+                issueIds.add(issue.getIssueUUID());
+            }
         }
         return issueIds;
     }
@@ -165,9 +170,10 @@ public class Project {
     public ArrayList<String> getPatchNoteUUIDs() {
         ArrayList<String> patchnoteUUIDs = new ArrayList<>();
         for (PatchNote patchnote : getPatchNotes()) {
-            patchnoteUUIDs.add(patchnote.getPatchNoteUUID());
+            if (patchnote != null) {
+                patchnoteUUIDs.add(patchnote.getPatchNoteUUID());
+            }
         }
-        System.out.println("patchnoteUUIDs = " + patchnoteUUIDs);
         return patchnoteUUIDs;
     }
 
