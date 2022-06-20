@@ -10,6 +10,7 @@ import lombok.*;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.UUID;
 
 /**
  * Project Class for the Project Tracker App
@@ -29,7 +30,7 @@ public class Project {
     /**
      * The project's unique ID
      */
-    private String projectUUID;
+    private String projectUUID = UUID.randomUUID().toString();
     /**
      * The project's name
      */

@@ -3,8 +3,6 @@ package com.example.projecttracker.model;
 import lombok.*;
 
 import java.time.LocalDate;
-import java.util.Date;
-import java.util.Objects;
 import java.util.UUID;
 
 /**
@@ -26,7 +24,7 @@ public class Task {
      *
      * @since 1.0
      */
-    private String taskUUID;
+    private String taskUUID = UUID.randomUUID().toString();
     /**
      * The name of the task.
      *

@@ -6,6 +6,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.UUID;
+
 /**
  * The User class
  *
@@ -25,7 +27,7 @@ public class User {
      *
      * @since 1.0
      */
-    private String userUUID;
+    private String userUUID = UUID.randomUUID().toString();
     /**
      * The user's username
      *

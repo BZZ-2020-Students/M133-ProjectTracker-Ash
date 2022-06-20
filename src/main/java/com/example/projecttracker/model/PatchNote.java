@@ -4,6 +4,7 @@ import lombok.*;
 
 import java.time.LocalDate;
 import java.util.Objects;
+import java.util.UUID;
 
 /**
  * A patch note that is added to a project. Preferably, this is a short note that describes the changes made to the project.
@@ -24,7 +25,7 @@ public class PatchNote {
      *
      * @since 1.0
      */
-    private String patchNoteUUID;
+    private String patchNoteUUID = UUID.randomUUID().toString();
     /**
      * The title of the patch note.
      *

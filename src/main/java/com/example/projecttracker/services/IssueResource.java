@@ -3,10 +3,10 @@ package com.example.projecttracker.services;
 import com.example.projecttracker.data.DataHandlerGen;
 import com.example.projecttracker.data.IssueDataHandler;
 import com.example.projecttracker.model.Issue;
-import com.example.projecttracker.model.Status;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import jakarta.validation.Valid;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
@@ -75,26 +75,19 @@ public class IssueResource {
     /**
      * This method creates a new issue and adds it to the json file.
      *
-     * @param title       the title of the issue
-     * @param description the description of the issue
-     * @param severity    the severity of the issue
-     * @return a response
-     * @author Alyssa Heimlicher
+     * @param issue the issue to be added
+     * @return a status code of 200 if the issue was added
      */
     @POST
     @Produces(MediaType.TEXT_PLAIN)
     @Path("/create")
-    public Response insertIssue(@FormParam("title") String title,
-                                @FormParam("description") String description,
-                                @FormParam("severity") String severity) {
+    public Response insertIssue(@Valid @BeanParam Issue issue) {
         System.out.println("IssueResource.insertIssue");
-        String issueUUID = UUID.randomUUID().toString();
-        Issue issue = new Issue(issueUUID, title, description, severity, Status.TODO);
         DataHandlerGen<Issue> dh = new DataHandlerGen<>(Issue.class);
         dh.insertIntoJson(issue, "issueJSON");
 
         return Response
-                .status(201)
+                .status(200)
                 .entity("")
                 .build();
     }
