@@ -7,6 +7,7 @@ import com.example.projecttracker.model.Task;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import jakarta.validation.Valid;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
@@ -79,21 +80,16 @@ public class TaskResource {
     /**
      * This method creates a new task and adds it to the json file.
      *
-     * @param title       the title of the task
-     * @param description the description of the task
-     * @param deadline    the deadline of the task
+     * @param task the task to be added
      * @return a response
      * @author Alyssa Heimlicher
      */
     @POST
     @Produces(MediaType.TEXT_PLAIN)
     @Path("/create")
-    public Response insertTask(@FormParam("title") String title,
-                               @FormParam("description") String description,
-                               @FormParam("deadline") String deadline) {
-        LocalDate deadlineLocal = LocalDate.parse(deadline);
-        String taskUUID = UUID.randomUUID().toString();
-        Task task = new Task(taskUUID, title, description, deadlineLocal, Status.TODO);
+    public Response insertTask(@Valid @BeanParam Task task) {
+        LocalDate deadlineLocal = LocalDate.parse(task.getTempDate());
+        task.setDeadline(deadlineLocal);
         DataHandlerGen<Task> dh = new DataHandlerGen<>(Task.class);
         dh.insertIntoJson(task, "taskJSON");
 
