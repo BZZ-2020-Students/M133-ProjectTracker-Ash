@@ -112,4 +112,51 @@ public class PatchNoteResource {
         }
     }
 
+    /**
+     * This method updates a patchNote from the json file by its uuid.
+     *
+     * @param uuid the uuid of the patch note.
+     * @param patchNote the patch note to be updated.
+     * @return a response with the status code
+     * @throws IOException if the json file cannot be read.
+     * @throws NoSuchFieldException if the field is not found.
+     * @throws IllegalAccessException if the file is not accessible.
+     * @author Alyssa Heimlicher
+     *
+     */
+    @PUT
+    @Produces("application/json")
+    @Path("/update/{uuid}")
+    public Response updatePatchNoteByUUID(@PathParam("uuid") String uuid, @Valid @BeanParam PatchNote patchNote) throws IOException, NoSuchFieldException, IllegalAccessException {
+        boolean changed = false;
+        PatchNote toBeUpdatedPatchNote = new PatchnoteDataHandler().readPatchNoteByUUID(uuid);
+        if (toBeUpdatedPatchNote == null) {
+            return Response.status(404).entity("{\"error\":\"PatchNote not found\"}").build();
+        }
+
+        if(patchNote.getTitle() != null && !patchNote.getTitle().equals(toBeUpdatedPatchNote.getTitle())) {
+            toBeUpdatedPatchNote.setTitle(patchNote.getTitle());
+            changed = true;
+        }
+
+        if(patchNote.getDescription() != null && !patchNote.getDescription().equals(toBeUpdatedPatchNote.getDescription())) {
+            toBeUpdatedPatchNote.setDescription(patchNote.getDescription());
+            changed = true;
+        }
+
+        if(patchNote.getVersion() != null && !patchNote.getVersion().equals(toBeUpdatedPatchNote.getVersion())) {
+            toBeUpdatedPatchNote.setVersion(patchNote.getVersion());
+            changed = true;
+        }
+
+        if(changed){
+            new PatchnoteDataHandler().updateSingleFromJson("patchNoteJSON", "patchNoteUUID", uuid, toBeUpdatedPatchNote);
+            return Response.status(200).entity("{\"success\":\"PatchNote updated\"}").build();
+        }
+
+        return Response.status(200).entity("{\"success\":\"No changes made\"}").build();
+
+    }
+
+
 }

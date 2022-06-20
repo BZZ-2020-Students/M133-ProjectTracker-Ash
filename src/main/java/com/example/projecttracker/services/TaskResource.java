@@ -121,9 +121,12 @@ public class TaskResource {
     /**
      * This method updates a task in the json file.
      *
-     * @param uuid  the uuid of the task
+     * @param uuid the uuid of the task
      * @param task the task to be updated
      * @return a response based on if the task was updated or not
+     * @throws IOException if the json file cannot be read
+     * @throws NoSuchFieldException if the field cannot be found
+     * @throws IllegalAccessException if the file cannot be accessed
      * @author Alyssa Heimlicher
      */
     @PUT
@@ -150,13 +153,13 @@ public class TaskResource {
             toBeUpdatedTask.setDeadline(task.getDeadline());
             changed = true;
         }
-        
+
         if (task.getStatus() != null && !task.getStatus().equals(toBeUpdatedTask.getStatus())) {
             toBeUpdatedTask.setStatus(task.getStatus());
             changed = true;
         }
 
-        if(changed){
+        if (changed) {
             new TaskDataHandler().updateSingleFromJson("taskJSON", "taskUUID", uuid, toBeUpdatedTask);
             return Response.status(200).entity("{\"success\":\"Task updated\"}").build();
         }
