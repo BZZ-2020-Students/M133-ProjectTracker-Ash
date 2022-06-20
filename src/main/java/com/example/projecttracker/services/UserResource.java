@@ -95,6 +95,7 @@ public class UserResource {
 
     /**
      * This method deletes a user from the json file by their uuid.
+     * Deletes the users projects as well.
      *
      * @param uuid the uuid of the user
      * @return a response with the status code
