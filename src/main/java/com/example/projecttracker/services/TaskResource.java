@@ -2,7 +2,6 @@ package com.example.projecttracker.services;
 
 import com.example.projecttracker.data.DataHandlerGen;
 import com.example.projecttracker.data.TaskDataHandler;
-import com.example.projecttracker.model.Status;
 import com.example.projecttracker.model.Task;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
@@ -15,7 +14,6 @@ import jakarta.ws.rs.core.Response;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.UUID;
 
 
 /**
@@ -118,5 +116,51 @@ public class TaskResource {
         } catch (IllegalArgumentException e) {
             return Response.status(404).entity("{\"error\":\"Task not found\"}").build();
         }
+    }
+
+    /**
+     * This method updates a task in the json file.
+     *
+     * @param uuid  the uuid of the task
+     * @param task the task to be updated
+     * @return a response based on if the task was updated or not
+     * @author Alyssa Heimlicher
+     */
+    @PUT
+    @Produces("application/json")
+    @Path("/update/{uuid}")
+    public Response updateTask(@PathParam("uuid") String uuid, @Valid @BeanParam Task task) throws IOException, NoSuchFieldException, IllegalAccessException {
+        boolean changed = false;
+        Task toBeUpdatedTask = new TaskDataHandler().readTaskByUUID(uuid);
+        if (toBeUpdatedTask == null) {
+            return Response.status(404).entity("{\"error\":\"Task not found\"}").build();
+        }
+
+        if (task.getTitle() != null && !task.getTitle().equals(toBeUpdatedTask.getTitle())) {
+            toBeUpdatedTask.setTitle(task.getTitle());
+            changed = true;
+        }
+
+        if (task.getDescription() != null && !task.getDescription().equals(toBeUpdatedTask.getDescription())) {
+            toBeUpdatedTask.setDescription(task.getDescription());
+            changed = true;
+        }
+
+        if (task.getDeadline() != null && !task.getDeadline().equals(toBeUpdatedTask.getDeadline())) {
+            toBeUpdatedTask.setDeadline(task.getDeadline());
+            changed = true;
+        }
+        
+        if (task.getStatus() != null && !task.getStatus().equals(toBeUpdatedTask.getStatus())) {
+            toBeUpdatedTask.setStatus(task.getStatus());
+            changed = true;
+        }
+
+        if(changed){
+            new TaskDataHandler().updateSingleFromJson("taskJSON", "taskUUID", uuid, toBeUpdatedTask);
+            return Response.status(200).entity("{\"success\":\"Task updated\"}").build();
+        }
+
+        return Response.status(200).entity("{\"success\":\"No changes made\"}").build();
     }
 }

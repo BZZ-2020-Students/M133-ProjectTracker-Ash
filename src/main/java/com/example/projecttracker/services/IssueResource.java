@@ -122,7 +122,7 @@ public class IssueResource {
     @PUT
     @Produces("application/json")
     @Path("/update/{uuid}")
-    public Response updateIssueByUUID(@PathParam("uuid") String uuid, @Valid @BeanParam Issue issue) throws IOException, NoSuchFieldException, IllegalAccessException {
+    public Response updateIssue(@PathParam("uuid") String uuid, @Valid @BeanParam Issue issue) throws IOException, NoSuchFieldException, IllegalAccessException {
         boolean changed = false;
         Issue toBeUpdatedIssue = new IssueDataHandler().readIssueByUUID(uuid);
         if (toBeUpdatedIssue == null) {
@@ -155,7 +155,7 @@ public class IssueResource {
             return Response.status(200).entity("{\"success\":\"Issue updated\"}").build();
         }
 
-        return Response.status(200).entity("{\"success\":\"Nothing updated\"}").build();
+        return Response.status(200).entity("{\"success\":\"No changes made\"}").build();
 
     }
 }
