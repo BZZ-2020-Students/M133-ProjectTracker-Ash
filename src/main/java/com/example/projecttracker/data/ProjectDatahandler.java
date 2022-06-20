@@ -96,11 +96,10 @@ public class ProjectDatahandler extends DataHandlerGen<Project> {
      * @throws NoSuchFieldException   if the field does not exist
      * @throws IllegalAccessException if the field cannot be accessed
      * @author Alyssa Heimlicher
-     * @see DataHandlerGen#getArrayListOutOfJSONByField(String, String, Object)
+     * @see DataHandlerGen#getArrayListOutOfJSON(String)
      * @since 2020-05-23
      */
     public ArrayList<Project> getArrayListOutOfJSONByUserUUID(String uuid) throws IOException, NoSuchFieldException, IllegalAccessException {
-        System.out.println("ProjectDatahandler.getArrayListOutOfJSONByUserUUID");
         ArrayList<Project> projects = super.getArrayListOutOfJSON("projectJSON");
         projects.removeIf(p -> !p.getUserUUID().equals(uuid));
 

@@ -57,31 +57,6 @@ public class DataHandlerGen<T> {
     }
 
     /**
-     * This method returns an arraylist with specific filters
-     *
-     * @param propertyName the name of the property that tells us which JSON-file to read
-     * @param fieldName    the name of the field of the class that we want to read
-     * @param fieldValue   the value of the field of the class that we want to read
-     * @return an arraylist with filtered objects
-     * @throws IOException            when the file cannot be read/is not found
-     * @throws NoSuchFieldException   when the field cannot be found
-     * @throws IllegalAccessException when the field cannot be accessed
-     */
-    public ArrayList<T> getArrayListOutOfJSONByField(String propertyName, String fieldName, Object fieldValue) throws IOException, NoSuchFieldException, IllegalAccessException {
-        ArrayList<T> arrayList = getArrayListOutOfJSON(propertyName);
-        ArrayList<T> returnList = new ArrayList<>();
-
-        for (T t : arrayList) {
-            Field privateField = t.getClass().getDeclaredField(fieldName);
-            privateField.setAccessible(true);
-            if (privateField.get(t).equals(fieldValue)) {
-                returnList.add(t);
-            }
-        }
-        return returnList;
-    }
-
-    /**
      * reads specific data from the JSON-file
      *
      * @param propertyName the name of the property that tells us which JSON-file to read
