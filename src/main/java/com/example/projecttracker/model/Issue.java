@@ -66,8 +66,7 @@ public class Issue {
      * @since 1.0
      */
     @FormParam("status")
-    @NotEmpty(message = "Status cannot be empty")
-    private Status status;
+    private Status status = Status.TODO;
 
     @Override
     public boolean equals(Object o) {

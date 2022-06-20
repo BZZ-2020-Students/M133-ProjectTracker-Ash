@@ -6,14 +6,13 @@ import com.example.projecttracker.model.PatchNote;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import jakarta.validation.Valid;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 
 import java.io.IOException;
-import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.UUID;
 
 
 /**
@@ -77,23 +76,13 @@ public class PatchNoteResource {
     /**
      * Creates a new patch note and adds it to the json file.
      *
-     * @param title       the title of the patch note.
-     * @param description the description of the patch note.
-     * @param date        the date of the patch note.
-     * @param version     the version of the patch note.
-     * @return a response depending on the success of the operation.
+     * @param patchNote the patch note to be added.
      * @author Alyssa Heimlicher
      */
     @POST
     @Produces(MediaType.TEXT_PLAIN)
     @Path("/create")
-    public Response createPatchNote(@FormParam("title") String title,
-                                    @FormParam("description") String description,
-                                    @FormParam("date") String date,
-                                    @FormParam("version") String version) {
-        LocalDate dateAsLocalDate = LocalDate.parse(date);
-        String patchNoteUUID = UUID.randomUUID().toString();
-        PatchNote patchNote = new PatchNote(patchNoteUUID, title, description, dateAsLocalDate, version);
+    public Response createPatchNote(@Valid @BeanParam PatchNote patchNote) {
         new PatchnoteDataHandler().insertIntoJson(patchNote, "patchNoteJSON");
 
         return Response

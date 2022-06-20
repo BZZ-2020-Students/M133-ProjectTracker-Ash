@@ -13,7 +13,6 @@ import jakarta.ws.rs.core.Response;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.UUID;
 
 /**
  * The issue service file used to handle all requests to the issue class.
@@ -82,7 +81,6 @@ public class IssueResource {
     @Produces(MediaType.TEXT_PLAIN)
     @Path("/create")
     public Response insertIssue(@Valid @BeanParam Issue issue) {
-        System.out.println("IssueResource.insertIssue");
         DataHandlerGen<Issue> dh = new DataHandlerGen<>(Issue.class);
         dh.insertIntoJson(issue, "issueJSON");
 

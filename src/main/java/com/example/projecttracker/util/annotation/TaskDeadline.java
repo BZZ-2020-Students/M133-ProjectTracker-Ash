@@ -6,7 +6,7 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 
 /**
- * This is an annotation that validates the severity of an issue.
+ * This is an annotation that validates the deadline of a task.
  *
  * @author Alyssa Heimlicher
  * @version 1.2
@@ -14,9 +14,14 @@ import java.lang.annotation.Target;
  */
 @Target({java.lang.annotation.ElementType.FIELD})
 @Retention(java.lang.annotation.RetentionPolicy.RUNTIME)
-@Constraint(validatedBy = {IssueSeverityValidator.class})
-public @interface IssueSeverity {
-    String message() default "Invalid Severity! Severity must be one of the following: Critical, Major, Minor, Trivial";
+@Constraint(validatedBy = {TaskDeadlineValidator.class})
+public @interface TaskDeadline {
+    /**
+     * The message to display if the deadline is invalid.
+     * @return The message to display if the deadline is invalid.
+     * @author Alyssa Heimlicher
+     */
+    String message() default "Invalid deadline! Deadline cant be before the project start date!";
 
     Class<?>[] groups() default {};
 
