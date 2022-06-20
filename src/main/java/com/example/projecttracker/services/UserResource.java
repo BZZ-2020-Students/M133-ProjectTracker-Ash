@@ -9,6 +9,7 @@ import com.example.projecttracker.util.ToJson;
 import com.fasterxml.jackson.databind.ser.FilterProvider;
 import com.fasterxml.jackson.databind.ser.impl.SimpleBeanPropertyFilter;
 import com.fasterxml.jackson.databind.ser.impl.SimpleFilterProvider;
+import jakarta.validation.Valid;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
@@ -73,18 +74,14 @@ public class UserResource {
     /**
      * Creates a new user and adds it to the json file.
      *
-     * @param username the username of the user
-     * @param password the password of the user
+     * @param user the user to be added
      * @return a response depending on the success of the operation.
      * @author Alyssa Heimlicher
      */
     @POST
     @Produces(MediaType.TEXT_PLAIN)
     @Path("/create")
-    public Response createPatchNote(@FormParam("username") String username,
-                                    @FormParam("password") String password) {
-        String userUUID = UUID.randomUUID().toString();
-        User user = new User(userUUID, username, password, "Guest");
+    public Response createPatchNote(@Valid @BeanParam User user) {
         new UserDataHandler().insertIntoJson(user, "userJSON");
 
         return Response

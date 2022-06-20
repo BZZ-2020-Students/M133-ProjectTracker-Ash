@@ -21,5 +21,11 @@ public class Constants {
 
     public static final String[] VALID_SEVERITIES = {"critical", "major", "minor", "trivial"};
 
+    public static final int MAX_USERNAME_LENGTH = 24;
+    public static final int MIN_USERNAME_LENGTH = 3;
+
+    public static final int MAX_PASSWORD_LENGTH = 16;
+    public static final int MIN_PASSWORD_LENGTH = 8;
+
 
 }
