@@ -19,7 +19,7 @@ public class Constants {
 
     public static final int MAX_VERSION_LENGTH = 16;
 
-    public static final String[] VALID_SEVERITIES = {"Critical", "Major", "Minor", "Trivial"};
+    public static final String[] VALID_SEVERITIES = {"critical", "major", "minor", "trivial"};
 
 
 }

@@ -13,6 +13,7 @@ import jakarta.ws.rs.core.Response;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Locale;
 
 /**
  * The issue service file used to handle all requests to the issue class.

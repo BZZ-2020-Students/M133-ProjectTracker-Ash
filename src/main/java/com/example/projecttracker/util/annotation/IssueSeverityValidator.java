@@ -4,6 +4,7 @@ import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 
 import java.util.Arrays;
+import java.util.Locale;
 
 import static com.example.projecttracker.util.Constants.VALID_SEVERITIES;
 
@@ -17,6 +18,6 @@ import static com.example.projecttracker.util.Constants.VALID_SEVERITIES;
 public class IssueSeverityValidator implements ConstraintValidator<IssueSeverity, String> {
     @Override
     public boolean isValid(String s, ConstraintValidatorContext constraintValidatorContext) {
-        return Arrays.asList(VALID_SEVERITIES).contains(s);
+        return Arrays.asList(VALID_SEVERITIES).contains(s.toLowerCase(Locale.ROOT));
     }
 }
