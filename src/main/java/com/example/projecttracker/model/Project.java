@@ -5,12 +5,18 @@ import com.example.projecttracker.data.PatchnoteDataHandler;
 import com.example.projecttracker.data.TaskDataHandler;
 import com.example.projecttracker.data.UserDataHandler;
 import com.fasterxml.jackson.annotation.JsonFilter;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.Size;
+import jakarta.ws.rs.FormParam;
 import lombok.*;
 
 import java.io.IOException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.UUID;
+
+import static com.example.projecttracker.util.Constants.*;
 
 /**
  * Project Class for the Project Tracker App
@@ -26,6 +32,7 @@ import java.util.UUID;
 @NoArgsConstructor
 @ToString
 @JsonFilter("ProjectFilter")
+@JsonIgnoreProperties({"tempStartDate", "userid"})
 public class Project {
     /**
      * The project's unique ID
@@ -34,39 +41,66 @@ public class Project {
     /**
      * The project's name
      */
+    @FormParam("title")
+    @NotEmpty(message = "Title cannot be empty")
+    @Size(min = MIN_TITLE_LENGTH, max = MAX_TITLE_LENGTH)
     private String title;
+
     /**
      * The project's description
      */
+    @FormParam("description")
+    @Size(max = MAX_DESCRIPTION_LENGTH)
     private String description;
     /**
      * The project's start date
      */
     private LocalDate startDate;
+
+    @FormParam("startDate")
+    @NotEmpty(message = "Start date cannot be empty")
+    private String tempStartDate;
+
     /**
      * Boolean value for whether the project is completed
      */
-    private Boolean isFinished;
+    private Boolean isFinished = false;
     /**
      * The project's subject (e.g. CS, Math, etc.)
      */
+    @FormParam("subject")
+    @NotEmpty(message = "Subject cannot be empty")
+    @Size(min = MIN_SUBJECT_LENGTH, max = MAX_SUBJECT_LENGTH)
     private String subject;
+
     /**
      * The User the project belongs to
+     *
+     * @since 1.0
      */
     private User user;
+
+    /**
+     * A temp variable for the user's ID
+     *
+     * @since 1.2
+     */
+    @FormParam("userUUID")
+    @NotEmpty(message = "User cannot be empty")
+    private String userid;
+
     /**
      * The list of issues associated with the project
      */
-    private ArrayList<Issue> issues;
+    private ArrayList<Issue> issues = new ArrayList<>();
     /**
      * The list of tasks associated with the project
      */
-    private ArrayList<Task> tasks;
+    private ArrayList<Task> tasks = new ArrayList<>();
     /**
      * The list of patchNotes associated with the project
      */
-    private ArrayList<PatchNote> patchNotes;
+    private ArrayList<PatchNote> patchNotes = new ArrayList<>();
 
     /**
      * gets the userUUID from the User-object

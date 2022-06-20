@@ -40,7 +40,7 @@ public class Task {
      */
     @FormParam("title")
     @NotEmpty(message = "Title cannot be empty")
-    @Size(min=MIN_TITLE_LENGTH, max=MAX_TITLE_LENGTH)
+    @Size(min = MIN_TITLE_LENGTH, max = MAX_TITLE_LENGTH)
     private String title;
     /**
      * The description of the task.
@@ -48,7 +48,7 @@ public class Task {
      * @since 1.0
      */
     @FormParam("description")
-    @Size(max=MAX_DESCRIPTION_LENGTH)
+    @Size(max = MAX_DESCRIPTION_LENGTH)
     private String description;
     /**
      * The date of when the task is due.
@@ -57,6 +57,11 @@ public class Task {
      */
     private LocalDate deadline;
 
+    /**
+     * a temp date to be used for the deadline
+     *
+     * @since 1.2
+     */
     @FormParam("deadline")
     @NotEmpty(message = "Deadline cannot be empty")
     private String tempDate;

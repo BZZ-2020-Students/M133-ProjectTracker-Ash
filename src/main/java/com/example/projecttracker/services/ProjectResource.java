@@ -7,6 +7,7 @@ import com.example.projecttracker.util.ToJson;
 import com.fasterxml.jackson.databind.ser.FilterProvider;
 import com.fasterxml.jackson.databind.ser.impl.SimpleBeanPropertyFilter;
 import com.fasterxml.jackson.databind.ser.impl.SimpleFilterProvider;
+import jakarta.validation.Valid;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
@@ -72,34 +73,23 @@ public class ProjectResource {
     /**
      * This method is used to add a project to the json file.
      *
-     * @param title       the title of the project
-     * @param description the description of the project
-     * @param startDate   the start date of the project
-     * @param subject     the subject of the project (e.g. Blender, Game Development, etc.)
-     * @param userUUID    the uuid of the user
+     * @param project the project to be added
      * @return a response
      * @author Alyssa Heimlicher
      */
     @POST
     @Produces(MediaType.TEXT_PLAIN)
     @Path("/create")
-    public Response createProject(@FormParam("title") String title,
-                                  @FormParam("description") String description,
-                                  @FormParam("startDate") String startDate,
-                                  @FormParam("subject") String subject,
-                                  @FormParam("userUUID") String userUUID) {
+    public Response createProject(@Valid @BeanParam Project project) {
 
         try {
-            String projectUUID = UUID.randomUUID().toString();
-            LocalDate startDateLocal = LocalDate.parse(startDate);
-            ArrayList<Task> tasks = new ArrayList<>();
-            ArrayList<Issue> issues = new ArrayList<>();
-            ArrayList<PatchNote> patchNotes = new ArrayList<>();
-            User user = new UserDataHandler().readUserByUserUUID(userUUID);
+            LocalDate startDateLocal = LocalDate.parse(project.getTempStartDate());
+            project.setStartDate(startDateLocal);
+            User user = new UserDataHandler().readUserByUserUUID(project.getUserid());
             if (user == null) {
                 return Response.status(404).entity("{\"error\":\"User not found\"}").build();
             }
-            Project project = new Project(projectUUID, title, description, startDateLocal, false, subject, user, issues, tasks, patchNotes);
+            project.setUser(user);
             new ProjectDatahandler().insertIntoJson(project, "projectJSON");
         } catch (IOException | NoSuchFieldException | IllegalAccessException e) {
             return Response.status(500).entity("{\"error\":\"" + e.getMessage() + "\"}").build();

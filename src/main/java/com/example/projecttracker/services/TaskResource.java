@@ -94,7 +94,7 @@ public class TaskResource {
         dh.insertIntoJson(task, "taskJSON");
 
         return Response
-                .status(201)
+                .status(200)
                 .entity("")
                 .build();
     }
