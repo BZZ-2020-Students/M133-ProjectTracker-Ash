@@ -65,7 +65,6 @@ public class Issue {
      *
      * @since 1.0
      */
-    @FormParam("status")
     private Status status = Status.TODO;
 
     @Override

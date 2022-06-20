@@ -13,7 +13,6 @@ import jakarta.ws.rs.core.Response;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Locale;
 
 /**
  * The issue service file used to handle all requests to the issue class.
@@ -110,5 +109,53 @@ public class IssueResource {
         } catch (IllegalArgumentException e) {
             return Response.status(404).entity("{\"error\":\"Issue not found\"}").build();
         }
+    }
+
+    /**
+     * This method updates an issue in the json file based on the uuid.
+     *
+     * @param uuid the uuid of the issue
+     * @param issue the issue to be updated
+     * @return a response based on if the issue was updated or not
+     * @author Alyssa Heimlicher
+     * */
+    @PUT
+    @Produces("application/json")
+    @Path("/update/{uuid}")
+    public Response updateIssueByUUID(@PathParam("uuid") String uuid, @Valid @BeanParam Issue issue) throws IOException, NoSuchFieldException, IllegalAccessException {
+        boolean changed = false;
+        Issue toBeUpdatedIssue = new IssueDataHandler().readIssueByUUID(uuid);
+        if (toBeUpdatedIssue == null) {
+            return Response.status(404).entity("{\"error\":\"Issue not found\"}").build();
+        }
+
+        if(issue.getTitle() != null && !issue.getTitle().equals(toBeUpdatedIssue.getTitle())) {
+            toBeUpdatedIssue.setTitle(issue.getTitle());
+            changed = true;
+        }
+
+        if(issue.getDescription() != null && !issue.getDescription().equals(toBeUpdatedIssue.getDescription())) {
+            toBeUpdatedIssue.setDescription(issue.getDescription());
+            changed = true;
+        }
+
+        if(issue.getStatus() != null && !issue.getStatus().equals(toBeUpdatedIssue.getStatus())) {
+            toBeUpdatedIssue.setStatus(issue.getStatus());
+            changed = true;
+        }
+
+        if(issue.getSeverity() != null && !issue.getSeverity().equals(toBeUpdatedIssue.getSeverity())) {
+            toBeUpdatedIssue.setSeverity(issue.getSeverity());
+            changed = true;
+        }
+
+
+        if(changed){
+            new IssueDataHandler().updateSingleFromJson("issueJSON", "issueUUID", uuid, toBeUpdatedIssue);
+            return Response.status(200).entity("{\"success\":\"Issue updated\"}").build();
+        }
+
+        return Response.status(200).entity("{\"success\":\"Nothing updated\"}").build();
+
     }
 }

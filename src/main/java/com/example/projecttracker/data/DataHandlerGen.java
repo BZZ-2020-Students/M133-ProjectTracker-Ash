@@ -124,6 +124,28 @@ public class DataHandlerGen<T> {
     }
 
     /**
+     * updates a specific data in the JSON-file
+     *
+     * @param propertyName the name of the property that tells us which JSON-file to write in
+     * @param fieldName    the name of the field of the class that we want to update
+     * @param fieldValue   the value of the data in the field
+     * @param object       the data that we want to update
+     * @throws IOException            when the file cannot be read/is not found
+     * @throws NoSuchFieldException   when the field cannot be found
+     * @throws IllegalAccessException when the field cannot be accessed
+     * @author Alyssa Heimlicher
+     */
+    public void updateSingleFromJson(String propertyName, String fieldName, Object fieldValue, T object) throws IOException, NoSuchFieldException, IllegalAccessException {
+        ArrayList<T> objects = getArrayListOutOfJSON(propertyName);
+        T oldObject = getSingleFromJsonArray(propertyName, fieldName, fieldValue);
+        if (!objects.remove(oldObject)) {
+            throw new IllegalArgumentException("Object not found");
+        }
+        objects.add(object);
+        saveJson(propertyName, objects);
+    }
+
+    /**
      * Saves the data in the JSON-file
      *
      * @param propertyName the name of the property that tells us which JSON-file to write in
