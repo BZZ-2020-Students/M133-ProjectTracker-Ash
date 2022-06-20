@@ -88,6 +88,26 @@ public class ProjectDatahandler extends DataHandlerGen<Project> {
     }
 
     /**
+     * Returns all found Projects with a specific user uuid. Also sets the tasks, issues, and patch notes of each project.
+     *
+     * @param uuid the user uuid
+     * @return all found Projects
+     * @throws IOException            if the file cannot be read
+     * @throws NoSuchFieldException   if the field does not exist
+     * @throws IllegalAccessException if the field cannot be accessed
+     * @author Alyssa Heimlicher
+     * @see DataHandlerGen#getArrayListOutOfJSONByField(String, String, Object)
+     * @since 2020-05-23
+     */
+    public ArrayList<Project> getArrayListOutOfJSONByUserUUID(String uuid) throws IOException, NoSuchFieldException, IllegalAccessException {
+        System.out.println("ProjectDatahandler.getArrayListOutOfJSONByUserUUID");
+        ArrayList<Project> projects = super.getArrayListOutOfJSON("projectJSON");
+        projects.removeIf(p -> !p.getUserUUID().equals(uuid));
+
+        return projects;
+    }
+
+    /**
      * Deletes a single project from the JSON file
      *
      * @param uuid the uuid of the project to delete

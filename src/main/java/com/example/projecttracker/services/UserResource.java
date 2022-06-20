@@ -1,7 +1,9 @@
 package com.example.projecttracker.services;
 
 import com.example.projecttracker.data.DataHandlerGen;
+import com.example.projecttracker.data.ProjectDatahandler;
 import com.example.projecttracker.data.UserDataHandler;
+import com.example.projecttracker.model.Project;
 import com.example.projecttracker.model.User;
 import com.example.projecttracker.util.ToJson;
 import com.fasterxml.jackson.databind.ser.FilterProvider;
@@ -103,6 +105,10 @@ public class UserResource {
     @Path("/delete/{uuid}")
     public Response deleteUserByUUID(@PathParam("uuid") String uuid) {
         try {
+            ArrayList<Project> projects = new ProjectDatahandler().getArrayListOutOfJSONByUserUUID(uuid);
+            for (Project project : projects) {
+                new ProjectDatahandler().deleteSingleFromJson(project.getProjectUUID());
+            }
             new UserDataHandler().deleteSingleFromJson("userJSON", "userUUID", uuid);
             return Response.status(200).entity("{\"success\":\"User deleted\"}").build();
         } catch (IOException | NoSuchFieldException | IllegalAccessException e) {
