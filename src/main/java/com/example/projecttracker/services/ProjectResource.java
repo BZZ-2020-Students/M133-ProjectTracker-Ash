@@ -2,7 +2,8 @@ package com.example.projecttracker.services;
 
 import com.example.projecttracker.data.ProjectDatahandler;
 import com.example.projecttracker.data.UserDataHandler;
-import com.example.projecttracker.model.*;
+import com.example.projecttracker.model.Project;
+import com.example.projecttracker.model.User;
 import com.example.projecttracker.util.ToJson;
 import com.fasterxml.jackson.databind.ser.FilterProvider;
 import com.fasterxml.jackson.databind.ser.impl.SimpleBeanPropertyFilter;
@@ -15,7 +16,6 @@ import jakarta.ws.rs.core.Response;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.UUID;
 
 /**
  * This class is used to handle the requests for the project class.
@@ -136,6 +136,54 @@ public class ProjectResource {
     private Response projectNotFound() {
         return Response.status(404).entity("{\"error\":\"Project not found\"}").build();
     }
+
+    /**
+     * This method is used to update a project in the json file.
+     *
+     * @param uuid    the uuid of the project
+     * @param project the project to be updated
+     * @return a response with the status code
+     * @throws IOException if the json file is not found
+     * @throws NoSuchFieldException if the field is not found
+     * @throws IllegalAccessException if the field is not accessible
+     *
+     * @author Alyssa Heimlicher
+     */
+    @PUT
+    @Produces("application/json")
+    @Path("/update/{uuid}")
+    public Response updateProject(@PathParam("uuid") String uuid, @Valid @BeanParam Project project) throws IOException, NoSuchFieldException, IllegalAccessException {
+        boolean changed = false;
+        Project toBeUpdatedProject = new ProjectDatahandler().getSingleFromJsonArray(uuid);
+        if (toBeUpdatedProject == null) {
+            return projectNotFound();
+        }
+
+        if (project.getTitle() != null && !project.getTitle().equals(toBeUpdatedProject.getTitle())) {
+            toBeUpdatedProject.setTitle(project.getTitle());
+            changed = true;
+        }
+        if (project.getDescription() != null && !project.getDescription().equals(toBeUpdatedProject.getDescription())) {
+            toBeUpdatedProject.setDescription(project.getDescription());
+            changed = true;
+        }
+        if (project.getStartDate() != null && !project.getStartDate().equals(toBeUpdatedProject.getStartDate())) {
+            toBeUpdatedProject.setStartDate(project.getStartDate());
+            changed = true;
+        }
+        if (project.getSubject() != null && !project.getSubject().equals(toBeUpdatedProject.getSubject())) {
+            toBeUpdatedProject.setSubject(project.getSubject());
+            changed = true;
+        }
+
+        if (changed) {
+            new ProjectDatahandler().updateSingleFromJson("projectJSON", "projectUUID", uuid, toBeUpdatedProject);
+            return Response.status(200).entity("{\"success\":\"Project updated\"}").build();
+        }
+        return Response.status(200).entity("{\"success\":\"No changes made\"}").build();
+
+    }
+
 
     /**
      * This method returns the filter provider for the project with every filter in it
