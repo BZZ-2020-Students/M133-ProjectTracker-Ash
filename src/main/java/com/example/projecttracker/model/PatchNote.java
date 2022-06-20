@@ -60,7 +60,7 @@ public class PatchNote {
      */
     @FormParam("version")
     @NotEmpty(message = "Version cannot be empty")
-    @Size(min = MIN_VERSION_LENGTH, max = MAX_VERSION_LENGTH)
+    @Size(max = MAX_VERSION_LENGTH)
     private String version;
 
     @Override

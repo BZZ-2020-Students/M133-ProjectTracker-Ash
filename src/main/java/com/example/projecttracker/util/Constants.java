@@ -18,7 +18,6 @@ public class Constants {
     public static final int MIN_SUBJECT_LENGTH = 3;
 
     public static final int MAX_VERSION_LENGTH = 16;
-    public static final int MIN_VERSION_LENGTH = 1;
 
     public static final String[] VALID_SEVERITIES = {"Critical", "Major", "Minor", "Trivial"};
 
