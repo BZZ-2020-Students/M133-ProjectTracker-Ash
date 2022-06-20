@@ -114,11 +114,14 @@ public class IssueResource {
     /**
      * This method updates an issue in the json file based on the uuid.
      *
-     * @param uuid the uuid of the issue
+     * @param uuid  the uuid of the issue
      * @param issue the issue to be updated
      * @return a response based on if the issue was updated or not
+     * @throws IOException            if the json file cannot be read
+     * @throws NoSuchFieldException   if the field cannot be found
+     * @throws IllegalAccessException if the fields cannot be accessed
      * @author Alyssa Heimlicher
-     * */
+     */
     @PUT
     @Produces("application/json")
     @Path("/update/{uuid}")
@@ -129,28 +132,28 @@ public class IssueResource {
             return Response.status(404).entity("{\"error\":\"Issue not found\"}").build();
         }
 
-        if(issue.getTitle() != null && !issue.getTitle().equals(toBeUpdatedIssue.getTitle())) {
+        if (issue.getTitle() != null && !issue.getTitle().equals(toBeUpdatedIssue.getTitle())) {
             toBeUpdatedIssue.setTitle(issue.getTitle());
             changed = true;
         }
 
-        if(issue.getDescription() != null && !issue.getDescription().equals(toBeUpdatedIssue.getDescription())) {
+        if (issue.getDescription() != null && !issue.getDescription().equals(toBeUpdatedIssue.getDescription())) {
             toBeUpdatedIssue.setDescription(issue.getDescription());
             changed = true;
         }
 
-        if(issue.getStatus() != null && !issue.getStatus().equals(toBeUpdatedIssue.getStatus())) {
+        if (issue.getStatus() != null && !issue.getStatus().equals(toBeUpdatedIssue.getStatus())) {
             toBeUpdatedIssue.setStatus(issue.getStatus());
             changed = true;
         }
 
-        if(issue.getSeverity() != null && !issue.getSeverity().equals(toBeUpdatedIssue.getSeverity())) {
+        if (issue.getSeverity() != null && !issue.getSeverity().equals(toBeUpdatedIssue.getSeverity())) {
             toBeUpdatedIssue.setSeverity(issue.getSeverity());
             changed = true;
         }
 
 
-        if(changed){
+        if (changed) {
             new IssueDataHandler().updateSingleFromJson("issueJSON", "issueUUID", uuid, toBeUpdatedIssue);
             return Response.status(200).entity("{\"success\":\"Issue updated\"}").build();
         }

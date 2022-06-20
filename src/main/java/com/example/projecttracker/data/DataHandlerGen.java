@@ -161,6 +161,11 @@ public class DataHandlerGen<T> {
         }
     }
 
+    /**
+     * returns the filter provider for the JSON-file
+     *
+     * @return null unless overridden
+     */
     protected FilterProvider getFilterProvider() {
         return null;
     }

@@ -57,6 +57,11 @@ public class Project {
      */
     private LocalDate startDate;
 
+
+    /**
+     * A temporary start date used for the project's start date
+     *
+     */
     @FormParam("startDate")
     @NotEmpty(message = "Start date cannot be empty")
     private String tempStartDate;

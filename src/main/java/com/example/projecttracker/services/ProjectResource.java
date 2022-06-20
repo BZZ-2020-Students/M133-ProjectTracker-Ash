@@ -133,6 +133,10 @@ public class ProjectResource {
         }
     }
 
+    /**
+     * this method is to return a 404 error if the project is not found.
+     * @return a response with the status code 404
+     */
     private Response projectNotFound() {
         return Response.status(404).entity("{\"error\":\"Project not found\"}").build();
     }
