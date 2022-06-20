@@ -16,7 +16,6 @@ import jakarta.ws.rs.core.Response;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.UUID;
 
 /**
  * This class is used to handle all requests to the user class.
@@ -114,6 +113,47 @@ public class UserResource {
         } catch (IllegalArgumentException e) {
             return Response.status(404).entity("{\"error\":\"User not found\"}").build();
         }
+    }
+
+    /**
+     * This method updates a user in the json file by their uuid.
+     *
+     * @param uuid the uuid of the user
+     * @param user the user to be updated
+     * @return a response depending on the success of the operation.
+     * @throws IOException            if the json file cannot be found
+     * @throws NoSuchFieldException   if the field cannot be found
+     * @throws IllegalAccessException if the file cannot be accessed
+     * @author Alyssa Heimlicher
+     */
+    @PUT
+    @Produces("application/json")
+    @Path("/update/{uuid}")
+    public Response updateUser(@PathParam("uuid") String uuid, @Valid @BeanParam User user) throws IOException, NoSuchFieldException, IllegalAccessException {
+        boolean changed = false;
+        User toBeUpdatedUser = new UserDataHandler().readUserByUserUUID(uuid);
+
+        if (toBeUpdatedUser == null) {
+            return Response.status(404).entity("{\"error\":\"User not found\"}").build();
+        }
+
+        if (user.getUserName() != null && !user.getUserName().equals(toBeUpdatedUser.getUserName())) {
+            toBeUpdatedUser.setUserName(user.getUserName());
+            changed = true;
+        }
+
+        if (user.getPassword() != null && !user.getPassword().equals(toBeUpdatedUser.getPassword())) {
+            toBeUpdatedUser.setPassword(user.getPassword());
+            changed = true;
+        }
+
+        if (changed) {
+            new UserDataHandler().updateSingleFromJson("userJSON", "userUUID", uuid, toBeUpdatedUser);
+            return Response.status(200).entity("{\"success\":\"User updated\"}").build();
+        }
+
+        return Response.status(200).entity("{\"success\":\"No changes made\"}").build();
+
     }
 
     /**

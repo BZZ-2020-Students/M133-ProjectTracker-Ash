@@ -127,7 +127,7 @@ public class PatchNoteResource {
     @PUT
     @Produces("application/json")
     @Path("/update/{uuid}")
-    public Response updatePatchNoteByUUID(@PathParam("uuid") String uuid, @Valid @BeanParam PatchNote patchNote) throws IOException, NoSuchFieldException, IllegalAccessException {
+    public Response updatePatchNote(@PathParam("uuid") String uuid, @Valid @BeanParam PatchNote patchNote) throws IOException, NoSuchFieldException, IllegalAccessException {
         boolean changed = false;
         PatchNote toBeUpdatedPatchNote = new PatchnoteDataHandler().readPatchNoteByUUID(uuid);
         if (toBeUpdatedPatchNote == null) {
