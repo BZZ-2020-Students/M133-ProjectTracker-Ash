@@ -27,15 +27,15 @@ public class IssueDataHandler extends DataHandlerGen<Issue> {
     /**
      * Reads a specific issue from the JSON file with the given ID.
      *
-     * @param id the ID of the issue to be read.
+     * @param uuid the uuid of the issue to be read.
      * @return the issue with the given ID.
      * @throws IOException            if the JSON file cannot be read.
      * @throws NoSuchFieldException   if the JSON file does not contain given field
      * @throws IllegalAccessException If the field is not accessible
      * @author Alyssa Heimlicher
      */
-    public Issue readIssueByID(int id) throws IOException, NoSuchFieldException, IllegalAccessException {
-        return super.getSingleFromJsonArray("issueJSON", "issueId", id);
+    public Issue readIssueByUUID(String uuid) throws IOException, NoSuchFieldException, IllegalAccessException {
+        return super.getSingleFromJsonArray("issueJSON", "issueUUID", uuid);
     }
 
     /**

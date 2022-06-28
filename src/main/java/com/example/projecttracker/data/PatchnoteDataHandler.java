@@ -28,15 +28,15 @@ public class PatchnoteDataHandler extends DataHandlerGen<PatchNote> {
     /**
      * gets a patch note from the json file by its id.
      *
-     * @param id the id of the patch note to get.
+     * @param uuid the id of the patch note to get.
      * @return the patch note with the given id.
      * @throws IOException            if the json file cannot be read.
      * @throws NoSuchFieldException   if the JSON file does not contain given field
      * @throws IllegalAccessException if the field is not accessible
      * @author Alyssa Heimlicher
      */
-    public PatchNote readPatchNoteByID(int id) throws IOException, NoSuchFieldException, IllegalAccessException {
-        return super.getSingleFromJsonArray("patchNoteJSON", "patchNoteId", id);
+    public PatchNote readPatchNoteByUUID(String uuid) throws IOException, NoSuchFieldException, IllegalAccessException {
+        return super.getSingleFromJsonArray("patchNoteJSON", "patchNoteUUID", uuid);
     }
 
     /**

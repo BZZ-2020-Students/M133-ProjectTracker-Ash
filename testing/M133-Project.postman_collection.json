@@ -7,493 +7,4108 @@
 	},
 	"item": [
 		{
-			"name": "Task",
+			"name": "Create",
 			"item": [
 				{
-					"name": "GetAllTasks",
-					"event": [
+					"name": "Task",
+					"item": [
 						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									"pm.test(\"Status code is 200\", function () {\r",
-									"    pm.response.to.have.status(200);\r",
-									"});\r",
-									"\r",
-									"const jsonData = pm.response.json();\r",
-									"pm.collectionVariables.set(\"taskId\", jsonData[0].taskId);"
-								],
-								"type": "text/javascript"
-							}
-						}
-					],
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{baseRestURL}}/task/list",
-							"host": [
-								"{{baseRestURL}}"
+							"name": "CreateTask",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
 							],
-							"path": [
-								"task",
-								"list"
-							]
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "title",
+											"value": "Create more Enemy AI",
+											"type": "text"
+										},
+										{
+											"key": "description",
+											"value": "The one singular enemy is kind of lonely",
+											"type": "text"
+										},
+										{
+											"key": "deadline",
+											"value": "2022-06-10",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{baseRestURL}}/task/create",
+									"host": [
+										"{{baseRestURL}}"
+									],
+									"path": [
+										"task",
+										"create"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "CreateTaskTitleTooShort",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 400\", function () {\r",
+											"    pm.response.to.have.status(400);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "title",
+											"value": "C",
+											"type": "text"
+										},
+										{
+											"key": "description",
+											"value": "The one singular enemy is kind of lonely",
+											"type": "text"
+										},
+										{
+											"key": "deadline",
+											"value": "2022-06-10",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{baseRestURL}}/task/create",
+									"host": [
+										"{{baseRestURL}}"
+									],
+									"path": [
+										"task",
+										"create"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "CreateTaskTitleTooLong",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 400\", function () {\r",
+											"    pm.response.to.have.status(400);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "title",
+											"value": "Created a new enemyCreated a new enemyCreated a new enemyCreated a new enemyCreated a new enemy",
+											"type": "text"
+										},
+										{
+											"key": "description",
+											"value": "The one singular enemy is kind of lonely",
+											"type": "text"
+										},
+										{
+											"key": "deadline",
+											"value": "2022-06-10",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{baseRestURL}}/task/create",
+									"host": [
+										"{{baseRestURL}}"
+									],
+									"path": [
+										"task",
+										"create"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "CreateTaskNoTitle",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 400\", function () {\r",
+											"    pm.response.to.have.status(400);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "title",
+											"value": "",
+											"type": "text"
+										},
+										{
+											"key": "description",
+											"value": "The one singular enemy is kind of lonely",
+											"type": "text"
+										},
+										{
+											"key": "deadline",
+											"value": "2022-06-10",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{baseRestURL}}/task/create",
+									"host": [
+										"{{baseRestURL}}"
+									],
+									"path": [
+										"task",
+										"create"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "CreateTaskDescTooLong",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 400\", function () {\r",
+											"    pm.response.to.have.status(400);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "title",
+											"value": "Created a new enemy",
+											"type": "text"
+										},
+										{
+											"key": "description",
+											"value": "The one singular enemy is kind of lonelyThe one singular enemy is kind of lonelyThe one singular enemy isThe one singular enemy is kind of lonelyThe one singular enemy is kind of lonelyThe one singular enemy is kind of lonelyThe one singular enemy is kind of lonelyThe one singular enemy is kind of lonelyThe one singular enemy is kind of lonelyThe one singular enemy is kind of lonelyThe one singular enemy is kind of lonelyThe one singular enemy is kind of lonelyThe one singular enemy is kind of lonelyThe one singular enemy is kind of lonely kind of lonelyThe one singular enemy is kind of lonelyThe one singular enemy is kind of lonelyThe one singular enemy is kind of lonelyThe one singular enemy is kind of lonelyThe one singular enemy is kind of lonelyThe one singular enemy is kind of lonelyThe one singular enemy is kind of lonelyThe one singular enemy is kind of lonelyThe one singular enemy is kind of lonelyThe one singular enemy is kind of lonelyThe one singular enemy is kind of lonelyThe one singular enemy is kind of lonelyThe one singular enemy is kind of lonely",
+											"type": "text"
+										},
+										{
+											"key": "deadline",
+											"value": "2022-06-10",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{baseRestURL}}/task/create",
+									"host": [
+										"{{baseRestURL}}"
+									],
+									"path": [
+										"task",
+										"create"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "CreateTaskNoDeadline",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 400\", function () {\r",
+											"    pm.response.to.have.status(400);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "title",
+											"value": "Create an enemy",
+											"type": "text"
+										},
+										{
+											"key": "description",
+											"value": "The one singular enemy is kind of lonely",
+											"type": "text"
+										},
+										{
+											"key": "deadline",
+											"value": "",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{baseRestURL}}/task/create",
+									"host": [
+										"{{baseRestURL}}"
+									],
+									"path": [
+										"task",
+										"create"
+									]
+								}
+							},
+							"response": []
 						}
-					},
-					"response": []
+					]
 				},
 				{
-					"name": "GetSingleTask",
-					"event": [
+					"name": "Issue",
+					"item": [
 						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									"pm.test(\"Status code is 200\", function () {\r",
-									"    pm.response.to.have.status(200);\r",
-									"});"
-								],
-								"type": "text/javascript"
-							}
-						}
-					],
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{baseRestURL}}/task/{{taskId}}",
-							"host": [
-								"{{baseRestURL}}"
+							"name": "CreateIssue",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
 							],
-							"path": [
-								"task",
-								"{{taskId}}"
-							]
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "title",
+											"value": "Enemies attack each other",
+											"type": "text"
+										},
+										{
+											"key": "description",
+											"value": "they should be on the same team...this shouldnt happen at all",
+											"type": "text"
+										},
+										{
+											"key": "severity",
+											"value": "Critical",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{baseRestURL}}/issue/create",
+									"host": [
+										"{{baseRestURL}}"
+									],
+									"path": [
+										"issue",
+										"create"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "CreateIssueTitleTooLong",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 400\", function () {\r",
+											"    pm.response.to.have.status(400);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "title",
+											"value": "Enemies attack each other hello worldhello worldhello worldhello worldhello worldhello worldhello worldhello worldhello worldhello worldhello worldhello worldhello worldhello worldhello worldhello world",
+											"type": "text"
+										},
+										{
+											"key": "description",
+											"value": "they should be on the same team...this shouldnt happen at all",
+											"type": "text"
+										},
+										{
+											"key": "severity",
+											"value": "Major",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{baseRestURL}}/issue/create",
+									"host": [
+										"{{baseRestURL}}"
+									],
+									"path": [
+										"issue",
+										"create"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "CreateIssueTitleTooShort",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 400\", function () {\r",
+											"    pm.response.to.have.status(400);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "title",
+											"value": "En",
+											"type": "text"
+										},
+										{
+											"key": "description",
+											"value": "they should be on the same team...this shouldnt happen at all",
+											"type": "text"
+										},
+										{
+											"key": "severity",
+											"value": "Major",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{baseRestURL}}/issue/create",
+									"host": [
+										"{{baseRestURL}}"
+									],
+									"path": [
+										"issue",
+										"create"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "CreateIssueNoTitle",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 400\", function () {\r",
+											"    pm.response.to.have.status(400);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "title",
+											"value": "",
+											"type": "text"
+										},
+										{
+											"key": "description",
+											"value": "they should be on the same team...this shouldnt happen at all",
+											"type": "text"
+										},
+										{
+											"key": "severity",
+											"value": "Major",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{baseRestURL}}/issue/create",
+									"host": [
+										"{{baseRestURL}}"
+									],
+									"path": [
+										"issue",
+										"create"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "CreateIssueDescTooLong",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 400\", function () {\r",
+											"    pm.response.to.have.status(400);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "title",
+											"value": "Some title",
+											"type": "text"
+										},
+										{
+											"key": "description",
+											"value": "they should be on the same team...this they should be on the same team...this shouldnt happen at allthey should be on the same team...this shouldnt happen at allthey should be on the same team...this shouldnt happen at allthey should be on the same team...this shouldnt happen at allthey should be on the same team...this shouldnt happen at allthey should be on the same team...this shouldnt happen at allthey should be on the same team...this shouldnt happen at allthey should be on the same team...this shouldnt happen at allthey should be on the same team...this shouldnt happen at allthey should be on the same team...this shouldnt happen at allthey should be on the same team...this shouldnt happen at all happen at allthey should be on the same team...this shouldnt happen at allthey should be on the same team...this shouldnt happen at allthey should be on the same team...this shouldnt happen at allthey should be on the same team...this shouldnt happen at allthey should be on the same team...this shouldnt happen at allthey should be on the same team...this shouldnt happen at allthey should be on the same team...this shouldnt happen at allthey should be on the same team...this shouldnt happen at allthey should be on the same team...this shouldnt happen at allthey should be on the same team...this shouldnt happen at allthey should be on the same team...this shouldnt happen at all",
+											"type": "text"
+										},
+										{
+											"key": "severity",
+											"value": "Major",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{baseRestURL}}/issue/create",
+									"host": [
+										"{{baseRestURL}}"
+									],
+									"path": [
+										"issue",
+										"create"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "CreateIssueWrongSeverity",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 400\", function () {\r",
+											"    pm.response.to.have.status(400);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "title",
+											"value": "Enemies attack each other",
+											"type": "text"
+										},
+										{
+											"key": "description",
+											"value": "they should be on the same team...this shouldnt happen at all",
+											"type": "text"
+										},
+										{
+											"key": "severity",
+											"value": "fixable",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{baseRestURL}}/issue/create",
+									"host": [
+										"{{baseRestURL}}"
+									],
+									"path": [
+										"issue",
+										"create"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "CreateIssueNOServerity",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 400\", function () {\r",
+											"    pm.response.to.have.status(400);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "title",
+											"value": "Enemies attack each other",
+											"type": "text"
+										},
+										{
+											"key": "description",
+											"value": "they should be on the same team...this shouldnt happen at all",
+											"type": "text"
+										},
+										{
+											"key": "severity",
+											"value": "",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{baseRestURL}}/issue/create",
+									"host": [
+										"{{baseRestURL}}"
+									],
+									"path": [
+										"issue",
+										"create"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "CreateIssueSeverityUpperCase",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "title",
+											"value": "Enemies attack each other",
+											"type": "text"
+										},
+										{
+											"key": "description",
+											"value": "they should be on the same team...this shouldnt happen at all",
+											"type": "text"
+										},
+										{
+											"key": "severity",
+											"value": "Critical",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{baseRestURL}}/issue/create",
+									"host": [
+										"{{baseRestURL}}"
+									],
+									"path": [
+										"issue",
+										"create"
+									]
+								}
+							},
+							"response": []
 						}
-					},
-					"response": []
+					]
 				},
 				{
-					"name": "GetSingleTask404",
-					"event": [
+					"name": "PatchNote",
+					"item": [
 						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									"pm.test(\"Status code is 404\", function () {\r",
-									"    pm.response.to.have.status(404);\r",
-									"});"
-								],
-								"type": "text/javascript"
-							}
-						}
-					],
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{baseRestURL}}/task/8098",
-							"host": [
-								"{{baseRestURL}}"
+							"name": "CreatePatchNote",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
 							],
-							"path": [
-								"task",
-								"8098"
-							]
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "title",
+											"value": "Hot Fix 1.2.0",
+											"type": "text"
+										},
+										{
+											"key": "description",
+											"value": "Various Bugfixes and points system is improved. Added new AI",
+											"type": "text"
+										},
+										{
+											"key": "version",
+											"value": "V1.2.0",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{baseRestURL}}/patchnote/create",
+									"host": [
+										"{{baseRestURL}}"
+									],
+									"path": [
+										"patchnote",
+										"create"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "CreatePatchNoteTitleTooLong",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 400\", function () {\r",
+											"    pm.response.to.have.status(400);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "title",
+											"value": "Hot Fix 1.2.0???????????????????????????????????????????????????????????????????????",
+											"type": "text"
+										},
+										{
+											"key": "description",
+											"value": "Various Bugfixes and points system is improved. Added new AI",
+											"type": "text"
+										},
+										{
+											"key": "version",
+											"value": "V1.2.0",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{baseRestURL}}/patchnote/create",
+									"host": [
+										"{{baseRestURL}}"
+									],
+									"path": [
+										"patchnote",
+										"create"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "CreatePatchNoteTitleTooShort",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 400\", function () {\r",
+											"    pm.response.to.have.status(400);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "title",
+											"value": "a",
+											"type": "text"
+										},
+										{
+											"key": "description",
+											"value": "Various Bugfixes and points system is improved. Added new AI",
+											"type": "text"
+										},
+										{
+											"key": "version",
+											"value": "V1.2.0",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{baseRestURL}}/patchnote/create",
+									"host": [
+										"{{baseRestURL}}"
+									],
+									"path": [
+										"patchnote",
+										"create"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "CreatePatchNoteNoTitle",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 400\", function () {\r",
+											"    pm.response.to.have.status(400);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "title",
+											"value": "",
+											"type": "text"
+										},
+										{
+											"key": "description",
+											"value": "Various Bugfixes and points system is improved. Added new AI",
+											"type": "text"
+										},
+										{
+											"key": "version",
+											"value": "V1.0",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{baseRestURL}}/patchnote/create",
+									"host": [
+										"{{baseRestURL}}"
+									],
+									"path": [
+										"patchnote",
+										"create"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "CreatePatchNoteDescTooLong",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 400\", function () {\r",
+											"    pm.response.to.have.status(400);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "title",
+											"value": "Hot fixes",
+											"type": "text"
+										},
+										{
+											"key": "description",
+											"value": "Various Bugfixes and points system is improved. Added new AIVarious Bugfixes and points system is improved. Added new AIVarious Bugfixes and points system is improved. Added new AIVarious Bugfixes and points system is improved. Added new AIVarious Bugfixes and points system is improved. Added new AIVarious Bugfixes and points system is improved. Added new AIVarious Bugfixes and points system is improved. Added new AIVarious Bugfixes and points system is improved. Added new AIVarious Bugfixes and points system is improved. Added new AIVarious Bugfixes and points system is improved. Added new AIVarious Bugfixes and points system is improved. Added new AIVarious Bugfixes and points system is improved. Added new AIVarious Bugfixes and points system is improved. Added new AIVarious Bugfixes and points system is improved. Added new AIVarious Bugfixes and points system is improved. Added new AIVarious Bugfixes and points system is improved. Added new AIVarious Bugfixes and points system is improved. Added new AIVarious Bugfixes and points system is improved. Added new AIVarious Bugfixes and points system is improved. Added new AIVarious Bugfixes and points system is improved. Added new AIVarious Bugfixes and points system is improved. Added new AIVarious Bugfixes and points system is improved. Added new AIVarious Bugfixes and points system is improved. Added new AI",
+											"type": "text"
+										},
+										{
+											"key": "version",
+											"value": "V1.2.0",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{baseRestURL}}/patchnote/create",
+									"host": [
+										"{{baseRestURL}}"
+									],
+									"path": [
+										"patchnote",
+										"create"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "CreatePatchNoteNoVersion",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 400\", function () {\r",
+											"    pm.response.to.have.status(400);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "title",
+											"value": "Hot Fix 1.2.0",
+											"type": "text"
+										},
+										{
+											"key": "description",
+											"value": "Various Bugfixes and points system is improved. Added new AI",
+											"type": "text"
+										},
+										{
+											"key": "version",
+											"value": "",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{baseRestURL}}/patchnote/create",
+									"host": [
+										"{{baseRestURL}}"
+									],
+									"path": [
+										"patchnote",
+										"create"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "CreatePatchNoteVersionTooLong",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 400\", function () {\r",
+											"    pm.response.to.have.status(400);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "title",
+											"value": "Hot Fix 1.2.0",
+											"type": "text"
+										},
+										{
+											"key": "description",
+											"value": "Various Bugfixes and points system is improved. Added new AI",
+											"type": "text"
+										},
+										{
+											"key": "version",
+											"value": "V1.00000000000000000000000000000000000000000000000000000",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{baseRestURL}}/patchnote/create",
+									"host": [
+										"{{baseRestURL}}"
+									],
+									"path": [
+										"patchnote",
+										"create"
+									]
+								}
+							},
+							"response": []
 						}
-					},
-					"response": []
+					]
+				},
+				{
+					"name": "User",
+					"item": [
+						{
+							"name": "CreateUser",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "username",
+											"value": "{{$randomUserName}}",
+											"type": "text"
+										},
+										{
+											"key": "password",
+											"value": "thisIsA12!",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{baseRestURL}}/user/create",
+									"host": [
+										"{{baseRestURL}}"
+									],
+									"path": [
+										"user",
+										"create"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "CreateUserUsernameTooLong",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 400\", function () {\r",
+											"    pm.response.to.have.status(400);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "username",
+											"value": "Jackson20419992021893999202189399920218939",
+											"type": "text"
+										},
+										{
+											"key": "password",
+											"value": "{{$randomPassword}}!",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{baseRestURL}}/user/create",
+									"host": [
+										"{{baseRestURL}}"
+									],
+									"path": [
+										"user",
+										"create"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "CreateUserUsernameTooShort",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 400\", function () {\r",
+											"    pm.response.to.have.status(400);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "username",
+											"value": "Ja",
+											"type": "text"
+										},
+										{
+											"key": "password",
+											"value": "{{$randomPassword}}!",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{baseRestURL}}/user/create",
+									"host": [
+										"{{baseRestURL}}"
+									],
+									"path": [
+										"user",
+										"create"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "CreateUserNoUsername",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 400\", function () {\r",
+											"    pm.response.to.have.status(400);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "username",
+											"value": "",
+											"type": "text"
+										},
+										{
+											"key": "password",
+											"value": "{{$randomPassword}}!",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{baseRestURL}}/user/create",
+									"host": [
+										"{{baseRestURL}}"
+									],
+									"path": [
+										"user",
+										"create"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "CreateUserPasswordTooLong",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 400\", function () {\r",
+											"    pm.response.to.have.status(400);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "username",
+											"value": "{{$randomUserName}}",
+											"type": "text"
+										},
+										{
+											"key": "password",
+											"value": "{{$randomPassword}}!....................................................................",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{baseRestURL}}/user/create",
+									"host": [
+										"{{baseRestURL}}"
+									],
+									"path": [
+										"user",
+										"create"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "CreateUserPasswordTooShort",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 400\", function () {\r",
+											"    pm.response.to.have.status(400);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "username",
+											"value": "{{$randomUserName}}",
+											"type": "text"
+										},
+										{
+											"key": "password",
+											"value": "12345",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{baseRestURL}}/user/create",
+									"host": [
+										"{{baseRestURL}}"
+									],
+									"path": [
+										"user",
+										"create"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "CreateUserNoPassword",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 400\", function () {\r",
+											"    pm.response.to.have.status(400);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "username",
+											"value": "{{$randomUserName}}",
+											"type": "text"
+										},
+										{
+											"key": "password",
+											"value": "",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{baseRestURL}}/user/create",
+									"host": [
+										"{{baseRestURL}}"
+									],
+									"path": [
+										"user",
+										"create"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "CreateUserPasswordNoNumbers",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 400\", function () {\r",
+											"    pm.response.to.have.status(400);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "username",
+											"value": "{{$randomUserName}}",
+											"type": "text"
+										},
+										{
+											"key": "password",
+											"value": "AsbB+polop!",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{baseRestURL}}/user/create",
+									"host": [
+										"{{baseRestURL}}"
+									],
+									"path": [
+										"user",
+										"create"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "CreateUserPasswordNoUppercase",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 400\", function () {\r",
+											"    pm.response.to.have.status(400);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "username",
+											"value": "{{$randomUserName}}",
+											"type": "text"
+										},
+										{
+											"key": "password",
+											"value": "111aaaaaa+@",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{baseRestURL}}/user/create",
+									"host": [
+										"{{baseRestURL}}"
+									],
+									"path": [
+										"user",
+										"create"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "CreateUserPasswordNoLowercase",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 400\", function () {\r",
+											"    pm.response.to.have.status(400);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "username",
+											"value": "{{$randomUserName}}",
+											"type": "text"
+										},
+										{
+											"key": "password",
+											"value": "AAAAAAAAAAAA123+",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{baseRestURL}}/user/create",
+									"host": [
+										"{{baseRestURL}}"
+									],
+									"path": [
+										"user",
+										"create"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "CreateUserPasswordNoLetters",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 400\", function () {\r",
+											"    pm.response.to.have.status(400);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "username",
+											"value": "{{$randomUserName}}",
+											"type": "text"
+										},
+										{
+											"key": "password",
+											"value": "23918273918237+",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{baseRestURL}}/user/create",
+									"host": [
+										"{{baseRestURL}}"
+									],
+									"path": [
+										"user",
+										"create"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "CreateUserPasswordNoSymbols",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 400\", function () {\r",
+											"    pm.response.to.have.status(400);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "username",
+											"value": "{{$randomUserName}}",
+											"type": "text"
+										},
+										{
+											"key": "password",
+											"value": "239182asdasD",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{baseRestURL}}/user/create",
+									"host": [
+										"{{baseRestURL}}"
+									],
+									"path": [
+										"user",
+										"create"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Project",
+					"item": [
+						{
+							"name": "CreateProject",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "title",
+											"value": "Low Poly Honda nsx",
+											"type": "text"
+										},
+										{
+											"key": "description",
+											"value": "A blender Low Pols Honda nsx for future uses",
+											"type": "text"
+										},
+										{
+											"key": "startDate",
+											"value": "2022-06-01",
+											"type": "text"
+										},
+										{
+											"key": "subject",
+											"value": "Blender",
+											"type": "text"
+										},
+										{
+											"key": "userUUID",
+											"value": "{{userUUID}}",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{baseRestURL}}/project/create",
+									"host": [
+										"{{baseRestURL}}"
+									],
+									"path": [
+										"project",
+										"create"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "CreateProjectTitleTooShort",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 400\", function () {\r",
+											"    pm.response.to.have.status(400);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "title",
+											"value": "L",
+											"type": "text"
+										},
+										{
+											"key": "description",
+											"value": "A blender Low Pols Honda nsx for future uses",
+											"type": "text"
+										},
+										{
+											"key": "startDate",
+											"value": "2022-06-01",
+											"type": "text"
+										},
+										{
+											"key": "subject",
+											"value": "Blender",
+											"type": "text"
+										},
+										{
+											"key": "userUUID",
+											"value": "{{userUUID}}",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{baseRestURL}}/project/create",
+									"host": [
+										"{{baseRestURL}}"
+									],
+									"path": [
+										"project",
+										"create"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "CreateProjectTitleTooLong",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 400\", function () {\r",
+											"    pm.response.to.have.status(400);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "title",
+											"value": "Low poly nsxLow poly nsxLow poly nsxLow poly nsxLow poly nsxLow poly nsxLow poly nsxLow poly nsxLow poly nsxLow poly nsx",
+											"type": "text"
+										},
+										{
+											"key": "description",
+											"value": "A blender Low Pols Honda nsx for future uses",
+											"type": "text"
+										},
+										{
+											"key": "startDate",
+											"value": "2022-06-01",
+											"type": "text"
+										},
+										{
+											"key": "subject",
+											"value": "Blender",
+											"type": "text"
+										},
+										{
+											"key": "userUUID",
+											"value": "{{userUUID}}",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{baseRestURL}}/project/create",
+									"host": [
+										"{{baseRestURL}}"
+									],
+									"path": [
+										"project",
+										"create"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "CreateProjectNoTitle",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 400\", function () {\r",
+											"    pm.response.to.have.status(400);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "title",
+											"value": "",
+											"type": "text"
+										},
+										{
+											"key": "description",
+											"value": "A blender Low Pols Honda nsx for future uses",
+											"type": "text"
+										},
+										{
+											"key": "startDate",
+											"value": "2022-06-01",
+											"type": "text"
+										},
+										{
+											"key": "subject",
+											"value": "Blender",
+											"type": "text"
+										},
+										{
+											"key": "userUUID",
+											"value": "{{userUUID}}",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{baseRestURL}}/project/create",
+									"host": [
+										"{{baseRestURL}}"
+									],
+									"path": [
+										"project",
+										"create"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "CreateProjectDescTooLong",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 400\", function () {\r",
+											"    pm.response.to.have.status(400);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "title",
+											"value": "Low poly nsx",
+											"type": "text"
+										},
+										{
+											"key": "description",
+											"value": "A blender Low Pols Honda nsx for A blender Low Pols Honda nsx for future usesA blender Low Pols Honda nsx for future usesA blender Low Pols Honda nsx for future usesA blender Low Pols Honda nsx for future usesA blender Low Pols Honda nsx for future usesA blender Low Pols Honda nsx for future usesA blender Low Pols Honda nsx for future usesA blender Low Pols Honda nsx for future usesA blender Low Pols Honda nsx for future usesA blender Low Pols Honda nsx for future usesA blender Low Pols Honda nsx for future usesA blender Low Pols Honda nsx for future usesA blender Low Pols Honda nsx for future usesA blender Low Pols Honda nsx for future usesusesA blender Low Pols Honda nsx for future usesA blender Low Pols Honda nsx for future usesA blender Low Pols Honda nsx for future usesA blender Low Pols Honda nsx for future usesA blender Low Pols Honda nsx for future usesA blender Low Pols Honda nsx for future usesA blender Low Pols Honda nsx for future usesA blender Low Pols Honda nsx for future usesA blender Low Pols Honda nsx for future usesA blender Low Pols Honda nsx for future usesA blender Low Pols Honda nsx for future usesA blender Low Pols Honda nsx for future usesA blender Low Pols Honda nsx for future usesA blender Low Pols Honda nsx for future usesA blender Low Pols Honda nsx for future usesA blender Low Pols Honda nsx for future usesA blender Low Pols Honda nsx for future usesA blender Low Pols Honda nsx for future uses",
+											"type": "text"
+										},
+										{
+											"key": "startDate",
+											"value": "2022-06-01",
+											"type": "text"
+										},
+										{
+											"key": "subject",
+											"value": "Blender",
+											"type": "text"
+										},
+										{
+											"key": "userUUID",
+											"value": "{{userUUID}}",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{baseRestURL}}/project/create",
+									"host": [
+										"{{baseRestURL}}"
+									],
+									"path": [
+										"project",
+										"create"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "CreateProjectNoStartDate",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 400\", function () {\r",
+											"    pm.response.to.have.status(400);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "title",
+											"value": "Low Poly nsx",
+											"type": "text"
+										},
+										{
+											"key": "description",
+											"value": "A blender Low Pols Honda nsx for future uses",
+											"type": "text"
+										},
+										{
+											"key": "startDate",
+											"value": "",
+											"type": "text"
+										},
+										{
+											"key": "subject",
+											"value": "Blender",
+											"type": "text"
+										},
+										{
+											"key": "userUUID",
+											"value": "{{userUUID}}",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{baseRestURL}}/project/create",
+									"host": [
+										"{{baseRestURL}}"
+									],
+									"path": [
+										"project",
+										"create"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "CreateProjectSubjectTooLong",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 400\", function () {\r",
+											"    pm.response.to.have.status(400);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "title",
+											"value": "Low Poly nsx",
+											"type": "text"
+										},
+										{
+											"key": "description",
+											"value": "A blender Low Pols Honda nsx for future uses",
+											"type": "text"
+										},
+										{
+											"key": "startDate",
+											"value": "2022-06-01",
+											"type": "text"
+										},
+										{
+											"key": "subject",
+											"value": "Blenderrrrrrrrrrrrrrrrrrrrrrrrrrrrrr",
+											"type": "text"
+										},
+										{
+											"key": "userUUID",
+											"value": "{{userUUID}}",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{baseRestURL}}/project/create",
+									"host": [
+										"{{baseRestURL}}"
+									],
+									"path": [
+										"project",
+										"create"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "CreateProjectSubjectTooShort",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 400\", function () {\r",
+											"    pm.response.to.have.status(400);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "title",
+											"value": "Low poly nsx",
+											"type": "text"
+										},
+										{
+											"key": "description",
+											"value": "A blender Low Pols Honda nsx for future uses",
+											"type": "text"
+										},
+										{
+											"key": "startDate",
+											"value": "2022-06-01",
+											"type": "text"
+										},
+										{
+											"key": "subject",
+											"value": "b",
+											"type": "text"
+										},
+										{
+											"key": "userUUID",
+											"value": "{{userUUID}}",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{baseRestURL}}/project/create",
+									"host": [
+										"{{baseRestURL}}"
+									],
+									"path": [
+										"project",
+										"create"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "CreateProjectNoSubject",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 400\", function () {\r",
+											"    pm.response.to.have.status(400);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "title",
+											"value": "Low poly nsx",
+											"type": "text"
+										},
+										{
+											"key": "description",
+											"value": "A blender Low Pols Honda nsx for future uses",
+											"type": "text"
+										},
+										{
+											"key": "startDate",
+											"value": "2022-06-01",
+											"type": "text"
+										},
+										{
+											"key": "subject",
+											"value": "",
+											"type": "text"
+										},
+										{
+											"key": "userUUID",
+											"value": "{{userUUID}}",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{baseRestURL}}/project/create",
+									"host": [
+										"{{baseRestURL}}"
+									],
+									"path": [
+										"project",
+										"create"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "CreateProjectUnknownUser",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 404\", function () {\r",
+											"    pm.response.to.have.status(404);\r",
+											"});\r",
+											"pm.test(\"Test message is accurate\", function () {\r",
+											"    var jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData.error).to.eql(\"User not found\");\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "title",
+											"value": "Strategy game test",
+											"type": "text"
+										},
+										{
+											"key": "description",
+											"value": "Like chess or something",
+											"type": "text"
+										},
+										{
+											"key": "startDate",
+											"value": "2022-05-31",
+											"type": "text"
+										},
+										{
+											"key": "subject",
+											"value": "Game Development",
+											"type": "text"
+										},
+										{
+											"key": "userUUID",
+											"value": "{{$randomUUID}}",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{baseRestURL}}/project/create",
+									"host": [
+										"{{baseRestURL}}"
+									],
+									"path": [
+										"project",
+										"create"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "CreateProjectNoUser",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 400\", function () {\r",
+											"    pm.response.to.have.status(400);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "title",
+											"value": "Strategy game test",
+											"type": "text"
+										},
+										{
+											"key": "description",
+											"value": "Like chess or something",
+											"type": "text"
+										},
+										{
+											"key": "startDate",
+											"value": "2022-05-31",
+											"type": "text"
+										},
+										{
+											"key": "subject",
+											"value": "Game Development",
+											"type": "text"
+										},
+										{
+											"key": "userUUID",
+											"value": "",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{baseRestURL}}/project/create",
+									"host": [
+										"{{baseRestURL}}"
+									],
+									"path": [
+										"project",
+										"create"
+									]
+								}
+							},
+							"response": []
+						}
+					]
 				}
 			]
 		},
 		{
-			"name": "Issue",
+			"name": "Read",
 			"item": [
 				{
-					"name": "GetAllIssues",
-					"event": [
+					"name": "Task",
+					"item": [
 						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									"pm.test(\"Status code is 200\", function () {\r",
-									"    pm.response.to.have.status(200);\r",
-									"});\r",
-									"\r",
-									"const jsonData = pm.response.json();\r",
-									"pm.collectionVariables.set(\"issueId\", jsonData[0].issueId);"
-								],
-								"type": "text/javascript"
-							}
-						}
-					],
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{baseRestURL}}/issue/list",
-							"host": [
-								"{{baseRestURL}}"
+							"name": "GetAllTasks",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											"\r",
+											"const jsonData = pm.response.json();\r",
+											"pm.collectionVariables.set(\"taskUUID\", jsonData[jsonData.length-1].taskUUID);\r",
+											"pm.collectionVariables.set(\"taskTitle\", jsonData[jsonData.length-1].title);\r",
+											"pm.collectionVariables.set(\"taskDesc\", jsonData[jsonData.length-1].description);\r",
+											"pm.collectionVariables.set(\"taskDeadline\", jsonData[jsonData.length-1].deadline);"
+										],
+										"type": "text/javascript"
+									}
+								}
 							],
-							"path": [
-								"issue",
-								"list"
-							]
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseRestURL}}/task/list",
+									"host": [
+										"{{baseRestURL}}"
+									],
+									"path": [
+										"task",
+										"list"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "GetSingleTask",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseRestURL}}/task/{{taskUUID}}",
+									"host": [
+										"{{baseRestURL}}"
+									],
+									"path": [
+										"task",
+										"{{taskUUID}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "GetSingleTask404",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 404\", function () {\r",
+											"    pm.response.to.have.status(404);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseRestURL}}/task/{{$randomUUID}}",
+									"host": [
+										"{{baseRestURL}}"
+									],
+									"path": [
+										"task",
+										"{{$randomUUID}}"
+									]
+								}
+							},
+							"response": []
 						}
-					},
-					"response": []
+					]
 				},
 				{
-					"name": "GetSingleIssue",
-					"event": [
+					"name": "Issue",
+					"item": [
 						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									"pm.test(\"Status code is 200\", function () {\r",
-									"    pm.response.to.have.status(200);\r",
-									"});"
-								],
-								"type": "text/javascript"
-							}
-						}
-					],
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{baseRestURL}}/issue/{{issueId}}",
-							"host": [
-								"{{baseRestURL}}"
+							"name": "GetAllIssues",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											"\r",
+											"const jsonData = pm.response.json();\r",
+											"pm.collectionVariables.set(\"issueUUID\", jsonData[jsonData.length-1].issueUUID);\r",
+											"pm.collectionVariables.set(\"issueTitle\", jsonData[jsonData.length-1].title);\r",
+											"pm.collectionVariables.set(\"issueDesc\", jsonData[jsonData.length-1].description);\r",
+											"pm.collectionVariables.set(\"isserSeverity\", jsonData[jsonData.length-1].severity);\r",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
 							],
-							"path": [
-								"issue",
-								"{{issueId}}"
-							]
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseRestURL}}/issue/list",
+									"host": [
+										"{{baseRestURL}}"
+									],
+									"path": [
+										"issue",
+										"list"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "GetSingleIssue",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseRestURL}}/issue/{{issueUUID}}",
+									"host": [
+										"{{baseRestURL}}"
+									],
+									"path": [
+										"issue",
+										"{{issueUUID}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "GetSingleIssue404",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 404\", function () {\r",
+											"    pm.response.to.have.status(404);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseRestURL}}/issue/{{$randomUUID}}",
+									"host": [
+										"{{baseRestURL}}"
+									],
+									"path": [
+										"issue",
+										"{{$randomUUID}}"
+									]
+								}
+							},
+							"response": []
 						}
-					},
-					"response": []
+					]
 				},
 				{
-					"name": "GetSingleIssue404",
-					"event": [
+					"name": "PatchNote",
+					"item": [
 						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									"pm.test(\"Status code is 404\", function () {\r",
-									"    pm.response.to.have.status(404);\r",
-									"});"
-								],
-								"type": "text/javascript"
-							}
-						}
-					],
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{baseRestURL}}/issue/234983",
-							"host": [
-								"{{baseRestURL}}"
+							"name": "GetAllPatchNotes",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											"\r",
+											"const jsonData = pm.response.json();\r",
+											"pm.collectionVariables.set(\"patchNoteUUID\", jsonData[jsonData.length-1].patchNoteUUID);\r",
+											"pm.collectionVariables.set(\"patchNoteTitle\", jsonData[jsonData.length-1].title);\r",
+											"pm.collectionVariables.set(\"patchNoteDesc\", jsonData[jsonData.length-1].description);\r",
+											"pm.collectionVariables.set(\"patchNoteVersion\", jsonData[jsonData.length-1].version);"
+										],
+										"type": "text/javascript"
+									}
+								}
 							],
-							"path": [
-								"issue",
-								"234983"
-							]
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseRestURL}}/patchnote/list",
+									"host": [
+										"{{baseRestURL}}"
+									],
+									"path": [
+										"patchnote",
+										"list"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "GetSinglePatchNote",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseRestURL}}/patchnote/{{patchNoteUUID}}",
+									"host": [
+										"{{baseRestURL}}"
+									],
+									"path": [
+										"patchnote",
+										"{{patchNoteUUID}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "GetSinglePatchNote404",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 404\", function () {\r",
+											"    pm.response.to.have.status(404);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseRestURL}}/patchnote/{{$randomUUID}}",
+									"host": [
+										"{{baseRestURL}}"
+									],
+									"path": [
+										"patchnote",
+										"{{$randomUUID}}"
+									]
+								}
+							},
+							"response": []
 						}
-					},
-					"response": []
+					]
+				},
+				{
+					"name": "User",
+					"item": [
+						{
+							"name": "GetAllUsers",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											"\r",
+											"const jsonData = pm.response.json();\r",
+											"pm.collectionVariables.set(\"userUUID\", jsonData[0].userUUID);\r",
+											"pm.collectionVariables.set(\"delUserUUID\", jsonData[jsonData.length -1].userUUID);\r",
+											"pm.collectionVariables.set(\"userUsername\", jsonData[jsonData.length -1].userName);\r",
+											"pm.collectionVariables.set(\"userPassword\", jsonData[jsonData.length -1].password);\r",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseRestURL}}/user/list",
+									"host": [
+										"{{baseRestURL}}"
+									],
+									"path": [
+										"user",
+										"list"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "GetSingleUser",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseRestURL}}/user/{{userUUID}}",
+									"host": [
+										"{{baseRestURL}}"
+									],
+									"path": [
+										"user",
+										"{{userUUID}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "GetSingleUser404",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 404\", function () {\r",
+											"    pm.response.to.have.status(404);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseRestURL}}/user/{{$randomUUID}}",
+									"host": [
+										"{{baseRestURL}}"
+									],
+									"path": [
+										"user",
+										"{{$randomUUID}}"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Project",
+					"item": [
+						{
+							"name": "GetAllProjects",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											"const jsonData = pm.response.json();\r",
+											"pm.collectionVariables.set(\"projectUUID\", jsonData[jsonData.length-1].projectUUID);\r",
+											"pm.collectionVariables.set(\"projectTitle\", jsonData[jsonData.length-1].title);\r",
+											"pm.collectionVariables.set(\"projectDesc\", jsonData[jsonData.length-1].description);\r",
+											"pm.collectionVariables.set(\"projectStartdate\", jsonData[jsonData.length-1].startDate);\r",
+											"pm.collectionVariables.set(\"projectSubject\", jsonData[jsonData.length-1].subject);\r",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseRestURL}}/project/list",
+									"host": [
+										"{{baseRestURL}}"
+									],
+									"path": [
+										"project",
+										"list"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "GetSingleProject",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseRestURL}}/project/{{projectUUID}}",
+									"host": [
+										"{{baseRestURL}}"
+									],
+									"path": [
+										"project",
+										"{{projectUUID}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "GetSingleProject404",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 404\", function () {\r",
+											"    pm.response.to.have.status(404);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseRestURL}}/project/{{$randomUUID}}",
+									"host": [
+										"{{baseRestURL}}"
+									],
+									"path": [
+										"project",
+										"{{$randomUUID}}"
+									]
+								}
+							},
+							"response": []
+						}
+					]
 				}
 			]
 		},
 		{
-			"name": "PatchNote",
+			"name": "Update",
 			"item": [
 				{
-					"name": "GetAllPatchNotes",
-					"event": [
+					"name": "Task",
+					"item": [
 						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									"pm.test(\"Status code is 200\", function () {\r",
-									"    pm.response.to.have.status(200);\r",
-									"});\r",
-									"\r",
-									"const jsonData = pm.response.json();\r",
-									"pm.collectionVariables.set(\"patchNoteId\", jsonData[0].patchNoteId);"
-								],
-								"type": "text/javascript"
-							}
-						}
-					],
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{baseRestURL}}/patchnote/list",
-							"host": [
-								"{{baseRestURL}}"
+							"name": "UpdateNothingTask",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Text is accurate\", function () {\r",
+											"    var jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData.success).to.eql(\"No changes made\");\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
 							],
-							"path": [
-								"patchnote",
-								"list"
-							]
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "title",
+											"value": "{{taskTitle}}",
+											"type": "text"
+										},
+										{
+											"key": "description",
+											"value": "{{taskDesc}}",
+											"type": "text"
+										},
+										{
+											"key": "deadline",
+											"value": "{{taskDeadline}}",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{baseRestURL}}/task/update/{{taskUUID}}",
+									"host": [
+										"{{baseRestURL}}"
+									],
+									"path": [
+										"task",
+										"update",
+										"{{taskUUID}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "UpdateTask",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Text is accurate\", function () {\r",
+											"    var jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData.success).to.eql(\"Task updated\");\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "title",
+											"value": "new Task title",
+											"type": "text"
+										},
+										{
+											"key": "description",
+											"value": "{{taskDesc}}",
+											"type": "text"
+										},
+										{
+											"key": "deadline",
+											"value": "2022-06-22",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{baseRestURL}}/task/update/{{taskUUID}}",
+									"host": [
+										"{{baseRestURL}}"
+									],
+									"path": [
+										"task",
+										"update",
+										"{{taskUUID}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "UpdateTask404",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 404\", function () {\r",
+											"    pm.response.to.have.status(404);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Text is accurate\", function () {\r",
+											"    var jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData.error).to.eql(\"Task not found\");\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "title",
+											"value": "new Task title",
+											"type": "text"
+										},
+										{
+											"key": "description",
+											"value": "{{taskDesc}}",
+											"type": "text"
+										},
+										{
+											"key": "deadline",
+											"value": "2022-06-22",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{baseRestURL}}/task/update/{{$randomUUID}}",
+									"host": [
+										"{{baseRestURL}}"
+									],
+									"path": [
+										"task",
+										"update",
+										"{{$randomUUID}}"
+									]
+								}
+							},
+							"response": []
 						}
-					},
-					"response": []
+					]
 				},
 				{
-					"name": "GetSinglePatchNote",
-					"event": [
+					"name": "Issue",
+					"item": [
 						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									"pm.test(\"Status code is 200\", function () {\r",
-									"    pm.response.to.have.status(200);\r",
-									"});"
-								],
-								"type": "text/javascript"
-							}
-						}
-					],
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{baseRestURL}}/patchnote/{{patchNoteId}}",
-							"host": [
-								"{{baseRestURL}}"
+							"name": "UpdateNothingIssue",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Text is accurate\", function () {\r",
+											"    var jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData.success).to.eql(\"No changes made\");\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
 							],
-							"path": [
-								"patchnote",
-								"{{patchNoteId}}"
-							]
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "title",
+											"value": "{{issueTitle}}",
+											"type": "text"
+										},
+										{
+											"key": "description",
+											"value": "{{issueDesc}}",
+											"type": "text"
+										},
+										{
+											"key": "severity",
+											"value": "{{isserSeverity}}",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{baseRestURL}}/issue/update/{{issueUUID}}",
+									"host": [
+										"{{baseRestURL}}"
+									],
+									"path": [
+										"issue",
+										"update",
+										"{{issueUUID}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "UpdateIssue",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Text is accurate\", function () {\r",
+											"    var jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData.success).to.eql(\"Issue updated\");\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "title",
+											"value": "update tester??",
+											"type": "text"
+										},
+										{
+											"key": "description",
+											"value": "",
+											"type": "text"
+										},
+										{
+											"key": "severity",
+											"value": "Major",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{baseRestURL}}/issue/update/{{issueUUID}}",
+									"host": [
+										"{{baseRestURL}}"
+									],
+									"path": [
+										"issue",
+										"update",
+										"{{issueUUID}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "UpdateIssue404",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 404\", function () {\r",
+											"    pm.response.to.have.status(404);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Text is accurate\", function () {\r",
+											"    var jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData.error).to.eql(\"Issue not found\");\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "title",
+											"value": "update tester??",
+											"type": "text"
+										},
+										{
+											"key": "description",
+											"value": "",
+											"type": "text"
+										},
+										{
+											"key": "severity",
+											"value": "Major",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{baseRestURL}}/issue/update/{{$randomUUID}}",
+									"host": [
+										"{{baseRestURL}}"
+									],
+									"path": [
+										"issue",
+										"update",
+										"{{$randomUUID}}"
+									]
+								}
+							},
+							"response": []
 						}
-					},
-					"response": []
+					]
 				},
 				{
-					"name": "GetSinglePatchNote404",
-					"event": [
+					"name": "PatchNote",
+					"item": [
 						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									"pm.test(\"Status code is 404\", function () {\r",
-									"    pm.response.to.have.status(404);\r",
-									"});"
-								],
-								"type": "text/javascript"
-							}
-						}
-					],
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{baseRestURL}}/patchnote/383",
-							"host": [
-								"{{baseRestURL}}"
+							"name": "UpdateNothingPatchNote",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Text is accurate\", function () {\r",
+											"    var jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData.success).to.eql(\"No changes made\");\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
 							],
-							"path": [
-								"patchnote",
-								"383"
-							]
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "title",
+											"value": "{{patchNoteTitle}}",
+											"type": "text"
+										},
+										{
+											"key": "description",
+											"value": "{{patchNoteDesc}}",
+											"type": "text"
+										},
+										{
+											"key": "version",
+											"value": "{{patchNoteVersion}}",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{baseRestURL}}/patchnote/update/{{patchNoteUUID}}",
+									"host": [
+										"{{baseRestURL}}"
+									],
+									"path": [
+										"patchnote",
+										"update",
+										"{{patchNoteUUID}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "UpdatePatchNote",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Text is accurate\", function () {\r",
+											"    var jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData.success).to.eql(\"PatchNote updated\");\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "title",
+											"value": "new patchnote",
+											"type": "text"
+										},
+										{
+											"key": "description",
+											"value": "something original",
+											"type": "text"
+										},
+										{
+											"key": "version",
+											"value": "V1.213",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{baseRestURL}}/patchnote/update/{{patchNoteUUID}}",
+									"host": [
+										"{{baseRestURL}}"
+									],
+									"path": [
+										"patchnote",
+										"update",
+										"{{patchNoteUUID}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "UpdatePatchNote404",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 404\", function () {\r",
+											"    pm.response.to.have.status(404);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Text is accurate\", function () {\r",
+											"    var jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData.error).to.eql(\"PatchNote not found\");\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "title",
+											"value": "new patchnote",
+											"type": "text"
+										},
+										{
+											"key": "description",
+											"value": "something original",
+											"type": "text"
+										},
+										{
+											"key": "version",
+											"value": "V1.213",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{baseRestURL}}/patchnote/update/{{$randomUUID}}",
+									"host": [
+										"{{baseRestURL}}"
+									],
+									"path": [
+										"patchnote",
+										"update",
+										"{{$randomUUID}}"
+									]
+								}
+							},
+							"response": []
 						}
-					},
-					"response": []
+					]
+				},
+				{
+					"name": "User",
+					"item": [
+						{
+							"name": "UpdateNothingUser",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Text is accurate\", function () {\r",
+											"    var jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData.success).to.eql(\"No changes made\");\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "username",
+											"value": "{{userUsername}}",
+											"type": "text"
+										},
+										{
+											"key": "password",
+											"value": "{{userPassword}}",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{baseRestURL}}/user/update/{{delUserUUID}}",
+									"host": [
+										"{{baseRestURL}}"
+									],
+									"path": [
+										"user",
+										"update",
+										"{{delUserUUID}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "UpdateUser",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Text is accurate\", function () {\r",
+											"    var jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData.success).to.eql(\"User updated\");\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "username",
+											"value": "{{$randomUserName}}",
+											"type": "text"
+										},
+										{
+											"key": "password",
+											"value": "testingA1!",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{baseRestURL}}/user/update/{{delUserUUID}}",
+									"host": [
+										"{{baseRestURL}}"
+									],
+									"path": [
+										"user",
+										"update",
+										"{{delUserUUID}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "UpdateUser404",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 404\", function () {\r",
+											"    pm.response.to.have.status(404);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Text is accurate\", function () {\r",
+											"    var jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData.error).to.eql(\"User not found\");\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "username",
+											"value": "{{$randomUserName}}",
+											"type": "text"
+										},
+										{
+											"key": "password",
+											"value": "testingA1!",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{baseRestURL}}/user/update/{{$randomUUID}}",
+									"host": [
+										"{{baseRestURL}}"
+									],
+									"path": [
+										"user",
+										"update",
+										"{{$randomUUID}}"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Project",
+					"item": [
+						{
+							"name": "UpdateNothingProject",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Text is accurate\", function () {\r",
+											"    var jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData.success).to.eql(\"No changes made\");\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "title",
+											"value": "{{projectTitle}}",
+											"type": "text"
+										},
+										{
+											"key": "description",
+											"value": "{{projectDesc}}",
+											"type": "text"
+										},
+										{
+											"key": "startDate",
+											"value": "{{projectStartdate}}",
+											"type": "text"
+										},
+										{
+											"key": "subject",
+											"value": "{{projectSubject}}",
+											"type": "text"
+										},
+										{
+											"key": "userUUID",
+											"value": "{{userUUID}}",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{baseRestURL}}/project/update/{{projectUUID}}",
+									"host": [
+										"{{baseRestURL}}"
+									],
+									"path": [
+										"project",
+										"update",
+										"{{projectUUID}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "UpdateProject",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Text is accurate\", function () {\r",
+											"    var jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData.success).to.eql(\"Project updated\");\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "title",
+											"value": "Something new",
+											"type": "text"
+										},
+										{
+											"key": "description",
+											"value": "something bigger",
+											"type": "text"
+										},
+										{
+											"key": "startDate",
+											"value": "{{projectStartdate}}",
+											"type": "text"
+										},
+										{
+											"key": "subject",
+											"value": "{{projectSubject}}",
+											"type": "text"
+										},
+										{
+											"key": "userUUID",
+											"value": "{{userUUID}}",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{baseRestURL}}/project/update/{{projectUUID}}",
+									"host": [
+										"{{baseRestURL}}"
+									],
+									"path": [
+										"project",
+										"update",
+										"{{projectUUID}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "UpdateProject404",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 404\", function () {\r",
+											"    pm.response.to.have.status(404);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Text is accurate\", function () {\r",
+											"    var jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData.error).to.eql(\"Project not found\");\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "title",
+											"value": "Something new",
+											"type": "text"
+										},
+										{
+											"key": "description",
+											"value": "something bigger",
+											"type": "text"
+										},
+										{
+											"key": "startDate",
+											"value": "{{projectStartdate}}",
+											"type": "text"
+										},
+										{
+											"key": "subject",
+											"value": "{{projectSubject}}",
+											"type": "text"
+										},
+										{
+											"key": "userUUID",
+											"value": "{{userUUID}}",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{baseRestURL}}/project/update/{{$randomUUID}}",
+									"host": [
+										"{{baseRestURL}}"
+									],
+									"path": [
+										"project",
+										"update",
+										"{{$randomUUID}}"
+									]
+								}
+							},
+							"response": []
+						}
+					]
 				}
 			]
 		},
 		{
-			"name": "User",
+			"name": "Delete",
 			"item": [
 				{
-					"name": "GetAllUsers",
-					"event": [
+					"name": "Task",
+					"item": [
 						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									"pm.test(\"Status code is 200\", function () {\r",
-									"    pm.response.to.have.status(200);\r",
-									"});\r",
-									"\r",
-									"const jsonData = pm.response.json();\r",
-									"pm.collectionVariables.set(\"userUUID\", jsonData[0].userUUID);"
-								],
-								"type": "text/javascript"
-							}
-						}
-					],
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{baseRestURL}}/user/list",
-							"host": [
-								"{{baseRestURL}}"
+							"name": "DeleteTaskByUUID",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
 							],
-							"path": [
-								"user",
-								"list"
-							]
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{baseRestURL}}/task/delete/{{taskUUID}}",
+									"host": [
+										"{{baseRestURL}}"
+									],
+									"path": [
+										"task",
+										"delete",
+										"{{taskUUID}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "DeleteTaskByUUID404",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 404\", function () {\r",
+											"    pm.response.to.have.status(404);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{baseRestURL}}/task/delete/{{$randomUUID}}",
+									"host": [
+										"{{baseRestURL}}"
+									],
+									"path": [
+										"task",
+										"delete",
+										"{{$randomUUID}}"
+									]
+								}
+							},
+							"response": []
 						}
-					},
-					"response": []
+					]
 				},
 				{
-					"name": "GetSingleUser",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{baseRestURL}}/user/{{userUUID}}",
-							"host": [
-								"{{baseRestURL}}"
+					"name": "Issue",
+					"item": [
+						{
+							"name": "DeleteIssueByUUID",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
 							],
-							"path": [
-								"user",
-								"{{userUUID}}"
-							]
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{baseRestURL}}/issue/delete/{{issueUUID}}",
+									"host": [
+										"{{baseRestURL}}"
+									],
+									"path": [
+										"issue",
+										"delete",
+										"{{issueUUID}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "DeleteIssueByUUID404",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 404\", function () {\r",
+											"    pm.response.to.have.status(404);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{baseRestURL}}/issue/delete/{{$randomUUID}}",
+									"host": [
+										"{{baseRestURL}}"
+									],
+									"path": [
+										"issue",
+										"delete",
+										"{{$randomUUID}}"
+									]
+								}
+							},
+							"response": []
 						}
-					},
-					"response": []
+					]
 				},
 				{
-					"name": "GetSingleUser404",
-					"event": [
+					"name": "PatchNote",
+					"item": [
 						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									"pm.test(\"Status code is 404\", function () {\r",
-									"    pm.response.to.have.status(404);\r",
-									"});"
-								],
-								"type": "text/javascript"
-							}
-						}
-					],
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{baseRestURL}}/user/132-0923",
-							"host": [
-								"{{baseRestURL}}"
+							"name": "DeletePatchNoteByUUID",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
 							],
-							"path": [
-								"user",
-								"132-0923"
-							]
-						}
-					},
-					"response": []
-				}
-			]
-		},
-		{
-			"name": "Project",
-			"item": [
-				{
-					"name": "GetAllProjects",
-					"event": [
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{baseRestURL}}/patchnote/delete/{{patchNoteUUID}}",
+									"host": [
+										"{{baseRestURL}}"
+									],
+									"path": [
+										"patchnote",
+										"delete",
+										"{{patchNoteUUID}}"
+									]
+								}
+							},
+							"response": []
+						},
 						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									"pm.test(\"Status code is 200\", function () {\r",
-									"    pm.response.to.have.status(200);\r",
-									"});\r",
-									"const jsonData = pm.response.json();\r",
-									"pm.collectionVariables.set(\"projectId\", jsonData[0].projectId);"
-								],
-								"type": "text/javascript"
-							}
-						}
-					],
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{baseRestURL}}/project/list",
-							"host": [
-								"{{baseRestURL}}"
+							"name": "DeletePatchNoteByUUID404",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 404\", function () {\r",
+											"    pm.response.to.have.status(404);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
 							],
-							"path": [
-								"project",
-								"list"
-							]
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{baseRestURL}}/patchnote/delete/{{$randomUUID}}",
+									"host": [
+										"{{baseRestURL}}"
+									],
+									"path": [
+										"patchnote",
+										"delete",
+										"{{$randomUUID}}"
+									]
+								}
+							},
+							"response": []
 						}
-					},
-					"response": []
+					]
 				},
 				{
-					"name": "GetSingleProject",
-					"event": [
+					"name": "Project",
+					"item": [
 						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									"pm.test(\"Status code is 200\", function () {\r",
-									"    pm.response.to.have.status(200);\r",
-									"});"
-								],
-								"type": "text/javascript"
-							}
-						}
-					],
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{baseRestURL}}/project/{{projectId}}",
-							"host": [
-								"{{baseRestURL}}"
+							"name": "DeleteProjectByUUID",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
 							],
-							"path": [
-								"project",
-								"{{projectId}}"
-							]
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{baseRestURL}}/project/delete/{{projectUUID}}",
+									"host": [
+										"{{baseRestURL}}"
+									],
+									"path": [
+										"project",
+										"delete",
+										"{{projectUUID}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "DeleteProjectByUUID404",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 404\", function () {\r",
+											"    pm.response.to.have.status(404);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{baseRestURL}}/project/delete/{{$randomUUID}}",
+									"host": [
+										"{{baseRestURL}}"
+									],
+									"path": [
+										"project",
+										"delete",
+										"{{$randomUUID}}"
+									]
+								}
+							},
+							"response": []
 						}
-					},
-					"response": []
+					]
 				},
 				{
-					"name": "GetSingleProject404",
-					"event": [
+					"name": "User",
+					"item": [
 						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									"pm.test(\"Status code is 404\", function () {\r",
-									"    pm.response.to.have.status(404);\r",
-									"});"
-								],
-								"type": "text/javascript"
-							}
-						}
-					],
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{baseRestURL}}/project/3928",
-							"host": [
-								"{{baseRestURL}}"
+							"name": "DeleteUserByUUID",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
 							],
-							"path": [
-								"project",
-								"3928"
-							]
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{baseRestURL}}/user/delete/{{delUserUUID}}",
+									"host": [
+										"{{baseRestURL}}"
+									],
+									"path": [
+										"user",
+										"delete",
+										"{{delUserUUID}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "DeleteUserByUUID404",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 404\", function () {\r",
+											"    pm.response.to.have.status(404);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{baseRestURL}}/user/delete/{{$randomUUID}}",
+									"host": [
+										"{{baseRestURL}}"
+									],
+									"path": [
+										"user",
+										"delete",
+										"{{$randomUUID}}"
+									]
+								}
+							},
+							"response": []
 						}
-					},
-					"response": []
+					]
 				}
 			]
 		}
@@ -521,26 +4136,90 @@
 	"variable": [
 		{
 			"key": "baseRestURL",
-			"value": "http://localhost:8080/ProjectTracker-1.0/api"
-		},
-		{
-			"key": "taskId",
-			"value": ""
-		},
-		{
-			"key": "issueId",
-			"value": ""
-		},
-		{
-			"key": "patchNoteId",
-			"value": ""
+			"value": "http://localhost:8080/ProjectTracker-1.2/api"
 		},
 		{
 			"key": "userUUID",
 			"value": ""
 		},
 		{
-			"key": "projectId",
+			"key": "taskUUID",
+			"value": ""
+		},
+		{
+			"key": "projectUUID",
+			"value": ""
+		},
+		{
+			"key": "issueUUID",
+			"value": ""
+		},
+		{
+			"key": "patchNoteUUID",
+			"value": ""
+		},
+		{
+			"key": "delUserUUID",
+			"value": ""
+		},
+		{
+			"key": "issueTitle",
+			"value": ""
+		},
+		{
+			"key": "issueDesc",
+			"value": ""
+		},
+		{
+			"key": "taskTitle",
+			"value": ""
+		},
+		{
+			"key": "taskDesc",
+			"value": ""
+		},
+		{
+			"key": "taskDeadline",
+			"value": ""
+		},
+		{
+			"key": "patchNoteTitle",
+			"value": ""
+		},
+		{
+			"key": "patchNoteDesc",
+			"value": ""
+		},
+		{
+			"key": "patchNoteVersion",
+			"value": ""
+		},
+		{
+			"key": "userUsername",
+			"value": ""
+		},
+		{
+			"key": "userPassword",
+			"value": ""
+		},
+		{
+			"key": "projectTitle",
+			"value": ""
+		},
+		{
+			"key": "projectDesc",
+			"value": ""
+		},
+		{
+			"key": "projectStartdate",
+			"value": ""
+		},
+		{
+			"key": "projectSubject",
+			"value": ""
+		},
+		{
+			"key": "isserSeverity",
 			"value": ""
 		}
 	]

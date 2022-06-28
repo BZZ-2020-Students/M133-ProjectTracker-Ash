@@ -1,7 +1,11 @@
 package com.example.projecttracker.data;
 
 import com.example.projecttracker.Config;
+import com.example.projecttracker.util.ToJson;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.databind.ser.FilterProvider;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
@@ -12,6 +16,7 @@ import java.lang.reflect.Field;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * reads and writes the data in the JSON-files
@@ -27,7 +32,6 @@ import java.util.ArrayList;
 public class DataHandlerGen<T> {
     /**
      * The class of the data
-     *
      */
     @NonNull
     private final Class<T> tClass;
@@ -47,6 +51,8 @@ public class DataHandlerGen<T> {
                 Paths.get(filePath)
         );
         ObjectMapper objectMapper = new ObjectMapper();
+        objectMapper.registerModule(new JavaTimeModule());
+        objectMapper.configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false);
         return objectMapper.readValue(jsonData, objectMapper.getTypeFactory().constructCollectionType(ArrayList.class, tClass));
     }
 
@@ -66,6 +72,7 @@ public class DataHandlerGen<T> {
     public T getSingleFromJsonArray(String propertyName, String fieldName, Object fieldValue) throws IOException, NoSuchFieldException, IllegalAccessException {
         ArrayList<T> arrayList = getArrayListOutOfJSON(propertyName);
 
+
         for (T t : arrayList) {
             Field privateField = t.getClass().getDeclaredField(fieldName);
             privateField.setAccessible(true);
@@ -77,5 +84,89 @@ public class DataHandlerGen<T> {
         return null;
     }
 
+    /**
+     * Adds a new data to the JSON-file
+     *
+     * @param object       the data that we want to add
+     * @param propertyName the name of the property that tells us which JSON-file to write in
+     * @author Alyssa Heimlicher
+     */
+    public void insertIntoJson(T object, String propertyName) {
+        try {
+            ObjectMapper objectMapper = new ObjectMapper();
+            String path = Config.getProperty(propertyName);
+            ArrayList<T> objects = getArrayListOutOfJSON(propertyName);
+            objects.add(object);
+            saveJson(propertyName, objects);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
+    /**
+     * Deletes a specific data from the JSON-file
+     *
+     * @param propertyName the name of the property that tells us which JSON-file to write in
+     * @param fieldName    the name of the field of the class that we want to delete
+     * @param fieldValue   the value of the data in the field
+     * @throws IOException            when the file cannot be read/is not found
+     * @throws NoSuchFieldException   when the field cannot be found
+     * @throws IllegalAccessException when the field cannot be accessed
+     * @author Alyssa Heimlicher
+     */
+    public void deleteSingleFromJson(String propertyName, String fieldName, Object fieldValue) throws IOException, NoSuchFieldException, IllegalAccessException {
+        ArrayList<T> objects = getArrayListOutOfJSON(propertyName);
+        T object = getSingleFromJsonArray(propertyName, fieldName, fieldValue);
+        if (!objects.remove(object)) {
+            throw new IllegalArgumentException("Object not found");
+        }
+        saveJson(propertyName, objects);
+    }
+
+    /**
+     * updates a specific data in the JSON-file
+     *
+     * @param propertyName the name of the property that tells us which JSON-file to write in
+     * @param fieldName    the name of the field of the class that we want to update
+     * @param fieldValue   the value of the data in the field
+     * @param object       the data that we want to update
+     * @throws IOException            when the file cannot be read/is not found
+     * @throws NoSuchFieldException   when the field cannot be found
+     * @throws IllegalAccessException when the field cannot be accessed
+     * @author Alyssa Heimlicher
+     */
+    public void updateSingleFromJson(String propertyName, String fieldName, Object fieldValue, T object) throws IOException, NoSuchFieldException, IllegalAccessException {
+        ArrayList<T> objects = getArrayListOutOfJSON(propertyName);
+        T oldObject = getSingleFromJsonArray(propertyName, fieldName, fieldValue);
+        if (!objects.remove(oldObject)) {
+            throw new IllegalArgumentException("Object not found");
+        }
+        objects.add(object);
+        saveJson(propertyName, objects);
+    }
+
+    /**
+     * Saves the data in the JSON-file
+     *
+     * @param propertyName the name of the property that tells us which JSON-file to write in
+     * @param objects      the data that we want to save
+     * @author Alyssa Heimlicher
+     */
+    public void saveJson(String propertyName, List<T> objects) {
+        try {
+            String path = Config.getProperty(propertyName);
+            ToJson.toJson(path, objects, getFilterProvider());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * returns the filter provider for the JSON-file
+     *
+     * @return null unless overridden
+     */
+    protected FilterProvider getFilterProvider() {
+        return null;
+    }
 }

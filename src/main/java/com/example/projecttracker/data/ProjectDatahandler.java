@@ -4,9 +4,13 @@ import com.example.projecttracker.model.Issue;
 import com.example.projecttracker.model.PatchNote;
 import com.example.projecttracker.model.Project;
 import com.example.projecttracker.model.Task;
+import com.fasterxml.jackson.databind.ser.FilterProvider;
+import com.fasterxml.jackson.databind.ser.impl.SimpleBeanPropertyFilter;
+import com.fasterxml.jackson.databind.ser.impl.SimpleFilterProvider;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Utility class for handling data regarding Projects in JSON files.
@@ -41,7 +45,7 @@ public class ProjectDatahandler extends DataHandlerGen<Project> {
      * @since 2020-05-23
      */
     public Project getSingleFromJsonArray(Object fieldValue) throws IOException, NoSuchFieldException, IllegalAccessException {
-        Project project = super.getSingleFromJsonArray("projectJSON", "projectId", fieldValue);
+        Project project = super.getSingleFromJsonArray("projectJSON", "projectUUID", fieldValue);
 
         if (project != null) {
             TaskDataHandler taskDataHandler = new TaskDataHandler();
@@ -84,6 +88,57 @@ public class ProjectDatahandler extends DataHandlerGen<Project> {
     }
 
     /**
+     * Returns all found Projects with a specific user uuid. Also sets the tasks, issues, and patch notes of each project.
+     *
+     * @param uuid the user uuid
+     * @return all found Projects
+     * @throws IOException            if the file cannot be read
+     * @throws NoSuchFieldException   if the field does not exist
+     * @throws IllegalAccessException if the field cannot be accessed
+     * @author Alyssa Heimlicher
+     * @see DataHandlerGen#getArrayListOutOfJSON(String)
+     * @since 2020-05-23
+     */
+    public ArrayList<Project> getArrayListOutOfJSONByUserUUID(String uuid) throws IOException, NoSuchFieldException, IllegalAccessException {
+        ArrayList<Project> projects = super.getArrayListOutOfJSON("projectJSON");
+        projects.removeIf(p -> !p.getUserUUID().equals(uuid));
+
+        return projects;
+    }
+
+    /**
+     * Deletes a single project from the JSON file
+     *
+     * @param uuid the uuid of the project to delete
+     * @throws IOException            if the file cannot be read
+     * @throws NoSuchFieldException   if the field does not exist
+     * @throws IllegalAccessException if the file cannot be accessed
+     */
+    public void deleteSingleFromJson(String uuid) throws IOException, NoSuchFieldException, IllegalAccessException {
+        Project project = new ProjectDatahandler().getSingleFromJsonArray(uuid);
+        ArrayList<Project> projects = new ProjectDatahandler().getArrayListOutOfJSON();
+        List<Task> tasks = project.getTasks();
+        List<Issue> issues = project.getIssues();
+        List<PatchNote> patchNotes = project.getPatchNotes();
+        for (Task task : tasks) {
+            new TaskDataHandler().deleteSingleFromJson("taskJSON", "taskUUID", task.getTaskUUID());
+        }
+        for (Issue issue : issues) {
+            new IssueDataHandler().deleteSingleFromJson("issueJSON", "issueUUID", issue.getIssueUUID());
+        }
+        for (PatchNote patchNote : patchNotes) {
+            new PatchnoteDataHandler().deleteSingleFromJson("patchNoteJSON", "patchNoteUUID", patchNote.getPatchNoteUUID());
+        }
+        projects.remove(project);
+        project.removeAllTasks();
+        project.removeAllIssues();
+        project.removeAllPatchNotes();
+        projects.add(project);
+        new ProjectDatahandler().saveJson("projectJSON", projects);
+        super.deleteSingleFromJson("projectJSON", "projectUUID", uuid);
+    }
+
+    /**
      * Utility method to set the tasks of a project.
      *
      * @param taskDataHandler The data handler to use to get the tasks
@@ -96,8 +151,8 @@ public class ProjectDatahandler extends DataHandlerGen<Project> {
      */
     private void setTasks(TaskDataHandler taskDataHandler, Project project) throws IOException, NoSuchFieldException, IllegalAccessException {
         ArrayList<Task> tasks = new ArrayList<>();
-        for (Integer taskID : project.getTaskIds()) {
-            Task task = taskDataHandler.readTaskById(taskID);
+        for (String taskUUid : project.getTaskUUIDs()) {
+            Task task = taskDataHandler.readTaskByUUID(taskUUid);
             tasks.add(task);
         }
         project.setTasks(tasks);
@@ -116,8 +171,8 @@ public class ProjectDatahandler extends DataHandlerGen<Project> {
      */
     private void setIssues(IssueDataHandler issueDataHandler, Project project) throws IOException, NoSuchFieldException, IllegalAccessException {
         ArrayList<Issue> issues = new ArrayList<>();
-        for (Integer issueId : project.getIssueIds()) {
-            Issue issue = issueDataHandler.readIssueByID(issueId);
+        for (String issueUUID : project.getIssueUUIDs()) {
+            Issue issue = issueDataHandler.readIssueByUUID(issueUUID);
             issues.add(issue);
         }
         project.setIssues(issues);
@@ -136,10 +191,17 @@ public class ProjectDatahandler extends DataHandlerGen<Project> {
      */
     private void setPatchNotes(PatchnoteDataHandler patchnoteDataHandler, Project project) throws IOException, NoSuchFieldException, IllegalAccessException {
         ArrayList<PatchNote> patchNotes = new ArrayList<>();
-        for (Integer patchnoteID : project.getTaskIds()) {
-            PatchNote patchNote = patchnoteDataHandler.readPatchNoteByID(patchnoteID);
+        for (String patchnoteUUID : project.getPatchNoteUUIDs()) {
+            PatchNote patchNote = patchnoteDataHandler.readPatchNoteByUUID(patchnoteUUID);
             patchNotes.add(patchNote);
         }
         project.setPatchNotes(patchNotes);
+    }
+
+    @Override
+    protected FilterProvider getFilterProvider() {
+        return new SimpleFilterProvider()
+                .addFilter("ProjectFilter", SimpleBeanPropertyFilter.serializeAllExcept("patchNoteUUIDs", "taskUUIDs", "issueUUIDs", "user"))
+                .addFilter("UserFilter", SimpleBeanPropertyFilter.serializeAll());
     }
 }

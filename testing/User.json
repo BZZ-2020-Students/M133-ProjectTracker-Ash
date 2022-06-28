@@ -1,8 +1,1 @@
-[
-  {
-    "userUUID": "123e4567-e89b-12d3-a456-426614174000",
-    "userName": "guest",
-    "password": "123456",
-    "userRole": "guest"
-  }
-]
+[{"userUUID":"2f6555a5-66d1-43fb-98fb-c9d781052ffe","userName":"Marcel_Huel","password":"2JV5Ra6YwQTMuOj","userRole":"Guest"},{"userUUID":"113f911b-3d14-4267-941d-fa3fd2b39c15","userName":"Brennan59","password":"imRZYUSLln8jcgO","userRole":"Guest"},{"userUUID":"d90f7d0a-266b-433c-9ccf-4f75d896d954","userName":"Tyrese_Jaskolski97","password":"YUSXHVb0i30rF8c","userRole":"Guest"},{"userUUID":"dff71715-55c7-46b0-b65c-dbff934dc59d","userName":"German9","password":"testingA1!","userRole":"guest"}]
