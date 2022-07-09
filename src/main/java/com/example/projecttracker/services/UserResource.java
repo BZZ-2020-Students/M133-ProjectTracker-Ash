@@ -9,6 +9,7 @@ import com.example.projecttracker.util.ToJson;
 import com.fasterxml.jackson.databind.ser.FilterProvider;
 import com.fasterxml.jackson.databind.ser.impl.SimpleBeanPropertyFilter;
 import com.fasterxml.jackson.databind.ser.impl.SimpleFilterProvider;
+import jakarta.activation.DataHandler;
 import jakarta.validation.Valid;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
@@ -155,6 +156,32 @@ public class UserResource {
         return Response.status(200).entity("{\"success\":\"No changes made\"}").build();
 
     }
+
+
+    /**
+     * This method is used for the login process
+     *
+     *
+     * @author Alyssa Heimlicher
+     */
+    @POST
+    @Produces("application/json")
+    @Path("/login")
+    public Response login(@FormParam("username") String username,
+                          @FormParam("password") String password) {
+        try {
+            User userFromJson = new UserDataHandler().readUser(username, password);
+            if(userFromJson == null) {
+                return Response.status(404).entity("{\"error\":\"User not found\"}").build();
+            }else{
+                return Response.status(200).entity("{\"success\":\"Login successful\"}").build();
+            }
+        } catch (IOException e) {
+            return Response.status(500).entity("{\"error\":\"" + e.getMessage() + "\"}").build();
+        }
+    }
+
+
 
     /**
      * This method returns a filter provider for the user class.
