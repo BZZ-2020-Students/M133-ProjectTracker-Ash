@@ -45,15 +45,14 @@ public class UserDataHandler extends DataHandlerGen<User> {
      * gets a specific user by their username and password
      *
      * @param username the username of the user
-     * @param password the password of the user
      * @return the user (null=not found)
      * @throws IOException if there is an error reading the file
      *
      * @author Alyssa Heimlicher
      */
-    public User readUser(String username, String password) throws IOException {
+    public User readUserByUsername(String username) throws IOException {
         for (User u : getArrayListOutOfJSON("userJSON")) {
-            if (u.getUserName().equals(username) && u.getPassword().equals(password)) {
+            if (u.getUserName().equals(username)) {
                 return u;
             }
         }

@@ -9,10 +9,10 @@ import com.example.projecttracker.util.ToJson;
 import com.fasterxml.jackson.databind.ser.FilterProvider;
 import com.fasterxml.jackson.databind.ser.impl.SimpleBeanPropertyFilter;
 import com.fasterxml.jackson.databind.ser.impl.SimpleFilterProvider;
-import jakarta.activation.DataHandler;
 import jakarta.validation.Valid;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
+import jakarta.ws.rs.core.NewCookie;
 import jakarta.ws.rs.core.Response;
 
 import java.io.IOException;
@@ -161,7 +161,6 @@ public class UserResource {
     /**
      * This method is used for the login process
      *
-     *
      * @author Alyssa Heimlicher
      */
     @POST
@@ -170,17 +169,32 @@ public class UserResource {
     public Response login(@FormParam("username") String username,
                           @FormParam("password") String password) {
         try {
-            User userFromJson = new UserDataHandler().readUser(username, password);
-            if(userFromJson == null) {
+            User userFromJson = new UserDataHandler().readUserByUsername(username);
+            if (userFromJson == null) {
                 return Response.status(404).entity("{\"error\":\"User not found\"}").build();
-            }else{
-                return Response.status(200).entity("{\"success\":\"Login successful\"}").build();
             }
+            if (!userFromJson.getPassword().equals(password)) {
+                return Response.status(401).entity("{\"error\":\"Wrong password\"}").build();
+            }
+
+            NewCookie roleCookie = new NewCookie(
+                    "userRole",
+                    userFromJson.getUserRole(),
+                    "/",
+                    "",
+                    "Login-Cookie",
+                    600,
+                    false
+            );
+            return Response.status(200).entity("{\"success\":\"Login successful\"}")
+                    .cookie(roleCookie)
+                    .build();
+
+
         } catch (IOException e) {
             return Response.status(500).entity("{\"error\":\"" + e.getMessage() + "\"}").build();
         }
     }
-
 
 
     /**
