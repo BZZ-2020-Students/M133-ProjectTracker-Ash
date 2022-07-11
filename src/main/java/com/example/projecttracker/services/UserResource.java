@@ -1,5 +1,7 @@
 package com.example.projecttracker.services;
 
+import com.example.projecttracker.Config;
+import com.example.projecttracker.authentication.TokenHandler;
 import com.example.projecttracker.data.DataHandlerGen;
 import com.example.projecttracker.data.ProjectDatahandler;
 import com.example.projecttracker.data.UserDataHandler;
@@ -177,17 +179,25 @@ public class UserResource {
                 return Response.status(401).entity("{\"error\":\"Wrong password\"}").build();
             }
 
-            NewCookie roleCookie = new NewCookie(
-                    "userRole",
-                    userFromJson.getUserRole(),
+            NewCookie tokenCookie = new NewCookie(
+                    Config.getProperty("jwt.name"),
+                    TokenHandler.createToken(userFromJson),
                     "/",
                     "",
-                    "Login-Cookie",
-                    600,
-                    false
-            );
-            return Response.status(200).entity("{\"success\":\"Login successful\"}")
-                    .cookie(roleCookie)
+                    "Auth-Token",
+                    86400,
+                    false);
+
+            return Response
+                    .status(200)
+                    .header("Access-Control-Allow-Origin", "*")
+                    .header("Access-Control-Allow-Credentials", "true")
+                    .header("Access-Control-Allow-Headers",
+                            "origin, content-type, accept, authorization")
+                    .header("Access-Control-Allow-Methods",
+                            "GET, POST, DELETE")
+                    .entity("")
+                    .cookie(tokenCookie)
                     .build();
 
 
