@@ -1,16 +1,25 @@
 package com.example.projecttracker.services;
 
+import com.example.projecttracker.authentication.NotLoggedInException;
+import com.example.projecttracker.authentication.TokenHandler;
 import com.example.projecttracker.data.DataHandlerGen;
 import com.example.projecttracker.data.PatchnoteDataHandler;
+import com.example.projecttracker.data.ProjectDatahandler;
+import com.example.projecttracker.model.Issue;
 import com.example.projecttracker.model.PatchNote;
+import com.example.projecttracker.model.Project;
+import com.example.projecttracker.model.User;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import jakarta.annotation.security.RolesAllowed;
 import jakarta.validation.Valid;
 import jakarta.ws.rs.*;
+import jakarta.ws.rs.container.ContainerRequestContext;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 
+import javax.sound.midi.Patch;
 import java.io.IOException;
 import java.util.ArrayList;
 
@@ -80,16 +89,39 @@ public class PatchNoteResource {
      * @return a response.
      * @author Alyssa Heimlicher
      */
+    @RolesAllowed({"admin", "user"})
     @POST
     @Produces(MediaType.TEXT_PLAIN)
     @Path("/create")
-    public Response createPatchNote(@Valid @BeanParam PatchNote patchNote) {
-        new PatchnoteDataHandler().insertIntoJson(patchNote, "patchNoteJSON");
+    public Response createPatchNote(@Valid @BeanParam PatchNote patchNote, @FormParam("projectUUID") String projectUUID, ContainerRequestContext requestContext) {
+        User user;
+        try {
+            user = TokenHandler.getUserFromCookie(requestContext);
+        } catch (NotLoggedInException | IOException e) {
+            return Response.status(Response.Status.UNAUTHORIZED).entity("{\"error\":\"" + e.getMessage() + "\"}").build();
+        }
+        ProjectDatahandler projectDatahandler = new ProjectDatahandler();
+        Project project;
+        try {
+            project = projectDatahandler.getSingleFromJsonArray(projectUUID);
+            if ("admin".equalsIgnoreCase(user.getUserRole()) || project.getUser().getUserUUID().equals(user.getUserUUID())) {
 
-        return Response
-                .status(200)
-                .entity("")
-                .build();
+                new PatchnoteDataHandler().insertIntoJson(patchNote, "patchNoteJSON");
+                ArrayList<PatchNote> patchNotes = project.getPatchNotes();
+                patchNotes.add(patchNote);
+                project.setPatchNotes(patchNotes);
+                projectDatahandler.updateSingleFromJson("projectJSON", "projectUUID", projectUUID, project);
+
+                return Response
+                        .status(200)
+                        .entity("")
+                        .build();
+            } else {
+                return Response.status(Response.Status.UNAUTHORIZED).entity("{\"error\":\"You do not have permission to create this issue\"}").build();
+            }
+        } catch (IOException | NoSuchFieldException | IllegalAccessException e) {
+            return Response.status(500).entity("{\"error\":\"" + e.getMessage() + "\"}").build();
+        }
     }
 
     /**
