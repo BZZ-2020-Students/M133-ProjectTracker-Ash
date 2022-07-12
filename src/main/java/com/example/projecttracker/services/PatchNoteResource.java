@@ -5,7 +5,6 @@ import com.example.projecttracker.authentication.TokenHandler;
 import com.example.projecttracker.data.DataHandlerGen;
 import com.example.projecttracker.data.PatchnoteDataHandler;
 import com.example.projecttracker.data.ProjectDatahandler;
-import com.example.projecttracker.model.Issue;
 import com.example.projecttracker.model.PatchNote;
 import com.example.projecttracker.model.Project;
 import com.example.projecttracker.model.User;
@@ -19,7 +18,6 @@ import jakarta.ws.rs.container.ContainerRequestContext;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 
-import javax.sound.midi.Patch;
 import java.io.IOException;
 import java.util.ArrayList;
 
@@ -117,7 +115,7 @@ public class PatchNoteResource {
                         .entity("")
                         .build();
             } else {
-                return Response.status(Response.Status.UNAUTHORIZED).entity("{\"error\":\"You do not have permission to create this issue\"}").build();
+                return Response.status(Response.Status.UNAUTHORIZED).entity("{\"error\":\"You do not have permission to create this Patchnote\"}").build();
             }
         } catch (IOException | NoSuchFieldException | IllegalAccessException e) {
             return Response.status(500).entity("{\"error\":\"" + e.getMessage() + "\"}").build();
@@ -131,18 +129,30 @@ public class PatchNoteResource {
      * @return a response with the status code
      * @author Alyssa Heimlicher
      */
+    @RolesAllowed({"admin"})
     @DELETE
     @Produces("application/json")
     @Path("/delete/{uuid}")
-    public Response deletePatchNoteByUUID(@PathParam("uuid") String uuid) {
+    public Response deletePatchNoteByUUID(@PathParam("uuid") String uuid, ContainerRequestContext requestContext) {
+        User user;
         try {
-            new PatchnoteDataHandler().deleteSingleFromJson("patchNoteJSON", "patchNoteUUID", uuid);
-            return Response.status(200).entity("{\"success\":\"PatchNote deleted\"}").build();
-        } catch (IOException | NoSuchFieldException | IllegalAccessException e) {
-            return Response.status(500).entity("{\"error\":\"" + e.getMessage() + "\"}").build();
-        } catch (IllegalArgumentException e) {
-            return Response.status(404).entity("{\"error\":\"PatchNote not found\"}").build();
+            user = TokenHandler.getUserFromCookie(requestContext);
+        } catch (NotLoggedInException | IOException e) {
+            return Response.status(Response.Status.UNAUTHORIZED).entity("{\"error\":\"" + e.getMessage() + "\"}").build();
         }
+        if (user.getUserRole().equalsIgnoreCase("admin")) {
+
+
+            try {
+                new PatchnoteDataHandler().deleteSingleFromJson("patchNoteJSON", "patchNoteUUID", uuid);
+                return Response.status(200).entity("{\"success\":\"PatchNote deleted\"}").build();
+            } catch (IOException | NoSuchFieldException | IllegalAccessException e) {
+                return Response.status(500).entity("{\"error\":\"" + e.getMessage() + "\"}").build();
+            } catch (IllegalArgumentException e) {
+                return Response.status(404).entity("{\"error\":\"PatchNote not found\"}").build();
+            }
+        }
+        return Response.status(Response.Status.UNAUTHORIZED).entity("{\"error\":\"You do not have permission to delete this Patchnote\"}").build();
     }
 
     /**
@@ -156,10 +166,18 @@ public class PatchNoteResource {
      * @throws IllegalAccessException if the file is not accessible.
      * @author Alyssa Heimlicher
      */
+    @RolesAllowed({"admin", "user"})
     @PUT
     @Produces("application/json")
     @Path("/update/{uuid}")
-    public Response updatePatchNote(@PathParam("uuid") String uuid, @Valid @BeanParam PatchNote patchNote) throws IOException, NoSuchFieldException, IllegalAccessException {
+    public Response updatePatchNote(@PathParam("uuid") String uuid, @Valid @BeanParam PatchNote patchNote, ContainerRequestContext requestContext) throws IOException, NoSuchFieldException, IllegalAccessException {
+        User user;
+        try {
+            user = TokenHandler.getUserFromCookie(requestContext);
+        } catch (NotLoggedInException | IOException e) {
+            return Response.status(Response.Status.UNAUTHORIZED).entity("{\"error\":\"" + e.getMessage() + "\"}").build();
+        }
+
         boolean changed = false;
         PatchNote toBeUpdatedPatchNote = new PatchnoteDataHandler().readPatchNoteByUUID(uuid);
         if (toBeUpdatedPatchNote == null) {
@@ -181,13 +199,30 @@ public class PatchNoteResource {
             changed = true;
         }
 
-        if (changed) {
-            new PatchnoteDataHandler().updateSingleFromJson("patchNoteJSON", "patchNoteUUID", uuid, toBeUpdatedPatchNote);
-            return Response.status(200).entity("{\"success\":\"PatchNote updated\"}").build();
+        ProjectDatahandler projectDatahandler = new ProjectDatahandler();
+        Project project = projectDatahandler.getProjectByObjectUUID(uuid, "patchnote");
+        if (project == null) {
+            return Response.status(404).entity("{\"error\":\"Project not found\"}").build();
         }
-
-        return Response.status(200).entity("{\"success\":\"No changes made\"}").build();
-
+        if (user.getUserRole().equalsIgnoreCase("admin") || project.getUser().getUserUUID().equals(user.getUserUUID())) {
+            if (changed) {
+                new PatchnoteDataHandler().updateSingleFromJson("patchNoteJSON", "patchNoteUUID", uuid, toBeUpdatedPatchNote);
+                ArrayList<PatchNote> patchNotes = project.getPatchNotes();
+                for (int i = 0; i < patchNotes.size(); i++) {
+                    if (patchNotes.get(i).getPatchNoteUUID().equals(uuid)) {
+                        patchNotes.set(i, toBeUpdatedPatchNote);
+                        break;
+                    }
+                }
+                project.setPatchNotes(patchNotes);
+                projectDatahandler.updateSingleFromJson("projectJSON", "projectUUID", project.getProjectUUID(), project);
+                return Response.status(200).entity("{\"success\":\"PatchNote updated\"}").build();
+            } else {
+                return Response.status(200).entity("{\"success\":\"No changes made\"}").build();
+            }
+        } else {
+            return Response.status(Response.Status.UNAUTHORIZED).entity("{\"error\":\"You do not have permission to update this Patchnote\"}").build();
+        }
     }
 
 
