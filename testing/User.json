@@ -3,7 +3,7 @@
     "userUUID": "2f6555a5-66d1-43fb-98fb-c9d781052ffe",
     "userName": "Marcel_Huel",
     "password": "2JV5Ra6YwQTMuOj",
-    "userRole": "user"
+    "userRole": "admin"
   },
   {
     "userUUID": "113f911b-3d14-4267-941d-fa3fd2b39c15",
@@ -16,11 +16,5 @@
     "userName": "Tyrese_Jaskolski97",
     "password": "YUSXHVb0i30rF8c",
     "userRole": "user"
-  },
-  {
-    "userUUID": "dff71715-55c7-46b0-b65c-dbff934dc59d",
-    "userName": "German9",
-    "password": "testingA1!",
-    "userRole": "admin"
   }
 ]

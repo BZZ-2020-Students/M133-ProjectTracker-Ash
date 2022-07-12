@@ -90,8 +90,6 @@ public class Project {
      *
      * @since 1.2
      */
-    @FormParam("userUUID")
-    @NotEmpty(message = "User cannot be empty")
     private String userid;
 
     /**

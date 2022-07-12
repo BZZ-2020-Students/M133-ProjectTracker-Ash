@@ -94,12 +94,11 @@ public class ProjectResource {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("{\"error\":\"" + e.getMessage() + "\"}").build();
         }
 
-        
-            LocalDate startDateLocal = LocalDate.parse(project.getTempStartDate());
-            project.setStartDate(startDateLocal);
-            project.setUser(user);
-            new ProjectDatahandler().insertIntoJson(project, "projectJSON");
 
+        LocalDate startDateLocal = LocalDate.parse(project.getTempStartDate());
+        project.setStartDate(startDateLocal);
+        project.setUser(user);
+        new ProjectDatahandler().insertIntoJson(project, "projectJSON");
 
 
         return Response
@@ -115,29 +114,46 @@ public class ProjectResource {
      * @return a response with the status code
      * @author Alyssa Heimlicher
      */
+    @RolesAllowed({"admin", "user"})
     @DELETE
     @Produces("application/json")
     @Path("/delete/{uuid}")
-    public Response deleteProjectByUUID(@PathParam("uuid") String uuid) {
+    public Response deleteProjectByUUID(@PathParam("uuid") String uuid, ContainerRequestContext requestContext) {
+        User user;
         try {
-            Project project = new ProjectDatahandler().getSingleFromJsonArray(uuid);
+            user = TokenHandler.getUserFromCookie(requestContext);
+        } catch (NotLoggedInException e) {
+            return Response.status(Response.Status.UNAUTHORIZED).entity("{\"error\":\"" + e.getMessage() + "\"}").build();
+        } catch (IOException e) {
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("{\"error\":\"" + e.getMessage() + "\"}").build();
+        }
+        Project project;
+        try {
+            project = new ProjectDatahandler().getSingleFromJsonArray(uuid);
 
             if (project == null) {
                 return projectNotFound();
             }
+
+
         } catch (IOException | NoSuchFieldException | IllegalAccessException e) {
             return projectNotFound();
         }
 
-        try {
-            new ProjectDatahandler().deleteSingleFromJson(uuid);
-            return Response.status(200).entity("{\"success\":\"Project deleted\"}").build();
-        } catch (IOException | NoSuchFieldException | IllegalAccessException e) {
-            e.printStackTrace();
-            return Response.status(500).entity("{\"error\":\"" + e.getMessage() + "\"}").build();
-        } catch (IllegalArgumentException e) {
-            return projectNotFound();
+        if ("admin".equalsIgnoreCase(user.getUserRole()) || project.getUser().getUserUUID().equals(user.getUserUUID())) {
+            try {
+                new ProjectDatahandler().deleteSingleFromJson(uuid);
+                return Response.status(200).entity("{\"success\":\"Project deleted\"}").build();
+            } catch (IOException | NoSuchFieldException | IllegalAccessException e) {
+                e.printStackTrace();
+                return Response.status(500).entity("{\"error\":\"" + e.getMessage() + "\"}").build();
+            } catch (IllegalArgumentException e) {
+                return projectNotFound();
+            }
+        } else {
+            return Response.status(Response.Status.UNAUTHORIZED).entity("{\"error\":\"You are not allowed to delete this project\"}").build();
         }
+
     }
 
     /**
@@ -160,15 +176,25 @@ public class ProjectResource {
      * @throws IllegalAccessException if the field is not accessible
      * @author Alyssa Heimlicher
      */
+    @RolesAllowed({"admin", "user"})
     @PUT
     @Produces("application/json")
     @Path("/update/{uuid}")
-    public Response updateProject(@PathParam("uuid") String uuid, @Valid @BeanParam Project project) throws IOException, NoSuchFieldException, IllegalAccessException {
+    public Response updateProject(@PathParam("uuid") String uuid, @Valid @BeanParam Project project, ContainerRequestContext requestContext) throws IOException, NoSuchFieldException, IllegalAccessException {
         boolean changed = false;
+        User user;
+        try {
+            user = TokenHandler.getUserFromCookie(requestContext);
+        } catch (NotLoggedInException e) {
+            return Response.status(Response.Status.UNAUTHORIZED).entity("{\"error\":\"" + e.getMessage() + "\"}").build();
+        } catch (IOException e) {
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("{\"error\":\"" + e.getMessage() + "\"}").build();
+        }
         Project toBeUpdatedProject = new ProjectDatahandler().getSingleFromJsonArray(uuid);
         if (toBeUpdatedProject == null) {
             return projectNotFound();
         }
+
 
         if (project.getTitle() != null && !project.getTitle().equals(toBeUpdatedProject.getTitle())) {
             toBeUpdatedProject.setTitle(project.getTitle());
@@ -187,11 +213,15 @@ public class ProjectResource {
             changed = true;
         }
 
-        if (changed) {
-            new ProjectDatahandler().updateSingleFromJson("projectJSON", "projectUUID", uuid, toBeUpdatedProject);
-            return Response.status(200).entity("{\"success\":\"Project updated\"}").build();
+        if ("admin".equalsIgnoreCase(user.getUserRole()) || project.getUser().getUserUUID().equals(user.getUserUUID())) {
+            if (changed) {
+                new ProjectDatahandler().updateSingleFromJson("projectJSON", "projectUUID", uuid, toBeUpdatedProject);
+                return Response.status(200).entity("{\"success\":\"Project updated\"}").build();
+            }
+            return Response.status(200).entity("{\"success\":\"No changes made\"}").build();
         }
-        return Response.status(200).entity("{\"success\":\"No changes made\"}").build();
+
+        return Response.status(Response.Status.UNAUTHORIZED).entity("{\"error\":\"You are not allowed to update this project\"}").build();
 
     }
 
