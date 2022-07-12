@@ -1,6 +1,5 @@
 package com.example.projecttracker.authentication;
 
-import com.example.projecttracker.Config;
 import com.example.projecttracker.model.User;
 import jakarta.annotation.security.DenyAll;
 import jakarta.annotation.security.PermitAll;
@@ -9,7 +8,6 @@ import jakarta.ws.rs.container.ContainerRequestContext;
 import jakarta.ws.rs.container.ContainerRequestFilter;
 import jakarta.ws.rs.container.ResourceInfo;
 import jakarta.ws.rs.core.Context;
-import jakarta.ws.rs.core.Cookie;
 import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.ext.Provider;
 
@@ -31,7 +29,7 @@ public class AuthenticationFilter implements ContainerRequestFilter {
 
         if (method.isAnnotationPresent(DenyAll.class)) {
             requestContext.abortWith(Response.status(Response.Status.FORBIDDEN)
-                    .entity("No roles are allowed. Continuing will be counted as trespassing!").build());
+                    .entity("No roles are allowed. Continuing will count as trespassing!").build());
         } else if (!method.isAnnotationPresent(PermitAll.class) &&
                 method.isAnnotationPresent(RolesAllowed.class)) {
             RolesAllowed rolesAnnotation = method.getAnnotation(RolesAllowed.class);
@@ -49,7 +47,7 @@ public class AuthenticationFilter implements ContainerRequestFilter {
 
             if (user == null || !isUserAllowed(requiredRoles, user.getUserRole())) {
                 requestContext.abortWith(Response.status(Response.Status.UNAUTHORIZED)
-                        .entity("You cannot access this resource").build());
+                        .entity("You cannot access this resource. Go away").build());
             }
         }
     }

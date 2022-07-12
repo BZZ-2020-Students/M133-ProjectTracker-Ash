@@ -57,7 +57,7 @@ public class User {
      *
      * @since 1.0
      */
-    private String userRole = "guest";
+    private String userRole = "user";
 
 
     @Override

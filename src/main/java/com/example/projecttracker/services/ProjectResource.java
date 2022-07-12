@@ -1,15 +1,18 @@
 package com.example.projecttracker.services;
 
+import com.example.projecttracker.authentication.NotLoggedInException;
+import com.example.projecttracker.authentication.TokenHandler;
 import com.example.projecttracker.data.ProjectDatahandler;
-import com.example.projecttracker.data.UserDataHandler;
 import com.example.projecttracker.model.Project;
 import com.example.projecttracker.model.User;
 import com.example.projecttracker.util.ToJson;
 import com.fasterxml.jackson.databind.ser.FilterProvider;
 import com.fasterxml.jackson.databind.ser.impl.SimpleBeanPropertyFilter;
 import com.fasterxml.jackson.databind.ser.impl.SimpleFilterProvider;
+import jakarta.annotation.security.RolesAllowed;
 import jakarta.validation.Valid;
 import jakarta.ws.rs.*;
+import jakarta.ws.rs.container.ContainerRequestContext;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 
@@ -77,23 +80,27 @@ public class ProjectResource {
      * @return a response
      * @author Alyssa Heimlicher
      */
+    @RolesAllowed({"admin", "user"})
     @POST
     @Produces(MediaType.TEXT_PLAIN)
     @Path("/create")
-    public Response createProject(@Valid @BeanParam Project project) {
-
+    public Response createProject(@Valid @BeanParam Project project, ContainerRequestContext requestContext) {
+        User user;
         try {
+            user = TokenHandler.getUserFromCookie(requestContext);
+        } catch (NotLoggedInException e) {
+            return Response.status(Response.Status.UNAUTHORIZED).entity("{\"error\":\"" + e.getMessage() + "\"}").build();
+        } catch (IOException e) {
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("{\"error\":\"" + e.getMessage() + "\"}").build();
+        }
+
+        
             LocalDate startDateLocal = LocalDate.parse(project.getTempStartDate());
             project.setStartDate(startDateLocal);
-            User user = new UserDataHandler().readUserByUserUUID(project.getUserid());
-            if (user == null) {
-                return Response.status(404).entity("{\"error\":\"User not found\"}").build();
-            }
             project.setUser(user);
             new ProjectDatahandler().insertIntoJson(project, "projectJSON");
-        } catch (IOException | NoSuchFieldException | IllegalAccessException e) {
-            return Response.status(500).entity("{\"error\":\"" + e.getMessage() + "\"}").build();
-        }
+
+
 
         return Response
                 .status(200)
@@ -135,6 +142,7 @@ public class ProjectResource {
 
     /**
      * this method is to return a 404 error if the project is not found.
+     *
      * @return a response with the status code 404
      */
     private Response projectNotFound() {
@@ -147,10 +155,9 @@ public class ProjectResource {
      * @param uuid    the uuid of the project
      * @param project the project to be updated
      * @return a response with the status code
-     * @throws IOException if the json file is not found
-     * @throws NoSuchFieldException if the field is not found
+     * @throws IOException            if the json file is not found
+     * @throws NoSuchFieldException   if the field is not found
      * @throws IllegalAccessException if the field is not accessible
-     *
      * @author Alyssa Heimlicher
      */
     @PUT

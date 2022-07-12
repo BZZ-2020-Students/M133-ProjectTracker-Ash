@@ -1,13 +1,18 @@
 package com.example.projecttracker.services;
 
+import com.example.projecttracker.authentication.NotLoggedInException;
+import com.example.projecttracker.authentication.TokenHandler;
 import com.example.projecttracker.data.DataHandlerGen;
 import com.example.projecttracker.data.IssueDataHandler;
 import com.example.projecttracker.model.Issue;
+import com.example.projecttracker.model.User;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import jakarta.annotation.security.RolesAllowed;
 import jakarta.validation.Valid;
 import jakarta.ws.rs.*;
+import jakarta.ws.rs.container.ContainerRequestContext;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 
@@ -77,10 +82,16 @@ public class IssueResource {
      * @param issue the issue to be added
      * @return a status code of 200 if the issue was added
      */
+    @RolesAllowed({"admin", "user"})
     @POST
     @Produces(MediaType.TEXT_PLAIN)
     @Path("/create")
-    public Response insertIssue(@Valid @BeanParam Issue issue) {
+    public Response insertIssue(@Valid @BeanParam Issue issue, ContainerRequestContext requestContext) {
+        try {
+            User user = TokenHandler.getUserFromCookie(requestContext);
+        } catch (NotLoggedInException | IOException e) {
+            return Response.status(Response.Status.UNAUTHORIZED).entity("{\"error\":\"" + e.getMessage() + "\"}").build();
+        }
         DataHandlerGen<Issue> dh = new DataHandlerGen<>(Issue.class);
         dh.insertIntoJson(issue, "issueJSON");
 
