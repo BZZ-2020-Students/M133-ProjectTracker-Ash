@@ -11,6 +11,7 @@ import com.fasterxml.jackson.databind.ser.impl.SimpleFilterProvider;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * Utility class for handling data regarding Projects in JSON files.
@@ -136,6 +137,36 @@ public class ProjectDatahandler extends DataHandlerGen<Project> {
         projects.add(project);
         new ProjectDatahandler().saveJson("projectJSON", projects);
         super.deleteSingleFromJson("projectJSON", "projectUUID", uuid);
+    }
+
+    public Project getProjectByObjectUUID(String issueUUID, String object) throws IOException, NoSuchFieldException, IllegalAccessException {
+        ArrayList<Project> projects = new ProjectDatahandler().getArrayListOutOfJSON();
+        for (Project project : projects) {
+            switch (object.toLowerCase(Locale.ROOT)){
+                case "task":
+                    for (Task task : project.getTasks()) {
+                        if (task.getTaskUUID().equals(issueUUID)) {
+                            return project;
+                        }
+                    }
+                    break;
+                case "issue":
+                    for (Issue issue : project.getIssues()) {
+                        if (issue.getIssueUUID().equals(issueUUID)) {
+                            return project;
+                        }
+                    }
+                    break;
+                case "patchnote":
+                    for (PatchNote patchNote : project.getPatchNotes()) {
+                        if (patchNote.getPatchNoteUUID().equals(issueUUID)) {
+                            return project;
+                        }
+                    }
+                    break;
+            }
+        }
+        return null;
     }
 
     /**

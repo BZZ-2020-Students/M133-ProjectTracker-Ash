@@ -131,18 +131,30 @@ public class IssueResource {
      * @return a response based on if the issue was deleted or not
      * @author Alyssa Heimlicher
      */
+    @RolesAllowed({"admin"})
     @DELETE
     @Produces("application/json")
     @Path("/delete/{uuid}")
-    public Response deleteIssueByUUID(@PathParam("uuid") String uuid) {
+    public Response deleteIssueByUUID(@PathParam("uuid") String uuid, ContainerRequestContext requestContext) {
+        User user;
         try {
-            new IssueDataHandler().deleteSingleFromJson("issueJSON", "issueUUID", uuid);
-            return Response.status(200).entity("{\"success\":\"Issue deleted\"}").build();
-        } catch (IOException | NoSuchFieldException | IllegalAccessException e) {
-            return Response.status(500).entity("{\"error\":\"" + e.getMessage() + "\"}").build();
-        } catch (IllegalArgumentException e) {
-            return Response.status(404).entity("{\"error\":\"Issue not found\"}").build();
+            user = TokenHandler.getUserFromCookie(requestContext);
+        } catch (NotLoggedInException | IOException e) {
+            return Response.status(Response.Status.UNAUTHORIZED).entity("{\"error\":\"" + e.getMessage() + "\"}").build();
         }
+
+        if ("admin".equalsIgnoreCase(user.getUserRole())) {
+            try {
+                new IssueDataHandler().deleteSingleFromJson("issueJSON", "issueUUID", uuid);
+                return Response.status(200).entity("{\"success\":\"Issue deleted\"}").build();
+            } catch (IOException | NoSuchFieldException | IllegalAccessException e) {
+                return Response.status(500).entity("{\"error\":\"" + e.getMessage() + "\"}").build();
+            } catch (IllegalArgumentException e) {
+                return Response.status(404).entity("{\"error\":\"Issue not found\"}").build();
+            }
+        }
+        return Response.status(Response.Status.UNAUTHORIZED).entity("{\"error\":\"You do not have permission to delete this issue\"}").build();
+
     }
 
     /**
@@ -156,10 +168,17 @@ public class IssueResource {
      * @throws IllegalAccessException if the fields cannot be accessed
      * @author Alyssa Heimlicher
      */
+    @RolesAllowed({"admin", "user"})
     @PUT
     @Produces("application/json")
     @Path("/update/{uuid}")
-    public Response updateIssue(@PathParam("uuid") String uuid, @Valid @BeanParam Issue issue) throws IOException, NoSuchFieldException, IllegalAccessException {
+    public Response updateIssue(@PathParam("uuid") String uuid, @Valid @BeanParam Issue issue, ContainerRequestContext requestContext) throws IOException, NoSuchFieldException, IllegalAccessException {
+        User user;
+        try {
+            user = TokenHandler.getUserFromCookie(requestContext);
+        } catch (NotLoggedInException | IOException e) {
+            return Response.status(Response.Status.UNAUTHORIZED).entity("{\"error\":\"" + e.getMessage() + "\"}").build();
+        }
         boolean changed = false;
         Issue toBeUpdatedIssue = new IssueDataHandler().readIssueByUUID(uuid);
         if (toBeUpdatedIssue == null) {
@@ -186,13 +205,30 @@ public class IssueResource {
             changed = true;
         }
 
-
-        if (changed) {
-            new IssueDataHandler().updateSingleFromJson("issueJSON", "issueUUID", uuid, toBeUpdatedIssue);
-            return Response.status(200).entity("{\"success\":\"Issue updated\"}").build();
+        ProjectDatahandler projectDatahandler = new ProjectDatahandler();
+        Project project = projectDatahandler.getProjectByObjectUUID(uuid, "issue");
+        if (project == null) {
+            return Response.status(404).entity("{\"error\":\"Project with issue not found\"}").build();
         }
-
-        return Response.status(200).entity("{\"success\":\"No changes made\"}").build();
+        if (user.getUserRole().equalsIgnoreCase("admin") || project.getUser().getUserUUID().equals(user.getUserUUID())) {
+            if (changed) {
+                new IssueDataHandler().updateSingleFromJson("issueJSON", "issueUUID", uuid, toBeUpdatedIssue);
+                ArrayList<Issue> issues = project.getIssues();
+                for (int i = 0; i < issues.size(); i++) {
+                    if (issues.get(i).getIssueUUID().equals(uuid)) {
+                        issues.set(i, toBeUpdatedIssue);
+                        break;
+                    }
+                }
+                project.setIssues(issues);
+                projectDatahandler.updateSingleFromJson("projectJSON", "projectUUID", project.getProjectUUID(), project);
+                return Response.status(200).entity("{\"success\":\"Issue updated\"}").build();
+            } else {
+                return Response.status(200).entity("{\"success\":\"No changes made\"}").build();
+            }
+        } else {
+            return Response.status(Response.Status.UNAUTHORIZED).entity("{\"error\":\"You do not have permission to update this issue\"}").build();
+        }
 
     }
 }
