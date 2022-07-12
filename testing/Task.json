@@ -1,9 +1,1 @@
-[
-  {
-    "taskUUID": "a6be2192-9808-4938-84f7-8399faea17e3",
-    "title": "Create more Enemy AI",
-    "description": "The one singular enemy is kind of lonely",
-    "deadline": "2022-06-10",
-    "status": "TODO"
-  }
-]
+[{"taskUUID":"a6be2192-9808-4938-84f7-8399faea17e3","title":"Create more Enemy AI","description":"The one singular enemy is kind of lonely","deadline":"2022-06-10","status":"TODO"}]

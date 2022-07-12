@@ -19,6 +19,7 @@ import jakarta.ws.rs.core.Response;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Objects;
 
 /**
  * This class is used to handle the requests for the project class.
@@ -181,15 +182,13 @@ public class ProjectResource {
     @Produces("application/json")
     @Path("/update/{uuid}")
     public Response updateProject(@PathParam("uuid") String uuid, @Valid @BeanParam Project project, ContainerRequestContext requestContext) throws IOException, NoSuchFieldException, IllegalAccessException {
-        boolean changed = false;
         User user;
         try {
             user = TokenHandler.getUserFromCookie(requestContext);
-        } catch (NotLoggedInException e) {
+        } catch (NotLoggedInException | IOException e) {
             return Response.status(Response.Status.UNAUTHORIZED).entity("{\"error\":\"" + e.getMessage() + "\"}").build();
-        } catch (IOException e) {
-            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("{\"error\":\"" + e.getMessage() + "\"}").build();
         }
+        boolean changed = false;
         Project toBeUpdatedProject = new ProjectDatahandler().getSingleFromJsonArray(uuid);
         if (toBeUpdatedProject == null) {
             return projectNotFound();
@@ -213,7 +212,7 @@ public class ProjectResource {
             changed = true;
         }
 
-        if ("admin".equalsIgnoreCase(user.getUserRole()) || project.getUser().getUserUUID().equals(user.getUserUUID())) {
+        if ("admin".equalsIgnoreCase(user.getUserRole()) || Objects.equals(user.getUserUUID(), toBeUpdatedProject.getUser().getUserUUID())) {
             if (changed) {
                 new ProjectDatahandler().updateSingleFromJson("projectJSON", "projectUUID", uuid, toBeUpdatedProject);
                 return Response.status(200).entity("{\"success\":\"Project updated\"}").build();
