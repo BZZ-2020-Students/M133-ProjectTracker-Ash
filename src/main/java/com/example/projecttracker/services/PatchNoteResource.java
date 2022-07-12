@@ -7,6 +7,7 @@ import com.example.projecttracker.data.PatchnoteDataHandler;
 import com.example.projecttracker.data.ProjectDatahandler;
 import com.example.projecttracker.model.PatchNote;
 import com.example.projecttracker.model.Project;
+import com.example.projecttracker.model.Task;
 import com.example.projecttracker.model.User;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
@@ -141,9 +142,16 @@ public class PatchNoteResource {
             return Response.status(Response.Status.UNAUTHORIZED).entity("{\"error\":\"" + e.getMessage() + "\"}").build();
         }
         if (user.getUserRole().equalsIgnoreCase("admin")) {
-
-
             try {
+                ProjectDatahandler projectDatahandler = new ProjectDatahandler();
+                Project project = projectDatahandler.getProjectByObjectUUID(uuid, "patchnote");
+                if(project == null){
+                    return Response.status(Response.Status.NOT_FOUND).entity("{\"error\":\"project with patchnote not found\"}").build();
+                }
+                ArrayList<PatchNote> patchNotes = project.getPatchNotes();
+                patchNotes.removeIf(patchNote -> patchNote.getPatchNoteUUID().equals(uuid));
+                project.setPatchNotes(patchNotes);
+                projectDatahandler.updateSingleFromJson("projectJSON", "projectUUID", project.getProjectUUID(), project);
                 new PatchnoteDataHandler().deleteSingleFromJson("patchNoteJSON", "patchNoteUUID", uuid);
                 return Response.status(200).entity("{\"success\":\"PatchNote deleted\"}").build();
             } catch (IOException | NoSuchFieldException | IllegalAccessException e) {

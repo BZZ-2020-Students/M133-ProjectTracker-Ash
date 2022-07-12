@@ -7,6 +7,7 @@ import com.example.projecttracker.data.IssueDataHandler;
 import com.example.projecttracker.data.ProjectDatahandler;
 import com.example.projecttracker.model.Issue;
 import com.example.projecttracker.model.Project;
+import com.example.projecttracker.model.Task;
 import com.example.projecttracker.model.User;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
@@ -145,6 +146,15 @@ public class IssueResource {
 
         if ("admin".equalsIgnoreCase(user.getUserRole())) {
             try {
+                ProjectDatahandler projectDatahandler = new ProjectDatahandler();
+                Project project = projectDatahandler.getProjectByObjectUUID(uuid, "issue");
+                if(project == null){
+                    return Response.status(Response.Status.NOT_FOUND).entity("{\"error\":\"project with issue not found\"}").build();
+                }
+                ArrayList<Issue> issues = project.getIssues();
+                issues.removeIf(issue -> issue.getIssueUUID().equals(uuid));
+                project.setIssues(issues);
+                projectDatahandler.updateSingleFromJson("projectJSON", "projectUUID", project.getProjectUUID(), project);
                 new IssueDataHandler().deleteSingleFromJson("issueJSON", "issueUUID", uuid);
                 return Response.status(200).entity("{\"success\":\"Issue deleted\"}").build();
             } catch (IOException | NoSuchFieldException | IllegalAccessException e) {

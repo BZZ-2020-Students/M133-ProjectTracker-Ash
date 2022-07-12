@@ -139,27 +139,27 @@ public class ProjectDatahandler extends DataHandlerGen<Project> {
         super.deleteSingleFromJson("projectJSON", "projectUUID", uuid);
     }
 
-    public Project getProjectByObjectUUID(String issueUUID, String object) throws IOException, NoSuchFieldException, IllegalAccessException {
+    public Project getProjectByObjectUUID(String uuid, String object) throws IOException, NoSuchFieldException, IllegalAccessException {
         ArrayList<Project> projects = new ProjectDatahandler().getArrayListOutOfJSON();
         for (Project project : projects) {
             switch (object.toLowerCase(Locale.ROOT)){
                 case "task":
                     for (Task task : project.getTasks()) {
-                        if (task.getTaskUUID().equals(issueUUID)) {
+                        if (task.getTaskUUID().equals(uuid)) {
                             return project;
                         }
                     }
                     break;
                 case "issue":
                     for (Issue issue : project.getIssues()) {
-                        if (issue.getIssueUUID().equals(issueUUID)) {
+                        if (issue.getIssueUUID().equals(uuid)) {
                             return project;
                         }
                     }
                     break;
                 case "patchnote":
                     for (PatchNote patchNote : project.getPatchNotes()) {
-                        if (patchNote.getPatchNoteUUID().equals(issueUUID)) {
+                        if (patchNote.getPatchNoteUUID().equals(uuid)) {
                             return project;
                         }
                     }

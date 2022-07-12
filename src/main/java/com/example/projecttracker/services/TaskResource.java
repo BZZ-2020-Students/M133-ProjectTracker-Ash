@@ -5,7 +5,6 @@ import com.example.projecttracker.authentication.TokenHandler;
 import com.example.projecttracker.data.DataHandlerGen;
 import com.example.projecttracker.data.ProjectDatahandler;
 import com.example.projecttracker.data.TaskDataHandler;
-import com.example.projecttracker.model.Issue;
 import com.example.projecttracker.model.Project;
 import com.example.projecttracker.model.Task;
 import com.example.projecttracker.model.User;
@@ -149,6 +148,16 @@ public class TaskResource {
         }
         if ("admin".equalsIgnoreCase(user.getUserRole())) {
             try {
+                //delete task from project
+                ProjectDatahandler projectDatahandler = new ProjectDatahandler();
+                Project project = projectDatahandler.getProjectByObjectUUID(uuid, "task");
+                if (project == null) {
+                    return Response.status(Response.Status.NOT_FOUND).entity("{\"error\":\"project with task not found\"}").build();
+                }
+                ArrayList<Task> tasks = project.getTasks();
+               tasks.removeIf(task -> task.getTaskUUID().equals(uuid));
+                project.setTasks(tasks);
+                projectDatahandler.updateSingleFromJson("projectJSON", "projectUUID", project.getProjectUUID(), project);
                 new TaskDataHandler().deleteSingleFromJson("taskJSON", "taskUUID", uuid);
                 return Response.status(200).entity("{\"success\":\"Task deleted\"}").build();
             } catch (IOException | NoSuchFieldException | IllegalAccessException e) {

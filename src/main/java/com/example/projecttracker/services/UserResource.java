@@ -1,6 +1,7 @@
 package com.example.projecttracker.services;
 
 import com.example.projecttracker.Config;
+import com.example.projecttracker.authentication.NotLoggedInException;
 import com.example.projecttracker.authentication.TokenHandler;
 import com.example.projecttracker.data.DataHandlerGen;
 import com.example.projecttracker.data.ProjectDatahandler;
@@ -11,8 +12,10 @@ import com.example.projecttracker.util.ToJson;
 import com.fasterxml.jackson.databind.ser.FilterProvider;
 import com.fasterxml.jackson.databind.ser.impl.SimpleBeanPropertyFilter;
 import com.fasterxml.jackson.databind.ser.impl.SimpleFilterProvider;
+import jakarta.annotation.security.RolesAllowed;
 import jakarta.validation.Valid;
 import jakarta.ws.rs.*;
+import jakarta.ws.rs.container.ContainerRequestContext;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.NewCookie;
 import jakarta.ws.rs.core.Response;
@@ -80,16 +83,27 @@ public class UserResource {
      * @return a response depending on the success of the operation.
      * @author Alyssa Heimlicher
      */
+    @RolesAllowed({"admin"})
     @POST
     @Produces(MediaType.TEXT_PLAIN)
     @Path("/create")
-    public Response createPatchNote(@Valid @BeanParam User user) {
-        new UserDataHandler().insertIntoJson(user, "userJSON");
+    public Response createPatchNote(@Valid @BeanParam User user, ContainerRequestContext requestContext) {
+        User userFromCookie;
+        try {
+            userFromCookie = TokenHandler.getUserFromCookie(requestContext);
+        } catch (NotLoggedInException | IOException e) {
+            return Response.status(Response.Status.UNAUTHORIZED).entity("{\"error\":\"" + e.getMessage() + "\"}").build();
+        }
+        if (userFromCookie.getUserRole().equalsIgnoreCase("admin")) {
+            new UserDataHandler().insertIntoJson(user, "userJSON");
 
-        return Response
-                .status(200)
-                .entity("")
-                .build();
+            return Response
+                    .status(200)
+                    .entity("")
+                    .build();
+
+        }
+        return Response.status(Response.Status.UNAUTHORIZED).entity("{\"error\":\"You are not authorized to create a user. Stop trying!\"}").build();
     }
 
     /**
@@ -100,22 +114,32 @@ public class UserResource {
      * @return a response with the status code
      * @author Alyssa Heimlicher
      */
+    @RolesAllowed({"admin"})
     @DELETE
     @Produces("application/json")
     @Path("/delete/{uuid}")
-    public Response deleteUserByUUID(@PathParam("uuid") String uuid) {
+    public Response deleteUserByUUID(@PathParam("uuid") String uuid, ContainerRequestContext requestContext) {
+        User userFromCookie;
         try {
-            ArrayList<Project> projects = new ProjectDatahandler().getArrayListOutOfJSONByUserUUID(uuid);
-            for (Project project : projects) {
-                new ProjectDatahandler().deleteSingleFromJson(project.getProjectUUID());
-            }
-            new UserDataHandler().deleteSingleFromJson("userJSON", "userUUID", uuid);
-            return Response.status(200).entity("{\"success\":\"User deleted\"}").build();
-        } catch (IOException | NoSuchFieldException | IllegalAccessException e) {
-            return Response.status(500).entity("{\"error\":\"" + e.getMessage() + "\"}").build();
-        } catch (IllegalArgumentException e) {
-            return Response.status(404).entity("{\"error\":\"User not found\"}").build();
+            userFromCookie = TokenHandler.getUserFromCookie(requestContext);
+        } catch (NotLoggedInException | IOException e) {
+            return Response.status(Response.Status.UNAUTHORIZED).entity("{\"error\":\"" + e.getMessage() + "\"}").build();
         }
+        if (userFromCookie.getUserRole().equalsIgnoreCase("admin")) {
+            try {
+                ArrayList<Project> projects = new ProjectDatahandler().getArrayListOutOfJSONByUserUUID(uuid);
+                for (Project project : projects) {
+                    new ProjectDatahandler().deleteSingleFromJson(project.getProjectUUID());
+                }
+                new UserDataHandler().deleteSingleFromJson("userJSON", "userUUID", uuid);
+                return Response.status(200).entity("{\"success\":\"User deleted\"}").build();
+            } catch (IOException | NoSuchFieldException | IllegalAccessException e) {
+                return Response.status(500).entity("{\"error\":\"" + e.getMessage() + "\"}").build();
+            } catch (IllegalArgumentException e) {
+                return Response.status(404).entity("{\"error\":\"User not found\"}").build();
+            }
+        }
+        return Response.status(Response.Status.UNAUTHORIZED).entity("{\"error\":\"You are not authorized to delete a user. Dont be rude!\"}").build();
     }
 
     /**
@@ -129,10 +153,17 @@ public class UserResource {
      * @throws IllegalAccessException if the file cannot be accessed
      * @author Alyssa Heimlicher
      */
+    @RolesAllowed({"admin"})
     @PUT
     @Produces("application/json")
     @Path("/update/{uuid}")
-    public Response updateUser(@PathParam("uuid") String uuid, @Valid @BeanParam User user) throws IOException, NoSuchFieldException, IllegalAccessException {
+    public Response updateUser(@PathParam("uuid") String uuid, @Valid @BeanParam User user, ContainerRequestContext requestContext) throws IOException, NoSuchFieldException, IllegalAccessException {
+        User userFromCookie;
+        try {
+            userFromCookie = TokenHandler.getUserFromCookie(requestContext);
+        } catch (NotLoggedInException | IOException e) {
+            return Response.status(Response.Status.UNAUTHORIZED).entity("{\"error\":\"" + e.getMessage() + "\"}").build();
+        }
         boolean changed = false;
         User toBeUpdatedUser = new UserDataHandler().readUserByUserUUID(uuid);
 
@@ -149,14 +180,16 @@ public class UserResource {
             toBeUpdatedUser.setPassword(user.getPassword());
             changed = true;
         }
+        if (userFromCookie.getUserRole().equalsIgnoreCase("admin")) {
+            if (changed) {
+                new UserDataHandler().updateSingleFromJson("userJSON", "userUUID", uuid, toBeUpdatedUser);
+                return Response.status(200).entity("{\"success\":\"User updated\"}").build();
+            }
 
-        if (changed) {
-            new UserDataHandler().updateSingleFromJson("userJSON", "userUUID", uuid, toBeUpdatedUser);
-            return Response.status(200).entity("{\"success\":\"User updated\"}").build();
+            return Response.status(200).entity("{\"success\":\"No changes made\"}").build();
         }
-
-        return Response.status(200).entity("{\"success\":\"No changes made\"}").build();
-
+        return Response.status(Response.Status.UNAUTHORIZED).entity("{\"error\":\"You are not authorized to update a user." +
+                " You're wasting your energy!\"}").build();
     }
 
 
@@ -206,11 +239,44 @@ public class UserResource {
         }
     }
 
+    /**
+     * This method is used for the logout process
+     *
+     * @author Alyssa Heimlicher
+     */
+    @POST
+    @Produces("application/json")
+    @Path("/logout")
+    public Response logout() {
+        NewCookie tokenCookie = new NewCookie(
+                Config.getProperty("jwt.name"),
+                "",
+                "/",
+                "",
+                "Auth-Token",
+                0,
+                false
+        );
+
+        return Response
+                .status(200)
+                .header("Access-Control-Allow-Origin", "*")
+                .header("Access-Control-Allow-Credentials", "true")
+                .header("Access-Control-Allow-Headers",
+                        "origin, content-type, accept, authorization")
+                .header("Access-Control-Allow-Methods",
+                        "GET, POST, DELETE")
+                .entity("")
+                .cookie(tokenCookie)
+                .build();
+    }
+
 
     /**
      * This method returns a filter provider for the user class.
      *
      * @return a filter provider for the user class
+     * @author Alyssa Heimlicher
      */
     private FilterProvider getFilterProvider() {
         return new SimpleFilterProvider()
