@@ -202,7 +202,7 @@ public class PatchNoteResource {
         ProjectDatahandler projectDatahandler = new ProjectDatahandler();
         Project project = projectDatahandler.getProjectByObjectUUID(uuid, "patchnote");
         if (project == null) {
-            return Response.status(404).entity("{\"error\":\"Project not found\"}").build();
+            return Response.status(404).entity("{\"error\":\"Project with patchnote  not found\"}").build();
         }
         if (user.getUserRole().equalsIgnoreCase("admin") || project.getUser().getUserUUID().equals(user.getUserUUID())) {
             if (changed) {

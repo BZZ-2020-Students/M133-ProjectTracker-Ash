@@ -1,13 +1,21 @@
 package com.example.projecttracker.services;
 
+import com.example.projecttracker.authentication.NotLoggedInException;
+import com.example.projecttracker.authentication.TokenHandler;
 import com.example.projecttracker.data.DataHandlerGen;
+import com.example.projecttracker.data.ProjectDatahandler;
 import com.example.projecttracker.data.TaskDataHandler;
+import com.example.projecttracker.model.Issue;
+import com.example.projecttracker.model.Project;
 import com.example.projecttracker.model.Task;
+import com.example.projecttracker.model.User;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import jakarta.annotation.security.RolesAllowed;
 import jakarta.validation.Valid;
 import jakarta.ws.rs.*;
+import jakarta.ws.rs.container.ContainerRequestContext;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 
@@ -82,19 +90,43 @@ public class TaskResource {
      * @return a response
      * @author Alyssa Heimlicher
      */
+    @RolesAllowed({"admin", "user"})
     @POST
     @Produces(MediaType.TEXT_PLAIN)
     @Path("/create")
-    public Response insertTask(@Valid @BeanParam Task task) {
-        LocalDate deadlineLocal = LocalDate.parse(task.getTempDate());
-        task.setDeadline(deadlineLocal);
-        DataHandlerGen<Task> dh = new DataHandlerGen<>(Task.class);
-        dh.insertIntoJson(task, "taskJSON");
+    public Response insertTask(@Valid @BeanParam Task task, @FormParam("projectUUID") String projectUUID, ContainerRequestContext requestContext) {
+        User user;
+        try {
+            user = TokenHandler.getUserFromCookie(requestContext);
+        } catch (NotLoggedInException | IOException e) {
+            return Response.status(Response.Status.UNAUTHORIZED).entity("{\"error\":\"" + e.getMessage() + "\"}").build();
+        }
 
-        return Response
-                .status(200)
-                .entity("")
-                .build();
+        ProjectDatahandler projectDatahandler = new ProjectDatahandler();
+        Project project;
+
+        try {
+            project = projectDatahandler.getSingleFromJsonArray(projectUUID);
+            if ("admin".equalsIgnoreCase(user.getUserRole()) || project.getUser().getUserUUID().equals(user.getUserUUID())) {
+                LocalDate deadlineLocal = LocalDate.parse(task.getTempDate());
+                task.setDeadline(deadlineLocal);
+                DataHandlerGen<Task> dh = new DataHandlerGen<>(Task.class);
+                dh.insertIntoJson(task, "taskJSON");
+                ArrayList<Task> tasks = project.getTasks();
+                tasks.add(task);
+                project.setTasks(tasks);
+                projectDatahandler.updateSingleFromJson("projectJSON", "projectUUID", projectUUID, project);
+
+                return Response
+                        .status(200)
+                        .entity("")
+                        .build();
+            } else {
+                return Response.status(Response.Status.UNAUTHORIZED).entity("{\"error\":\"You do not have permission to create this task\"}").build();
+            }
+        } catch (IOException | NoSuchFieldException | IllegalAccessException e) {
+            return Response.status(500).entity("{\"error\":\"" + e.getMessage() + "\"}").build();
+        }
     }
 
     /**
@@ -104,18 +136,29 @@ public class TaskResource {
      * @return a response with the status code
      * @author Alyssa Heimlicher
      */
+    @RolesAllowed({"admin"})
     @DELETE
     @Produces("application/json")
     @Path("/delete/{uuid}")
-    public Response deleteTaskByUUID(@PathParam("uuid") String uuid) {
+    public Response deleteTaskByUUID(@PathParam("uuid") String uuid, ContainerRequestContext requestContext) {
+        User user;
         try {
-            new TaskDataHandler().deleteSingleFromJson("taskJSON", "taskUUID", uuid);
-            return Response.status(200).entity("{\"success\":\"Task deleted\"}").build();
-        } catch (IOException | NoSuchFieldException | IllegalAccessException e) {
-            return Response.status(500).entity("{\"error\":\"" + e.getMessage() + "\"}").build();
-        } catch (IllegalArgumentException e) {
-            return Response.status(404).entity("{\"error\":\"Task not found\"}").build();
+            user = TokenHandler.getUserFromCookie(requestContext);
+        } catch (NotLoggedInException | IOException e) {
+            return Response.status(Response.Status.UNAUTHORIZED).entity("{\"error\":\"" + e.getMessage() + "\"}").build();
         }
+        if ("admin".equalsIgnoreCase(user.getUserRole())) {
+            try {
+                new TaskDataHandler().deleteSingleFromJson("taskJSON", "taskUUID", uuid);
+                return Response.status(200).entity("{\"success\":\"Task deleted\"}").build();
+            } catch (IOException | NoSuchFieldException | IllegalAccessException e) {
+                return Response.status(500).entity("{\"error\":\"" + e.getMessage() + "\"}").build();
+            } catch (IllegalArgumentException e) {
+                return Response.status(404).entity("{\"error\":\"Task not found\"}").build();
+            }
+        }
+        return Response.status(Response.Status.UNAUTHORIZED).entity("{\"error\":\"You do not have permission to delete this task\"}").build();
+
     }
 
     /**
@@ -124,15 +167,22 @@ public class TaskResource {
      * @param uuid the uuid of the task
      * @param task the task to be updated
      * @return a response based on if the task was updated or not
-     * @throws IOException if the json file cannot be read
-     * @throws NoSuchFieldException if the field cannot be found
+     * @throws IOException            if the json file cannot be read
+     * @throws NoSuchFieldException   if the field cannot be found
      * @throws IllegalAccessException if the file cannot be accessed
      * @author Alyssa Heimlicher
      */
     @PUT
     @Produces("application/json")
     @Path("/update/{uuid}")
-    public Response updateTask(@PathParam("uuid") String uuid, @Valid @BeanParam Task task) throws IOException, NoSuchFieldException, IllegalAccessException {
+    public Response updateTask(@PathParam("uuid") String uuid, @Valid @BeanParam Task task, ContainerRequestContext requestContext) throws IOException, NoSuchFieldException, IllegalAccessException {
+        User user;
+        try {
+            user = TokenHandler.getUserFromCookie(requestContext);
+        } catch (NotLoggedInException | IOException e) {
+            return Response.status(Response.Status.UNAUTHORIZED).entity("{\"error\":\"" + e.getMessage() + "\"}").build();
+        }
+
         boolean changed = false;
         Task toBeUpdatedTask = new TaskDataHandler().readTaskByUUID(uuid);
         if (toBeUpdatedTask == null) {
@@ -158,12 +208,30 @@ public class TaskResource {
             toBeUpdatedTask.setStatus(task.getStatus());
             changed = true;
         }
-
-        if (changed) {
-            new TaskDataHandler().updateSingleFromJson("taskJSON", "taskUUID", uuid, toBeUpdatedTask);
-            return Response.status(200).entity("{\"success\":\"Task updated\"}").build();
+        ProjectDatahandler projectDatahandler = new ProjectDatahandler();
+        Project project = projectDatahandler.getProjectByObjectUUID(uuid, "task");
+        if (project == null) {
+            return Response.status(404).entity("{\"error\":\"Project with task not found\"}").build();
         }
+        if (user.getUserRole().equalsIgnoreCase("admin") || project.getUser().getUserUUID().equals(user.getUserUUID())) {
+            if (changed) {
+                new TaskDataHandler().updateSingleFromJson("taskJSON", "taskUUID", uuid, toBeUpdatedTask);
+                ArrayList<Task> tasks = project.getTasks();
+                for (int i = 0; i < tasks.size(); i++) {
+                    if (tasks.get(i).getTaskUUID().equals(uuid)) {
+                        tasks.set(i, toBeUpdatedTask);
+                        break;
+                    }
+                }
+                project.setTasks(tasks);
+                projectDatahandler.updateSingleFromJson("projectJSON", "projectUUID", project.getProjectUUID(), project);
 
-        return Response.status(200).entity("{\"success\":\"No changes made\"}").build();
+                return Response.status(200).entity("{\"success\":\"Task updated\"}").build();
+            } else {
+                return Response.status(200).entity("{\"success\":\"No changes made\"}").build();
+            }
+        } else {
+            return Response.status(Response.Status.UNAUTHORIZED).entity("{\"error\":\"You do not have permission to update this task\"}").build();
+        }
     }
 }
