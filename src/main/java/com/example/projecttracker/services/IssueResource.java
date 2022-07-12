@@ -7,7 +7,6 @@ import com.example.projecttracker.data.IssueDataHandler;
 import com.example.projecttracker.data.ProjectDatahandler;
 import com.example.projecttracker.model.Issue;
 import com.example.projecttracker.model.Project;
-import com.example.projecttracker.model.Task;
 import com.example.projecttracker.model.User;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
@@ -82,7 +81,9 @@ public class IssueResource {
     /**
      * This method creates a new issue and adds it to the json file.
      *
-     * @param issue the issue to be added
+     * @param issue          the issue to be added
+     * @param projectUUID    the uuid of the project the issue is associated with
+     * @param requestContext contains the token of the user
      * @return a status code of 200 if the issue was added
      */
     @RolesAllowed({"admin", "user"})
@@ -128,7 +129,8 @@ public class IssueResource {
     /**
      * This method deletes an issue from the json file based on the uuid.
      *
-     * @param uuid the uuid of the issue
+     * @param uuid           the uuid of the issue
+     * @param requestContext contains the token of the user
      * @return a response based on if the issue was deleted or not
      * @author Alyssa Heimlicher
      */
@@ -148,7 +150,7 @@ public class IssueResource {
             try {
                 ProjectDatahandler projectDatahandler = new ProjectDatahandler();
                 Project project = projectDatahandler.getProjectByObjectUUID(uuid, "issue");
-                if(project == null){
+                if (project == null) {
                     return Response.status(Response.Status.NOT_FOUND).entity("{\"error\":\"project with issue not found\"}").build();
                 }
                 ArrayList<Issue> issues = project.getIssues();
@@ -172,6 +174,7 @@ public class IssueResource {
      *
      * @param uuid  the uuid of the issue
      * @param issue the issue to be updated
+     * @param requestContext contains the token of the user
      * @return a response based on if the issue was updated or not
      * @throws IOException            if the json file cannot be read
      * @throws NoSuchFieldException   if the field cannot be found

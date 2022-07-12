@@ -7,7 +7,6 @@ import com.example.projecttracker.data.PatchnoteDataHandler;
 import com.example.projecttracker.data.ProjectDatahandler;
 import com.example.projecttracker.model.PatchNote;
 import com.example.projecttracker.model.Project;
-import com.example.projecttracker.model.Task;
 import com.example.projecttracker.model.User;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
@@ -84,7 +83,9 @@ public class PatchNoteResource {
     /**
      * Creates a new patch note and adds it to the json file.
      *
-     * @param patchNote the patch note to be added.
+     * @param patchNote      the patch note to be added.
+     * @param projectUUID    the uuid of the project the patch note is associated with.
+     * @param requestContext context of the token.
      * @return a response.
      * @author Alyssa Heimlicher
      */
@@ -126,7 +127,8 @@ public class PatchNoteResource {
     /**
      * This method deletes a patchNote from the json file by its uuid.
      *
-     * @param uuid the uuid of the patch note.
+     * @param uuid           the uuid of the patch note.
+     * @param requestContext context of the token.
      * @return a response with the status code
      * @author Alyssa Heimlicher
      */
@@ -145,7 +147,7 @@ public class PatchNoteResource {
             try {
                 ProjectDatahandler projectDatahandler = new ProjectDatahandler();
                 Project project = projectDatahandler.getProjectByObjectUUID(uuid, "patchnote");
-                if(project == null){
+                if (project == null) {
                     return Response.status(Response.Status.NOT_FOUND).entity("{\"error\":\"project with patchnote not found\"}").build();
                 }
                 ArrayList<PatchNote> patchNotes = project.getPatchNotes();
@@ -166,8 +168,9 @@ public class PatchNoteResource {
     /**
      * This method updates a patchNote from the json file by its uuid.
      *
-     * @param uuid      the uuid of the patch note.
-     * @param patchNote the patch note to be updated.
+     * @param uuid           the uuid of the patch note.
+     * @param patchNote      the patch note to be updated.
+     * @param requestContext context of the token.
      * @return a response with the status code
      * @throws IOException            if the json file cannot be read.
      * @throws NoSuchFieldException   if the field is not found.

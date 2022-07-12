@@ -17,9 +17,18 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
-
+/**
+ * This is the filter for the roles
+ *
+ * @author Alyssa Heimlicher
+ * @since 1.3
+ */
 @Provider
 public class AuthenticationFilter implements ContainerRequestFilter {
+    /**
+     * The resource info is used to get the method
+     * @since 1.3
+     */
     @Context
     ResourceInfo resourceInfo;
 
@@ -52,6 +61,13 @@ public class AuthenticationFilter implements ContainerRequestFilter {
         }
     }
 
+    /**
+     * This method is used to check if the user is allowed to access the resource
+     * @param requiredRoles the roles that are required to access the resource
+     * @param userRole the role of the user
+     * @return true if the user is allowed to access the resource, false if not
+     * @since 1.3
+     */
     private boolean isUserAllowed(final Set<String> requiredRoles, String userRole) {
         return requiredRoles.stream().anyMatch(role -> role.equalsIgnoreCase(userRole));
     }

@@ -77,7 +77,8 @@ public class ProjectResource {
     /**
      * This method is used to add a project to the json file.
      *
-     * @param project the project to be added
+     * @param project        the project to be added
+     * @param requestContext the context of the token
      * @return a response
      * @author Alyssa Heimlicher
      */
@@ -111,7 +112,8 @@ public class ProjectResource {
     /**
      * This method deletes a project from the json file by its uuid.
      *
-     * @param uuid the uuid of the project
+     * @param uuid           the uuid of the project
+     * @param requestContext the context of the token
      * @return a response with the status code
      * @author Alyssa Heimlicher
      */
@@ -169,8 +171,9 @@ public class ProjectResource {
     /**
      * This method is used to update a project in the json file.
      *
-     * @param uuid    the uuid of the project
-     * @param project the project to be updated
+     * @param uuid           the uuid of the project
+     * @param project        the project to be updated
+     * @param requestContext the context of the token
      * @return a response with the status code
      * @throws IOException            if the json file is not found
      * @throws NoSuchFieldException   if the field is not found

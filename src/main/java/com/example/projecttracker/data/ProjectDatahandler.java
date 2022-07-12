@@ -139,10 +139,23 @@ public class ProjectDatahandler extends DataHandlerGen<Project> {
         super.deleteSingleFromJson("projectJSON", "projectUUID", uuid);
     }
 
+    /**
+     * Returns a project if it contains either the task, issue or patchnote uuid
+     *
+     * @param uuid   the uuid to search for
+     * @param object if its a task, issue or patchnote
+     * @return the project if it contains the uuid
+     * @throws IOException            if the file cannot be read
+     * @throws NoSuchFieldException   if the field does not exist
+     * @throws IllegalAccessException if the field cannot be accessed
+     *
+     * @author Alyssa Heimlicher
+     * @since 1.3
+     */
     public Project getProjectByObjectUUID(String uuid, String object) throws IOException, NoSuchFieldException, IllegalAccessException {
         ArrayList<Project> projects = new ProjectDatahandler().getArrayListOutOfJSON();
         for (Project project : projects) {
-            switch (object.toLowerCase(Locale.ROOT)){
+            switch (object.toLowerCase(Locale.ROOT)) {
                 case "task":
                     for (Task task : project.getTasks()) {
                         if (task.getTaskUUID().equals(uuid)) {

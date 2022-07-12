@@ -85,7 +85,9 @@ public class TaskResource {
     /**
      * This method creates a new task and adds it to the json file.
      *
-     * @param task the task to be added
+     * @param task           the task to be added
+     * @param projectUUID    the uuid of the project the task belongs to
+     * @param requestContext contains the token of the user
      * @return a response
      * @author Alyssa Heimlicher
      */
@@ -131,7 +133,8 @@ public class TaskResource {
     /**
      * This method deletes a task from the json file by its uuid.
      *
-     * @param uuid the uuid of the task
+     * @param uuid           the uuid of the task
+     * @param requestContext contains the token of the user
      * @return a response with the status code
      * @author Alyssa Heimlicher
      */
@@ -155,7 +158,7 @@ public class TaskResource {
                     return Response.status(Response.Status.NOT_FOUND).entity("{\"error\":\"project with task not found\"}").build();
                 }
                 ArrayList<Task> tasks = project.getTasks();
-               tasks.removeIf(task -> task.getTaskUUID().equals(uuid));
+                tasks.removeIf(task -> task.getTaskUUID().equals(uuid));
                 project.setTasks(tasks);
                 projectDatahandler.updateSingleFromJson("projectJSON", "projectUUID", project.getProjectUUID(), project);
                 new TaskDataHandler().deleteSingleFromJson("taskJSON", "taskUUID", uuid);
@@ -173,8 +176,9 @@ public class TaskResource {
     /**
      * This method updates a task in the json file.
      *
-     * @param uuid the uuid of the task
-     * @param task the task to be updated
+     * @param uuid           the uuid of the task
+     * @param task           the task to be updated
+     * @param requestContext contains the token of the user
      * @return a response based on if the task was updated or not
      * @throws IOException            if the json file cannot be read
      * @throws NoSuchFieldException   if the field cannot be found

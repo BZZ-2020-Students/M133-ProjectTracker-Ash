@@ -79,7 +79,8 @@ public class UserResource {
     /**
      * Creates a new user and adds it to the json file.
      *
-     * @param user the user to be added
+     * @param user           the user to be added
+     * @param requestContext contains the token of the user
      * @return a response depending on the success of the operation.
      * @author Alyssa Heimlicher
      */
@@ -110,7 +111,8 @@ public class UserResource {
      * This method deletes a user from the json file by their uuid.
      * Deletes the users projects as well.
      *
-     * @param uuid the uuid of the user
+     * @param uuid           the uuid of the user
+     * @param requestContext contains the token of the user
      * @return a response with the status code
      * @author Alyssa Heimlicher
      */
@@ -145,8 +147,9 @@ public class UserResource {
     /**
      * This method updates a user in the json file by their uuid.
      *
-     * @param uuid the uuid of the user
-     * @param user the user to be updated
+     * @param uuid           the uuid of the user
+     * @param user           the user to be updated
+     * @param requestContext contains the token of the user
      * @return a response depending on the success of the operation.
      * @throws IOException            if the json file cannot be found
      * @throws NoSuchFieldException   if the field cannot be found
@@ -196,6 +199,10 @@ public class UserResource {
     /**
      * This method is used for the login process
      *
+     * @param username the username of the user
+     * @param password the password of the user
+     * @return a response depending on the success of the operation.
+     *
      * @author Alyssa Heimlicher
      */
     @POST
@@ -241,6 +248,7 @@ public class UserResource {
 
     /**
      * This method is used for the logout process
+     * @return a response depending on the success of the operation.
      *
      * @author Alyssa Heimlicher
      */
