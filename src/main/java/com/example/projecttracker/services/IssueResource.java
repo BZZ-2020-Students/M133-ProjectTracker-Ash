@@ -4,7 +4,9 @@ import com.example.projecttracker.authentication.NotLoggedInException;
 import com.example.projecttracker.authentication.TokenHandler;
 import com.example.projecttracker.data.DataHandlerGen;
 import com.example.projecttracker.data.IssueDataHandler;
+import com.example.projecttracker.data.ProjectDatahandler;
 import com.example.projecttracker.model.Issue;
+import com.example.projecttracker.model.Project;
 import com.example.projecttracker.model.User;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
@@ -86,19 +88,40 @@ public class IssueResource {
     @POST
     @Produces(MediaType.TEXT_PLAIN)
     @Path("/create")
-    public Response insertIssue(@Valid @BeanParam Issue issue, ContainerRequestContext requestContext) {
+    public Response insertIssue(@Valid @BeanParam Issue issue,
+                                @FormParam("projectUUID") String projectUUID,
+                                ContainerRequestContext requestContext) {
+        User user;
         try {
-            User user = TokenHandler.getUserFromCookie(requestContext);
+            user = TokenHandler.getUserFromCookie(requestContext);
         } catch (NotLoggedInException | IOException e) {
             return Response.status(Response.Status.UNAUTHORIZED).entity("{\"error\":\"" + e.getMessage() + "\"}").build();
         }
-        DataHandlerGen<Issue> dh = new DataHandlerGen<>(Issue.class);
-        dh.insertIntoJson(issue, "issueJSON");
 
-        return Response
-                .status(200)
-                .entity("")
-                .build();
+        ProjectDatahandler projectDatahandler = new ProjectDatahandler();
+        Project project;
+        try {
+            project = projectDatahandler.getSingleFromJsonArray(projectUUID);
+            if ("admin".equalsIgnoreCase(user.getUserRole()) || project.getUser().getUserUUID().equals(user.getUserUUID())) {
+                DataHandlerGen<Issue> dh = new DataHandlerGen<>(Issue.class);
+                dh.insertIntoJson(issue, "issueJSON");
+                ArrayList<Issue> issues = project.getIssues();
+                issues.add(issue);
+                project.setIssues(issues);
+                projectDatahandler.updateSingleFromJson("projectJSON", "projectUUID", projectUUID, project);
+
+                return Response
+                        .status(200)
+                        .entity("")
+                        .build();
+            } else {
+                return Response.status(Response.Status.UNAUTHORIZED).entity("{\"error\":\"You do not have permission to create this issue\"}").build();
+            }
+        } catch (IOException | NoSuchFieldException | IllegalAccessException e) {
+            return Response.status(500).entity("{\"error\":\"" + e.getMessage() + "\"}").build();
+        }
+
+
     }
 
     /**
